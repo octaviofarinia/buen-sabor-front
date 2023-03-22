@@ -30,18 +30,19 @@ Conocimientos:
 - Ingles: intermedio
 
 
-[**Franco Minati**](https://github.com/FrancoMinati): Backend
+[**Franco Minati**](https://github.com/FrancoMinati): Fullstack
 
 Tengo 22 años, empece a interesarme en la programación hace 2 años aproximadamente, cuando estaba en mi segundo año de Ing.Industrial cursando Calculo, cuando llegue a 3ro de ing, me di cuenta que no era lo mío y decidí optar por la programación porque me resulto interesante y entretenida. 
 Hice un curso de desarrollo web en Coder y actualmente hago uno de Javascript en paralelo a la Tecnicatura. Estoy interesado mucho mas la parte del front-end.
 
 Conocimientos:
 - Java: medio
-- HTML/CSS/Boostrap: medio
+- HTML/CSS/Boostrap: avanzado
 - SASS: basico
 - JS: basico
 - Git: medio
-
+- Thymeleaf: medio
+- Ingles: intermedio
 
 [**Fernando Cevelicek**](https://github.com/fernandocevelicek): Frontend
 
