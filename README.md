@@ -4,7 +4,7 @@ Los clientes tienen a disposición un menú que describe para cada una de las co
 
 Este proyecto implementa la interfaz visual a la que accedera el cliente para realizar sus pedidos. La misma sera desarrollada utilizando Vite, React y TailwindCSS.
 
-Link Wireframes: https://drive.google.com/file/d/1ScBXKwO0oVhv_P_5ruZph6G3cvs7tEjg/view?usp=sharing
+Link Wireframes Usuario: https://drive.google.com/file/d/1WzmdSMI3HaSul1fpeHr11WR3FYH_ppDV/view?usp=share_link
 
 ## Público Objetivo:
 El público objetivo de este proyecto es para todas las edades (sin embargo el rango etario esperado es 15 a 50 años). Ya que está aplicación brinda un servicio que lo puede hacer cualquier persona que tenga la aplicación y también que de opciones de formas de pago (efectivo,tarjeta,billetera virtual) para ampliar a la mayor cantidad posible de personas.
@@ -30,18 +30,19 @@ Conocimientos:
 - Ingles: intermedio
 
 
-[**Franco Minati**](https://github.com/FrancoMinati): Backend
+[**Franco Minati**](https://github.com/FrancoMinati): Fullstack
 
 Tengo 22 años, empece a interesarme en la programación hace 2 años aproximadamente, cuando estaba en mi segundo año de Ing.Industrial cursando Calculo, cuando llegue a 3ro de ing, me di cuenta que no era lo mío y decidí optar por la programación porque me resulto interesante y entretenida. 
 Hice un curso de desarrollo web en Coder y actualmente hago uno de Javascript en paralelo a la Tecnicatura. Estoy interesado mucho mas la parte del front-end.
 
 Conocimientos:
 - Java: medio
-- HTML/CSS/Boostrap: medio
+- HTML/CSS/Boostrap: avanzado
 - SASS: basico
 - JS: basico
 - Git: medio
-
+- Thymeleaf: medio
+- Ingles: intermedio
 
 [**Fernando Cevelicek**](https://github.com/fernandocevelicek): Frontend
 
