@@ -48,12 +48,12 @@ const UserList = () => {
   const callApi = async () => {
     try {
       const token = await getAccessTokenSilently({
-        audience: 'https://buensaborback.com',
+        audience: import.meta.env.VITE_BACKEND_API_BASE_URL,
         scope: 'all',
       });
       console.log(token);
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_API_BASE_URL}/usuarios`,
+        `${import.meta.env.VITE_AUTH0_AUDIENCE}/usuarios`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
