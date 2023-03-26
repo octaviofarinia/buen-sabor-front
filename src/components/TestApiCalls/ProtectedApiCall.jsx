@@ -23,7 +23,7 @@ const ProtectedApiCall = () => {
 
       alert(responseData.message);
     } catch (error) {
-      alert('Ocurrio un error: ' + error);
+      alert('Ocurrio un error');
       console.error(error);
     }
   };
