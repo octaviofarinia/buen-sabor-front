@@ -1,23 +1,31 @@
 import './App.css';
-import Auth0ProviderWithHistory from './components/Auth0/Auth0ProviderWithHistory';
-import Greeting from './components/Greeting';
-import LoginButton from './components/LoginButton';
-import LogoutButton from './components/LogoutButton';
-import Profile from './components/Profile';
-import UserList from './components/UserList';
+import LoginButton from './components/Auth0/LoginButton';
+import LogoutButton from './components/Auth0/LogoutButton';
+import Profile from './components/Auth0/Profile';
+import AdminApiCall from './components/TestApiCalls/AdminApiCall';
+import ProtectedApiCall from './components/TestApiCalls/ProtectedApiCall';
+import PublicApiCall from './components/TestApiCalls/PublicApiCall';
 
 function App() {
   return (
-    <Auth0ProviderWithHistory>
-      <Greeting />
+    <>
+      <div className="text-center">
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+          Bienvenido al Buen Sabor
+        </h1>
+      </div>
       <div className="my-10 flex justify-evenly">
         <LoginButton />
         <LogoutButton />
       </div>
       <Profile />
-      <br className="my-10" />
-      <UserList />
-    </Auth0ProviderWithHistory>
+      <hr className="my-10" />
+      <div className="flex w-full flex-row justify-around">
+        <PublicApiCall />
+        <ProtectedApiCall />
+        <AdminApiCall />
+      </div>
+    </>
   );
 }
 

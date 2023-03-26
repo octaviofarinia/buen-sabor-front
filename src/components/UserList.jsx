@@ -51,7 +51,7 @@ const UserList = () => {
         audience: import.meta.env.VITE_AUTH0_AUDIENCE,
         scope: 'all',
       });
-      console.log(token);
+
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_API_BASE_URL}/usuarios`,
         {
