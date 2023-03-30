@@ -7,35 +7,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Buen Sabor | Home</title>
     <link rel="stylesheet" href="styles/styles.css">
-    <link rel="stylesheet" href="styles/index.css">
 </head>
 
-<body>
+<body class="body_normal">
 
     <!-- Header -->
     <header class="header">
-        <nav class="header__nav">
-            <div class="header__nav__search">SEARCH</div>
-            <div class="center-container">
-                <div class="header__nav__item">LOGO EL BUEN SABOR</div>
+        <nav class="header_nav">
+            <div class="header_search">
+                <form method="get" class="header_search_container">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-search header_search_vector"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                    <input type="search" class="header_search_input" placeholder="Buscar...">
+                </form>
             </div>
-            <div class="header__nav__item">PRODUCTOS</div>
-            <div class="header__nav__item">LOGIN</div>
-            <div class="header__nav__item">CART</div>
-            <div class="header__nav__item">REGISTRATE</div>
+            <div class="header_logo">
+                <img src="./imgs/🦆 illustration _Chicken_ (1).png" alt="buen sabor logo" class="header_img_logo">
+                <h1>el buen sabor</h1>
+            </div>
+            <div class="header_menu">
+                <div class="header_dropdown"><a href="./menu.html" class="header_btn header_btn_dropdown">Productos <svg
+                            xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                            class="bi bi-caret-down" viewBox="0 0 16 16">
+                            <path
+                                d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+                        </svg></a>
+                    <div class="header_dropdown_content">
+                        <a href="./menu.html" class="header_dropdown_content_item">Categoria 1</a>
+                        <a href="./menu.html" class="header_dropdown_content_item">Categoria 2</a>
+                        <a href="./menu.html" class="header_dropdown_content_item last_child">Categoria 3</a>
+                    </div>
+                </div>
+                <a href="" class="header_btn">Login</a>
+                <a href="" class="header_btn"><img src="./imgs/🦆 icon _shopping cart_.png" alt="cart" class="header_btn_cart"></a>
+                <a href="" class="header_btn_registro">Registrarse</a>
+            </div>
         </nav>
     </header>
 
     <!-- Main -->
-    <main style="border:1px solid red;">
-        <p style="color: white;">MAIN</p>
+    <main>
+
     </main>
+
 
     <article></article>
 
     <!-- Footer -->
-    <footer style="border:1px solid green;">
-        <p style="color: white;">FOOTER</p>
+    <footer class="footer">
+        <p>FOOTER</p>
     </footer>
 
 </body>
