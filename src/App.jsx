@@ -18,6 +18,7 @@ import Profile from './components/Auth0/Profile';
 import AdminApiCall from './components/TestApiCalls/AdminApiCall';
 import ProtectedApiCall from './components/TestApiCalls/ProtectedApiCall';
 import PublicApiCall from './components/TestApiCalls/PublicApiCall';
+import LoginHeader from './components/LoginHeader';
 
 function App() {
   return (
@@ -75,9 +76,7 @@ function App() {
                 </a>
               </div>
             </div>
-            <a href="./login.html" className="header_btn">
-              Iniciar sesión
-            </a>
+            <LoginHeader />
             <a href="./carrito.html" className="header_btn">
               <img src={img2} alt="cart" className="header_btn_cart" />
             </a>
