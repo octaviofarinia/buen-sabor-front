@@ -9,103 +9,78 @@
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 
-<body class="body_index">
-
-    <!-- Header -->
-    <header class="header">
-        <nav class="header_nav">
-            <div class="header_search">
-                <form method="get" class="header_search_container">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-search header_search_vector"
-                        viewBox="0 0 16 16">
-                        <path
-                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                    </svg>
-                    <input type="search" class="header_search_input" placeholder="Buscar...">
-                </form>
-            </div>
-            <div class="header_logo">
-                <img src="./imgs/🦆 illustration _Chicken_ (1).png" alt="buen sabor logo" class="header_img_logo">
-                <h1>el buen sabor</h1>
-            </div>
-            <div class="header_menu">
-                <div class="header_dropdown"><a href="./menu.html" class="header_btn header_btn_dropdown">Productos <svg
-                            xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                            class="bi bi-caret-down" viewBox="0 0 16 16">
+<body>
+    <div class="body_index">
+        <!-- Header -->
+        <header class="header">
+            <nav class="header_nav">
+                <div class="header_search">
+                    <form method="get" class="header_search_container">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-search header_search_vector"
+                            viewBox="0 0 16 16">
                             <path
-                                d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-                        </svg></a>
-                    <div class="header_dropdown_content">
-                        <a href="./menu.html" class="header_dropdown_content_item">Categoria 1</a>
-                        <a href="./menu.html" class="header_dropdown_content_item">Categoria 2</a>
-                        <a href="./menu.html" class="header_dropdown_content_item last_child">Categoria 3</a>
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                        </svg>
+                        <input type="search" class="header_search_input" placeholder="Buscar...">
+                    </form>
+                </div>
+                <div class="header_logo">
+                    <img src="./imgs/🦆 illustration _Chicken_ (1).png" alt="buen sabor logo" class="header_img_logo">
+                    <h1>el buen sabor</h1>
+                </div>
+                <div class="header_menu">
+                    <div class="header_dropdown"><a href="./menu.html" class="header_btn header_btn_dropdown">Productos
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                class="bi bi-caret-down" viewBox="0 0 16 16">
+                                <path
+                                    d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+                            </svg></a>
+                        <div class="header_dropdown_content">
+                            <a href="./menu.html" class="header_dropdown_content_item">Categoria 1</a>
+                            <a href="./menu.html" class="header_dropdown_content_item">Categoria 2</a>
+                            <a href="./menu.html" class="header_dropdown_content_item last_child">Categoria 3</a>
+                        </div>
+                    </div>
+                    <a href="./login.html" class="header_btn">Iniciar sesión</a>
+                    <a href="./carrito.html" class="header_btn"><img src="./imgs/🦆 icon _shopping cart_.png" alt="cart"
+                            class="header_btn_cart"></a>
+                    <a href="./registro.html" class="header_btn_registro">Registrarse</a>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main -->
+        <main>
+            <div class="carrousel">
+                <img src="./imgs/imagen-archivo-hamburguesas_98 1.jpg" alt="burgas" class="carrousel_img">
+                <img src="./imgs/Delivery Cartel.png" alt="delivery cartel" class="carrousel_addon_delivery">
+                <img src="./imgs/Take Away Cartel.png" alt="takeway cartel" class="carrousel_addon_takeaway">
+            </div>
+            <div class="main_categorias">
+                <div class="main_categoria_container">
+                    <div class="main_categoria_btn">
+                        <img src="./imgs/Rectangle 187.png" alt="img_categoria" class="">
+                        <h2 class="main_categoria_titulo">Categoria</h2>
+                    </div>
+                    <div class="main_categoria_btn">
+                        <img src="./imgs/Rectangle 188.png" alt="img_categoria" class="">
+                        <h2 class="main_categoria_titulo">Categoria</h2>
                     </div>
                 </div>
-                <a href="./login.html" class="header_btn">Iniciar sesión</a>
-                <a href="./carrito.html" class="header_btn"><img src="./imgs/🦆 icon _shopping cart_.png" alt="cart"
-                        class="header_btn_cart"></a>
-                <a href="./registro.html" class="header_btn_registro">Registrarse</a>
-            </div>
-        </nav>
-    </header>
+                <div class="main_categoria_container">
+                    <div class="main_categoria_btn">
+                        <img src="./imgs/Rectangle 189.png" alt="img_categoria" class="">
+                        <h2 class="main_categoria_titulo">Categoria</h2>
+                    </div>
+                    <div class="main_categoria_btn">
+                        <img src="./imgs/Rectangle 190.png" alt="img_categoria" class="">
+                        <h2 class="main_categoria_titulo">Categoria</h2>
+                    </div>
 
-    <!-- Main -->
-    <main>
-        <div class="carrousel">
-            <img src="./imgs/imagen-archivo-hamburguesas_98 1.jpg" alt="burgas" class="carrousel_img">
-            <img src="./imgs/Delivery Cartel.png" alt="delivery cartel" class="carrousel_addon_delivery">
-            <img src="./imgs/Take Away Cartel.png" alt="takeway cartel" class="carrousel_addon_takeaway">
-        </div>
-        <div class="main_categorias">
-            <div class="main_categoria_container">
-                <div class="main_categoria_btn">
-                    <img src="./imgs/Rectangle 187.png" alt="img_categoria" class="">
-                    <h2 class="main_categoria_titulo">Categoria</h2>
-                </div>
-                <div class="main_categoria_btn">
-                    <img src="./imgs/Rectangle 188.png" alt="img_categoria" class="">
-                    <h2 class="main_categoria_titulo">Categoria</h2>
                 </div>
             </div>
-            <div class="main_categoria_container">
-                <div class="main_categoria_btn">
-                    <img src="./imgs/Rectangle 189.png" alt="img_categoria" class="">
-                    <h2 class="main_categoria_titulo">Categoria</h2>
-                </div>
-                <div class="main_categoria_btn">
-                    <img src="./imgs/Rectangle 190.png" alt="img_categoria" class="">
-                    <h2 class="main_categoria_titulo">Categoria</h2>
-                </div>
-
-            </div>
-        </div>
-    </main>
-
-
-    <article></article>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer_nav">
-            <div class="footer_nav_tree">
-                <h2 class="footer_titulo">Navegá por nuestro sitio</h2>
-                <a href="">Menu</a>
-                <a href="">Iniciar sesión</a>
-                <a href="">Registrarse</a>
-                <a href="">Menu</a>
-                <a href="">Acerca de</a>
-                <a href="">Nosotros</a>
-            </div>
-            <div class="footer_nav_content">
-                <h2 class="footer_titulo">Medios de Pago</h2>
-                <img src="./imgs/image 2.png" alt="Medios de pago">
-            </div>
-            <div class="footer_nav_content_otros">
-                <img src="./imgs/Delivery Cartel.png" alt="delivery cartel">
-                <img src="./imgs/Take Away Cartel.png" alt="takeway cartel">
-            </div>
-        </div>
-    </footer>
+        </main>
+    </div>
 
 </body>
 
