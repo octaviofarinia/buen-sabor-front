@@ -1,7 +1,6 @@
 import './App.css';
 import '../vistas/styles/styles.css';
 import img1 from '../vistas/imgs/🦆 illustration _Chicken_ (1).png';
-import img2 from '../vistas/imgs/🦆 icon _shopping cart_.png';
 import img3 from '../vistas/imgs/imagen-archivo-hamburguesas_98 1.jpg';
 import img4 from '../vistas/imgs/Delivery Cartel.png';
 import img5 from '../vistas/imgs/Take Away Cartel.png';
@@ -77,12 +76,6 @@ function App() {
               </div>
             </div>
             <LoginHeader />
-            <a href="./carrito.html" className="header_btn">
-              <img src={img2} alt="cart" className="header_btn_cart" />
-            </a>
-            <a href="./registro.html" className="header_btn_registro">
-              Registrarse
-            </a>
           </div>
         </nav>
       </header>
