@@ -1,0 +1,12 @@
+[
+  {
+    "username": "Franco Minati",
+    "role": "EMPLOYEE",
+    "status": true
+  },
+  {
+    "username": "Octavio Fariña",
+    "role": "USER",
+    "status": true
+  }
+]

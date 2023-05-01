@@ -4,6 +4,9 @@ import './App.css';
 import AbmTable from './components/ABM/AbmTable';
 import CargaDeRegistro from './components/ABM/CargaDeRegistro';
 import { useEffect, useState } from 'react';
+import Header from './components/Header/Header';
+
+import userData from "../public/user.json";
 
 function App() {
   const [categories, setCategories] = useState([]);
@@ -25,11 +28,14 @@ function App() {
   }, []);
   return (
     <>
-      <div className={'flex h-full w-full'}>
+      <div className="flex flex-col">
+        
+        <Header user={userData[0]}/>
         <Routes>
+          <Route path='/'></Route>
           <Route
-            path="/admin/abm-rubro"
-            element={<AbmTable information={categories} deleteMethod={deleteRegister}/>}
+            path="/employee/abm-categorias"
+            element={<AbmTable information={categories} />}
           />
           <Route path="/carga_registro" element={<CargaDeRegistro saveMethod={createRegister}/>} />
         </Routes>
