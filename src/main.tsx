@@ -5,7 +5,7 @@ import App from './App';
 import Auth0ProviderWithHistory from './components/Auth0/Auth0ProviderWithHistory';
 import './index.css';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
      <BrowserRouter>
     <Auth0ProviderWithHistory>
