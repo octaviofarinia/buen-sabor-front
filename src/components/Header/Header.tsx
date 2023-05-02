@@ -9,7 +9,9 @@ interface Users {
 const Header = ({user }: Users) => {
   return (
     <header className="w-full  bg-slate-900 h-32 flex flex-row items-center">
-      <nav className="flex w-full flex-row items-center justify-between px-12 text-white">
+      <nav className="flex w-full flex-row items-center justify-between px-12 text-white
+      sticky top-0 z- py-2 text-neutral-600 "
+      data-te-navbar-ref>
         <div className="">
           <form className="flex items-center">
             <label  className="sr-only">
