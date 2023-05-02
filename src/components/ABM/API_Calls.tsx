@@ -6,3 +6,9 @@ export const getCategories = ({ keySetter, dataSetter }) => {
     keySetter(Object.keys(res.data[0]));
   });
 };
+
+export const deleteCategoria = (id) => {
+  axios
+    .delete(`http://localhost:8080/api/v1/rubros-articulos/${id}`)
+    .then((res) => {});
+};
