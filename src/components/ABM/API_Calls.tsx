@@ -12,3 +12,4 @@ export const deleteCategoria = (id) => {
     .delete(`http://localhost:8080/api/v1/rubros-articulos/${id}`)
     .then((res) => {});
 };
+

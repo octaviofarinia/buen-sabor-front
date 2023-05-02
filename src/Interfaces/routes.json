@@ -1,11 +1,19 @@
 [
-    {
-        "name":"categorias"
-    },
-    {
-        "name":"ingredientes"
-    },
-    {
-        "name":"productos"
-    }
+  {
+    "name": "categorias",
+    "imagen": "../../public/Categorias.png"
+    
+  },
+  {
+    "name": "ingredientes",
+    "imagen": "../../public/Ingredientes.png"
+  },
+  {
+    "name": "productos",
+    "imagen": "../../public/Productos.png"
+  },
+  {
+    "name": "unidad de medida",
+    "imagen": "../../public/unidadesMedida.png"
+  }
 ]
