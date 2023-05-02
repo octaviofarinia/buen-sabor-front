@@ -5,35 +5,20 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getCategories } from './API_Calls';
 
-const AbmTable = ({ tableInformation }) => {
+const AbmTable = () => {
   const [tableData, setTableData] = useState([]);
   const [headerKeys, setHeaderKeys] = useState([]);
 
-  const getKeys = () => {
-    getCategories({ setter: setTableData });
-    const keys = Object.keys(tableData);
-    setHeaderKeys(keys);
-  };
-  function renderHeaders() {
-    return headerKeys.map((key, index) => <th key={index}>{key}</th>);
-  }
-  function renderRows() {
-    return (
-      <tr>
-        {headerKeys.map((key, index) => (
-          <td key={index}>{tableData[key]}</td>
-        ))}
-      </tr>
-    );
-  }
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getCategories({ dataSetter: setTableData, keySetter: setHeaderKeys });
+  }, []);
+
   return (
     <div className="flex w-full flex-col gap-5 px-32 pt-20">
       <h1 className="text-slate-950 flex items-center gap-3 text-3xl font-extrabold">
         <FontAwesomeIcon icon={faBoxOpen} style={{ color: '#020617' }} />
         CATEGORIAS
       </h1>
-      <Link to="/carga_registro"></Link>
 
       <div className="flex flex-col">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -41,10 +26,52 @@ const AbmTable = ({ tableInformation }) => {
             <div className="overflow-hidden">
               <table className="min-w-full text-left text-sm font-light">
                 <thead className="border-b bg-white font-medium dark:border-neutral-500 dark:bg-neutral-600">
-                  <tr>{renderHeaders()}</tr>
+                  {headerKeys.map((header) => (
+                    <th scope="col" className="px-6 py-4" key={header}>
+                      {header}
+                    </th>
+                  ))}
+                  <th className="text-center"> Acciones</th>
                 </thead>
                 <tbody>
-                  {renderRows()}
+                  {tableData.map((row) => (
+                    <tr
+                      className="border-b odd:bg-white even:bg-neutral-100 hover:bg-neutral-200 even:hover:bg-neutral-200 dark:border-neutral-500 dark:bg-neutral-700 "
+                      key={row.id}
+                    >
+                      {headerKeys.map((header) => (
+                        <td
+                          className="whitespace-nowrap px-6 py-4"
+                          key={header}
+                        >
+                          {row[header]}
+                        </td>
+                      ))}
+
+                      <td className='flex justify-center gap-16 items-center h-full px-6 py-4'>
+                        <button
+                          type="button"
+                          className="inline-block rounded bg-cyan-400 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-cyan-600 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-cyan-600 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-cyan-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(84,180,211,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)]"
+                        >
+                          Editar
+                        </button>
+
+                        <button
+                          type="button"
+                          className="inline-block rounded bg-green-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#14a44d] transition duration-150 ease-in-out hover:bg-green-800 hover:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.3),0_4px_18px_0_rgba(20,164,77,0.2)] focus:bg-green-800 focus:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.3),0_4px_18px_0_rgba(20,164,77,0.2)] focus:outline-none focus:ring-0 active:bg-green-900 active:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.3),0_4px_18px_0_rgba(20,164,77,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(20,164,77,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.2),0_4px_18px_0_rgba(20,164,77,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.2),0_4px_18px_0_rgba(20,164,77,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.2),0_4px_18px_0_rgba(20,164,77,0.1)]"
+                        >
+                          Ver
+                        </button>
+
+                        <button
+                          type="button"
+                          className="active:bg-danger-900 inline-block rounded bg-red-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-red-800 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-red-800 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(220,76,100,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)]"
+                        >
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
