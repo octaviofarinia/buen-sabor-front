@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { roleCase } from "./RoleFunctions";
-import { users } from "../../userInteface";
+import { users } from "../../Interfaces/userInteface";
 
 interface Users {
     user: users;

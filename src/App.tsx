@@ -1,12 +1,10 @@
-import axios from 'axios';
+
 import { Route, Routes } from 'react-router';
 import './App.css';
-import AbmTable from './components/ABM/AbmTable';
-import CargaDeRegistro from './components/ABM/CargaDeRegistro';
-import { useEffect, useState } from 'react';
 import Header from './components/Header/Header';
 
 import userData from "../public/user.json";
+import { AbmRouter } from './components/ABM/ABMRouter';
 
 function App() {
   
@@ -18,9 +16,10 @@ function App() {
         <Routes>
           <Route path='/'></Route>
           <Route
-            path="/employee/abm-categorias"
-            element={<AbmTable/>}
+            path="/employee/:categoryName"
+            element={<AbmRouter/>}
           />
+          <Route />
         </Routes>
       </div>
     </>
