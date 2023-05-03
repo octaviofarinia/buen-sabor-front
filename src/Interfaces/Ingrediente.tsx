@@ -1,7 +1,6 @@
 import { UnidadDeMedida } from "./UnidadDeMedida";
 
 export interface Ingrediente{
-    id: Int16Array;
-    nombre: String;
-    unidad_de_medida: UnidadDeMedida;
+    nombre: String | null;
+    unidad_de_medida: UnidadDeMedida | null;
 }

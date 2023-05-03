@@ -16,11 +16,20 @@ export const deleteRegister = ({ id, endpoint }) => {
   axios.delete(`http://localhost:8080/${endpoint}/${id}`).then((res) => {});
 };
 
-export const getRegister = ({ dataSetter, endpoint,id }) => {
+export const getRegister = ({ dataSetter, endpoint, id }) => {
+  axios.get(`http://localhost:8080/${endpoint}/${id}`).then((res) => {
+    dataSetter(res.data);
+    console.log(res.data);
+  });
+};
+
+export const createRegister = ({ endpoint }) => {
   axios
-    .get(`http://localhost:8080/${endpoint}/${id}`)
+    .post(`http://localhost:8080/${endpoint}`)
     .then((res) => {
-      dataSetter(res.data);
-      console.log(res.data);
+      console.log(res.status);
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };

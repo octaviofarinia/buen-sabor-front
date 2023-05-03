@@ -7,16 +7,19 @@ import {
   faEye,
   faPenToSquare,
 } from '@fortawesome/free-regular-svg-icons';
-import { getRegisters } from './API_Calls';
+import { getRegisters, deleteRegister } from './API_Calls';
 
 const AbmTable = ({ tableName, endpoint }) => {
   const [tableData, setTableData] = useState([]);
   const [headerKeys, setHeaderKeys] = useState([]);
 
-  useEffect(()=>{
-    getRegisters({endpoint:endpoint,keySetter:setHeaderKeys,dataSetter:setTableData})
-    
-  },[endpoint]);
+  useEffect(() => {
+    getRegisters({
+      endpoint: endpoint,
+      keySetter: setHeaderKeys,
+      dataSetter: setTableData,
+    });
+  }, [endpoint, tableData]);
 
   return (
     <div className="flex w-full flex-col gap-5 px-32 pt-20">
@@ -25,16 +28,20 @@ const AbmTable = ({ tableName, endpoint }) => {
         {tableName}
       </h1>
       <div className="flex py-4">
-        <button
-          type="button"
-          className="inline-block rounded bg-sky-700 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-sky-800 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-sky-800 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-sky-800 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(84,180,211,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)]"
+        <Link
+          to={`/employee/${tableName}/newRegister`}
         >
-          <FontAwesomeIcon
-            icon={faPlus}
-            size="lg"
-            style={{ color: '#ffffff' }}
-          />
-        </button>
+          <button
+            type="button"
+            className="inline-block rounded bg-sky-700 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-sky-800 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-sky-800 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-sky-800 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(84,180,211,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)]"
+          >
+            <FontAwesomeIcon
+              icon={faPlus}
+              size="lg"
+              style={{ color: '#ffffff' }}
+            />
+          </button>
+        </Link>
       </div>
       <div className="flex flex-col gap-y-1 rounded-2xl shadow-2xl">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -67,6 +74,9 @@ const AbmTable = ({ tableName, endpoint }) => {
                       ))}
 
                       <td className="flex h-full items-center justify-center gap-16 px-6 py-4">
+                      <Link
+                          to={`/employee/${tableName}/${row.id}?editable=true`}
+                        >
                         <button
                           type="button"
                           className="inline-block rounded bg-cyan-400 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-cyan-600 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-cyan-600 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-cyan-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(84,180,211,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)]"
@@ -77,8 +87,9 @@ const AbmTable = ({ tableName, endpoint }) => {
                             style={{ color: '#ffffff' }}
                           />
                         </button>
+                        </Link>
                         <Link
-                          to={`/employee/${tableName}/${row.id}?editable=true&dataModel=${endpoint}`}
+                          to={`/employee/${tableName}/${row.id}?editable=false`}
                         >
                           <button
                             type="button"
@@ -95,7 +106,9 @@ const AbmTable = ({ tableName, endpoint }) => {
                         <button
                           type="button"
                           className="inline-block rounded bg-red-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-red-800 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-red-800 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-red-900 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(220,76,100,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)]"
-                          onClick={() => deleteButton(row.id)}
+                          onClick={() => {
+                            deleteRegister({ id: row.id, endpoint: endpoint });
+                          }}
                         >
                           <FontAwesomeIcon
                             icon={faTrashCan}

@@ -6,6 +6,7 @@ import userData from './user.json';
 import { AbmRouter } from './components/ABM/ABMRouter';
 import { Detail } from './views/Detail';
 import { EmployeeMain } from './views/EmployeeMain';
+import { NewRegister } from './components/ABM/NewRegister';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/employee" element={<EmployeeMain/>}/>
           <Route path="/employee/:Name?" element={<AbmRouter />} />
           <Route path="/employee/:Name/:id?" element={<Detail  />} />
+          <Route path="/employee/:Name/newRegister?" element={<NewRegister  />} />
         </Routes>
       </div>
     </>

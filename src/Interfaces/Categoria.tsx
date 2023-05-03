@@ -1,5 +1,4 @@
-export interface Categoria{
-    id: Int16Array;
-    denominacion: String;
-    id_rubro_padre: Int16Array;
-}
+export interface Categoria {
+    denominacion: string | null;
+    id_rubro_padre: Int16Array | null;
+  }
