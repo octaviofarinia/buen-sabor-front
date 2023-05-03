@@ -1,19 +1,23 @@
 [
   {
-    "name": "categorias",
-    "imagen": "../../public/Categorias.png"
+    "name": "Categorias",
+    "imagen": "../../public/Categorias.png",
+    "interface": "Categorias"
     
   },
   {
-    "name": "ingredientes",
-    "imagen": "../../public/Ingredientes.png"
+    "name": "Ingredientes",
+    "imagen": "../../public/Ingredientes.png",
+    "interface": "Ingredientes"
   },
   {
-    "name": "productos",
-    "imagen": "../../public/Productos.png"
+    "name": "Productos",
+    "imagen": "../../public/Productos.png",
+    "interface": "Productos"
   },
   {
-    "name": "unidad de medida",
-    "imagen": "../../public/unidadesMedida.png"
+    "name": "UnidadDeMedida",
+    "imagen": "../../public/unidadesMedida.png",
+    "interface": "UnidadDeMedida"
   }
 ]

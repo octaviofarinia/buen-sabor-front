@@ -1,27 +1,33 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getRegister } from '../components/ABM/API_Calls';
+import { APIRouter } from '../components/ABM/APIRouter';
 
 export const Detail = () => {
+  const [registerData, setRegisterData] = useState([]);
+
   const { Name, id } = useParams();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const editable = params.get('editable') === 'true';
+  
+
+  useEffect(() => {
+    getRegister({ dataSetter: setRegisterData, id: id, endpoint: APIRouter({dataModel:Name}) });
+  }, []);
   return (
-    <div className="p-6">
-      <h5 className="mb-3 text-lg font-bold">White city</h5>
-      <p className="mb-4 pb-2">
-        Ut pretium ultricies dignissim. Sed sit amet mi eget urna placerat
-        vulputate. Ut vulputate est non quam dignissim elementum. Donec a
-        ullamcorper diam.
-      </p>
-      {editable?<p>EDITABLE</p>:<p>NOEDITABLE</p>}
-      <a
-        href="#!"
-        data-mdb-ripple="true"
-        data-mdb-ripple-color="light"
-        className="inline-block rounded-full bg-blue-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg"
-      >
-        Read more
-      </a>
+    <div className="bg-white py-6 sm:py-8 lg:py-12">
+      <div className="mx-auto max-w-screen-md px-4 md:px-8">
+        <h1 className="mb-4 text-center text-2xl font-bold text-gray-800 sm:text-3xl md:mb-6"></h1>
+        <div>
+          {Object.keys(registerData).map((key) => (
+            <div key={key}>
+              <span>{key}: </span>
+              <span>{registerData[key]}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

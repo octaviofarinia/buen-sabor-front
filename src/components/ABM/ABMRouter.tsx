@@ -2,15 +2,17 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AbmTable from './AbmTable';
 import rutas from '../../Interfaces/routes.json';
+import { APIRouter } from './APIRouter';
 export const AbmRouter = () => {
   const { Name } = useParams();
   const [rutaEspecificada, setRutaEspecificada] = useState([]);
 
   useEffect(() => {
     setRutaEspecificada(rutas);
+    
   });
   return rutaEspecificada.find((obj) => obj.name === Name) ? (
-    <AbmTable tableName={Name} />
+    <AbmTable tableName={Name} endpoint={APIRouter({dataModel:Name})} />
   ) : (
     <div
       className="inline-flex items-center rounded-lg rounded-2xl bg-red-100 m-20 p-6 text-base text-red-700 shadow-xl"

@@ -1,15 +1,26 @@
 import axios from 'axios';
 
-export const getCategories = ({ keySetter, dataSetter }) => {
-  axios.get(`http://localhost:8080/api/v1/rubros-articulos`).then((res) => {
-    dataSetter(res.data);
-    keySetter(Object.keys(res.data[0]));
-  });
-};
-
-export const deleteCategoria = (id) => {
+export const getRegisters = ({ keySetter, dataSetter, endpoint }) => {
   axios
-    .delete(`http://localhost:8080/api/v1/rubros-articulos/${id}`)
-    .then((res) => {});
+    .get(`http://localhost:8080/${endpoint}`)
+    .then((res) => {
+      dataSetter(res.data);
+      keySetter(Object.keys(res.data[0]));
+    })
+    .catch((err) => {
+      dataSetter([]), keySetter([]);
+    });
 };
 
+export const deleteRegister = ({ id, endpoint }) => {
+  axios.delete(`http://localhost:8080/${endpoint}/${id}`).then((res) => {});
+};
+
+export const getRegister = ({ dataSetter, endpoint,id }) => {
+  axios
+    .get(`http://localhost:8080/${endpoint}/${id}`)
+    .then((res) => {
+      dataSetter(res.data);
+      console.log(res.data);
+    });
+};

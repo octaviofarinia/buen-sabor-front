@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import routes from '../Interfaces/routes.json';
 export const EmployeeMain = ({ employeeName }) => {
   return (
@@ -5,8 +6,8 @@ export const EmployeeMain = ({ employeeName }) => {
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
         <div className="grid gap-6 sm:grid-cols-2">
           {routes.map((route) => (
-            <a
-              href="#"
+            <Link
+            to={`${route.name}?interface=${route.interface}`}  key={route.name}
               className="group relative flex h-80 items-end overflow-hidden rounded-lg bg-gray-100 p-4 shadow-lg"
             >
               <img
@@ -19,11 +20,11 @@ export const EmployeeMain = ({ employeeName }) => {
 
               <div className="relative flex flex-col">
                 <span className="text-gray-300">ABM</span>
-                <span className="text-lg font-semibold text-white lg:text-xl">
+                <span className="text-lg font-semibold text-white lg:text-xl capitalize">
                   {route.name}
                 </span>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

@@ -1,28 +1,22 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBoxOpen, faPlus } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getCategories, deleteCategoria } from './API_Calls';
 import {
   faTrashCan,
   faEye,
   faPenToSquare,
 } from '@fortawesome/free-regular-svg-icons';
+import { getRegisters } from './API_Calls';
 
-const AbmTable = ({ tableName }) => {
+const AbmTable = ({ tableName, endpoint }) => {
   const [tableData, setTableData] = useState([]);
   const [headerKeys, setHeaderKeys] = useState([]);
 
-  function deleteButton(id) {
-    deleteCategoria(id);
-    getCategories({ dataSetter: setTableData, keySetter: setHeaderKeys });
+  useEffect(()=>{
+    getRegisters({endpoint:endpoint,keySetter:setHeaderKeys,dataSetter:setTableData})
     
-  }
-
-  useEffect(() => {
-    getCategories({ dataSetter: setTableData, keySetter: setHeaderKeys });
-  }, []);
+  },[endpoint]);
 
   return (
     <div className="flex w-full flex-col gap-5 px-32 pt-20">
@@ -35,7 +29,11 @@ const AbmTable = ({ tableName }) => {
           type="button"
           className="inline-block rounded bg-sky-700 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-sky-800 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-sky-800 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-sky-800 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(84,180,211,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)]"
         >
-         <FontAwesomeIcon icon={faPlus} size="lg" style={{color: "#ffffff",}} />
+          <FontAwesomeIcon
+            icon={faPlus}
+            size="lg"
+            style={{ color: '#ffffff' }}
+          />
         </button>
       </div>
       <div className="flex flex-col gap-y-1 rounded-2xl shadow-2xl">
@@ -44,12 +42,14 @@ const AbmTable = ({ tableName }) => {
             <div className="overflow-hidden">
               <table className="min-w-full text-left text-sm font-light">
                 <thead className="border-b bg-white font-medium uppercase dark:border-neutral-500 dark:bg-neutral-600">
-                  {headerKeys.map((header) => (
-                    <th scope="col" className="px-6 py-4" key={header}>
-                      {header}
-                    </th>
-                  ))}
-                  <th className="text-center"> Acciones</th>
+                  <tr className="border-b odd:bg-white even:bg-neutral-100 hover:bg-neutral-200 even:hover:bg-neutral-200 dark:border-neutral-500 dark:bg-neutral-700 ">
+                    {headerKeys.map((header) => (
+                      <th scope="col" className="px-6 py-4" key={header}>
+                        {header}
+                      </th>
+                    ))}
+                    <th className="text-center"> Acciones</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {tableData.map((row) => (
@@ -78,7 +78,7 @@ const AbmTable = ({ tableName }) => {
                           />
                         </button>
                         <Link
-                          to={`/employee/${tableName}/${row.id}?editable=true`}
+                          to={`/employee/${tableName}/${row.id}?editable=true&dataModel=${endpoint}`}
                         >
                           <button
                             type="button"

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { roleCase } from './RoleFunctions';
+import { HeaderRouter } from './HeaderRouter';
 import { users } from '../../Interfaces/userInteface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
@@ -13,7 +13,7 @@ const Header = ({ user }: Users) => {
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
         <header className="flex items-center justify-between py-4 md:py-8">
           <Link
-            to={user.role === 'EMPLOYEE ' ? '/employee' : '/'}
+            to={user.role === 'EMPLOYEE' ? '/employee' : '/'}
             className="inline-flex items-center gap-2.5 text-3xl font-bold uppercase text-amber-300 md:text-3xl"
             aria-label="logo"
           >
@@ -27,21 +27,10 @@ const Header = ({ user }: Users) => {
             </h2>
           </Link>
 
-          <nav className="hidden gap-12 lg:flex">
-            {roleCase({user:user})}
-          </nav>
+          <nav className="hidden gap-12 lg:flex"></nav>
 
           <div className="-ml-8 hidden flex-col gap-2.5 sm:flex-row sm:justify-center lg:flex lg:justify-start">
-            {user.status ? (
-              <Link to="/perfil" className="inline-block rounded-lg px-4 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:text-indigo-500 focus-visible:ring active:text-indigo-600 md:text-base">Perfil</Link>
-            ) : (
-              <Link to="/registro"  className="inline-block rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">Registrarse</Link>
-            )}
-            {user.status ? (
-              <Link to="/logout" className="inline-block rounded-lg px-4 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:text-indigo-500 focus-visible:ring active:text-indigo-600 md:text-base">Cerrar sesion</Link>
-            ) : (
-              <Link to="/login" className="inline-block rounded-lg px-4 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:text-indigo-500 focus-visible:ring active:text-indigo-600 md:text-base">Iniciar sesión</Link>
-            )}
+            {HeaderRouter({ user: user })}
           </div>
 
           <button
@@ -55,9 +44,9 @@ const Header = ({ user }: Users) => {
               fill="currentColor"
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                clip-rule="evenodd"
+                clipRule="evenodd"
               />
             </svg>
             Menu

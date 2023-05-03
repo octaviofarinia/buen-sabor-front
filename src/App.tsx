@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router';
 import './App.css';
 import Header from './components/Header/Header';
 
-import userData from '../public/user.json';
+import userData from './user.json';
 import { AbmRouter } from './components/ABM/ABMRouter';
 import { Detail } from './views/Detail';
 import { EmployeeMain } from './views/EmployeeMain';
@@ -14,9 +14,9 @@ function App() {
         <Header user={userData[0]} />
         <Routes>
           <Route path="/"></Route>
-          <Route path="/employee" element={<EmployeeMain/>}></Route>
-          <Route path="/employee/:Name" element={<AbmRouter />} />
-          <Route path="/employee/:Name/:id?" element={<Detail />} />
+          <Route path="/employee" element={<EmployeeMain/>}/>
+          <Route path="/employee/:Name?" element={<AbmRouter />} />
+          <Route path="/employee/:Name/:id?" element={<Detail  />} />
         </Routes>
       </div>
     </>
