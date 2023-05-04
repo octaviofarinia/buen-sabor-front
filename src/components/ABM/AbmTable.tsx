@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBoxOpen, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useCallback } from 'react';
 import {
   faTrashCan,
   faEye,
@@ -20,8 +20,19 @@ const AbmTable = ({ tableName, endpoint }) => {
       dataSetter: setTableData,
     });
   }, [endpoint]);
-
-  return (
+  
+  const handleDeleteRecord = ({id}) => {
+    deleteRegister({id:id,endpoint:endpoint}).then(() => {
+      getRegisters({
+        endpoint: endpoint,
+        keySetter: setHeaderKeys,
+        dataSetter: setTableData,
+      });
+    });
+  };
+  
+  {return tableData===(null || undefined) ? " " : (
+    
     <div className="flex w-full flex-col gap-5 px-32 pt-20">
       <h1 className="text-slate-950 flex items-center gap-3 text-3xl font-extrabold uppercase">
         <FontAwesomeIcon icon={faBoxOpen} style={{ color: '#020617' }} />
@@ -105,7 +116,7 @@ const AbmTable = ({ tableName, endpoint }) => {
                           type="button"
                           className="inline-block rounded bg-red-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-red-800 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-red-800 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-red-900 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(220,76,100,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)]"
                           onClick={() => {
-                            deleteRegister({ id: row.id, endpoint: endpoint });
+                            handleDeleteRecord({id:row.id});
                           }}
                         >
                           <FontAwesomeIcon
@@ -124,7 +135,7 @@ const AbmTable = ({ tableName, endpoint }) => {
         </div>
       </div>
     </div>
-  );
+  );} 
 };
 
 export default AbmTable;

@@ -13,7 +13,7 @@ export const getRegisters = ({ keySetter, dataSetter, endpoint }) => {
 };
 
 export const deleteRegister = ({ id, endpoint }) => {
-  axios.delete(`http://localhost:8080/${endpoint}/${id}`).then((res) => {});
+  return axios.delete(`http://localhost:8080/${endpoint}/${id}`);
 };
 
 export const getRegister = ({ dataSetter, endpoint, id }) => {
