@@ -9,6 +9,24 @@ export const NewRegister = ({ registerData }) => {
 
   const navigate = useNavigate();
 
+  function filterObjectByInterface<T>(
+    obj: any,
+    interfaceReference: T
+  ): Partial<T> {
+    const keys = Object.keys(interfaceReference) as Array<keyof T>;
+    let result: Partial<T> = {};
+
+    keys.forEach((key) => {
+      if (key in obj) {
+        result[key] = obj[key];
+      } else {
+        result[key] = null;
+      }
+    });
+
+    return result;
+  }
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -41,7 +59,12 @@ export const NewRegister = ({ registerData }) => {
       typeof registerData === 'object' &&
       Object.keys(registerData).length !== 0
     ) {
-      setPersistibleObject(registerData);
+      setPersistibleObject(
+        filterObjectByInterface(
+          registerData,
+          interfaceRouter({ dataModel: Name })
+        )
+      );
     } else {
       setPersistibleObject(interfaceRouter({ dataModel: Name }));
     }
