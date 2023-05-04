@@ -9,13 +9,12 @@ export const AbmRouter = () => {
 
   useEffect(() => {
     setRutaEspecificada(rutas);
-    
   });
   return rutaEspecificada.find((obj) => obj.name === Name) ? (
-    <AbmTable tableName={Name} endpoint={APIRouter({dataModel:Name})} />
+    <AbmTable tableName={Name} endpoint={APIRouter({ dataModel: Name })} />
   ) : (
     <div
-      className="inline-flex items-center rounded-lg rounded-2xl bg-red-100 m-20 p-6 text-base text-red-700 shadow-xl"
+      className="m-20 inline-flex items-center rounded-lg rounded-2xl bg-red-100 p-6 text-base text-red-700 shadow-xl"
       role="alert"
     >
       <div className="flex gap-3 ">
