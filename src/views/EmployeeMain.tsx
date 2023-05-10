@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import routes from '../Interfaces/routes.json';
+import routes from '../Interfaces/EmployeeRoutes.json';
 export const EmployeeMain = ({ employeeName }) => {
   return (
     <div className="bg-white py-6 sm:py-8 lg:py-12">

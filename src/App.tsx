@@ -14,10 +14,9 @@ function App() {
   },[])
   return (
     <>
-      <div className="flex flex-col justify-between overflow-hidden h-full">
+      <div className="flex flex-col justify-between h-full">
         <Header user={user} />
         <Routes>
-          <Route path="/"></Route>
           {EmployeeRoutesConfigs.map((route, index) => (
             <Route key={index} path={route.path} element={route.element} />
           ))}

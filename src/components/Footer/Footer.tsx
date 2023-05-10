@@ -1,112 +1,113 @@
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
+
 import { users } from '../../Interfaces/userInteface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
+import { faGithub,faGithubSquare } from '@fortawesome/fontawesome-free-brands';
 
 interface Users {
   user: users;
 }
 export const Footer = ({ user }: Users) => {
   return user.role == 'USER' ? (
-    <footer className="body-font bg-slate-900 text-slate-900 ">
-      <div className="text-md container mx-auto px-5 lg:text-lg">
-        <div className="order-first flex h-80 flex-wrap text-center md:text-left ">
-          <div className="flex w-full  flex-col gap-3 overflow-hidden px-4 pt-8 text-zinc-100 md:w-1/2 lg:w-1/3">
+    <footer className="body-font bg-neutral-900 text-slate-900 ">
+      <div className="text sm container mx-auto px-5 lg:text-lg p-3">
+        <div className="order-first flex  flex-wrap text-center sm:text-left ">
+          <div className="flex w-full  h-72 flex-col  gap-3 overflow-hidden px-4 pt-8 text-zinc-100 sm:w-1/2 lg:w-1/3">
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">
               el buen sabor
             </h2>
             <Link
               to="/Inicio"
-              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400 active:bg-amber-500
+              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
               active:text-slate-900 ${styles}`}
             >
               <p>Inicio</p>
             </Link>
             <Link
               to="/Productos"
-              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400 active:bg-amber-500
+              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
               active:text-slate-900 ${styles}`}
             >
               <p>Productos</p>
             </Link>
             <Link
               to="/Carrito"
-              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400 active:bg-amber-500
+              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
               active:text-slate-900 ${styles}`}
             >
               <p>Carrito</p>
             </Link>
             <Link
               to="/Nosotros"
-              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400 active:bg-amber-500
+              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400   active:bg-amber-500
               active:text-slate-900 ${styles}`}
             >
               <p>Nosotros</p>
             </Link>
             <Link
               to="/Donde-Estamos"
-              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400 active:bg-amber-500
+              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
               active:text-slate-900 ${styles}`}
             >
               <p>Donde Estamos</p>
             </Link>
           </div>
-          <div className="flex w-full flex-col gap-3 px-4 pt-8  text-zinc-100 md:w-1/2  lg:w-1/3">
+          <div className="flex w-full flex-col gap-3 px-4 pt-8  text-zinc-100 sm:w-1/2  lg:w-1/3">
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">
               Formas de Retiro
             </h2>
-            <div className="flex gap-5">
+            <div className="flex gap-5 justify-center items-center sm:items-start sm:justify-start">
               <img src="../../../public/Take_Away_Cartel.png" alt="" />
               <img src="../../../public/Delivery_Cartel.png" alt="" />
             </div>
           </div>
-          <div className="flex w-full  flex-col gap-3 overflow-hidden px-4 pt-8 text-zinc-100 md:w-1/2 lg:w-1/3">
+          <div className="flex w-full flex-col gap-3 overflow-hidden px-4 pt-8 text-zinc-100  lg:w-1/3">
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">
               Medios de pago (PLACEHOLDER)
             </h2>
-            <div className='flex items-center '>
+            <div className='flex flex-col items-center '>
               <img
                 src="../../../public/mediosPago.png"
                 alt=""
-                className="object-contain"
+                className="object-contain max-w-fit"
               />
             </div>
           </div>
         </div>
       </div>
-      <div className="bg-slate-900">
-        <div className="container mx-auto flex flex-col items-center px-5 py-6 sm:flex-row">
-          <a className="title-font flex items-center justify-center p-2 font-medium text-gray-900 md:justify-start">
+      <div className="bg-neutral-800">
+        <div className="container mx-auto flex flex-col items-center px-5 py-6 sm:flex-row ">
+          <a className="title-font flex items-center justify-center p-2 font-medium text-gray-900 sm:justify-start">
             <FontAwesomeIcon
               icon={faBurger}
               size="2xl"
-              style={{ color: '#fcd34d' }}
+              className='text-amber-400'
             />
-            <h5 className="ml-3 text-xl uppercase text-amber-300">
+            <h5 className="ml-3 text-xl uppercase text-amber-400">
               El Buen Sabor
             </h5>
           </a>
-          <p className="mt-4  text-amber-300 sm:ml-6 sm:mt-0">
-            © 2023 El Buen Sabor —
+          <h5 className="mt-4 text-sm sm:text-base text-amber-400 sm:ml-6 sm:mt-0 flex flex-col gap-3 items-center sm:flex-row">
+            © 2023 El Buen Sabor 
             <a
-              href="https://twitter.com/FrancoMinatii"
+              href="https://github.com/FrancoMinati"
               rel="noopener noreferrer"
-              className="ml-1 text-zinc-400"
+              className="ml-1 text-zinc-400  flex  gap-2 hover:text-zinc-200"
               target="_blank"
             >
-              @FrancoMinatii
+             <FontAwesomeIcon icon={faGithubSquare} size="xl" />FrancoMinati
             </a>
-            &nbsp; —
             <a
-              href="https://twitter.com/Octaviofaria1              "
+              href="https://github.com/octaviofarinia"
               rel="noopener noreferrer"
-              className="ml-1 text-zinc-400"
+              className="ml-1 text-sm sm:text-base text-zinc-400 flex  gap-2 hover:text-zinc-200 text-base" 
               target="_blank"
             >
-              @Octaviofaria1
+              <FontAwesomeIcon icon={faGithubSquare} size="xl" />octaviofarinia
             </a>
-          </p>
+          </h5>
           <span className="mt-4 inline-flex justify-center sm:ml-auto sm:mt-0 sm:justify-start">
             <a className="text-zinc-200">
               <svg

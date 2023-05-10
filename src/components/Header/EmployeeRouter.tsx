@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import routes from '../../Interfaces/routes.json';
+import routes from '../../Interfaces/EmployeeRoutes.json';
 
 export const EmployeeRouter = ({ user }) => {
   return (

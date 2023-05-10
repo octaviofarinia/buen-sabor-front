@@ -1,0 +1,19 @@
+[
+    {
+      "name": "Hamburguesas",
+      "imagen": "../../public/burga.jpg" 
+    },
+    {
+      "name": "Panchos",
+      "imagen": "../../public/panchos.jpg" 
+    },
+    {
+      "name": "Pizzas",
+      "imagen": "../../public/pizza.jpg" 
+    },
+    {
+      "name": "Papas Fritas",
+      "imagen": "../../public/papas.jpg"
+    }
+  ]
+  

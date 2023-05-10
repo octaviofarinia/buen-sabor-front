@@ -10,20 +10,20 @@ interface Users {
 
 const Header = ({ user }: Users) => {
   return (
-    <div className="h-32 bg-slate-900 lg:pb-12">
+    <div className="h-32 bg-neutral-900 lg:pb-12">
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
         <header className="flex items-center justify-between py-4 md:py-8">
           <Link
             to={user.role === 'EMPLOYEE' ? '/employee' : '/'}
-            className="inline-flex items-center gap-2.5 text-3xl font-bold uppercase text-amber-300 md:text-3xl"
+            className="inline-flex items-center gap-2.5 text-3xl font-bold uppercase text-amber-400 md:text-3xl"
             aria-label="logo"
           >
             <FontAwesomeIcon
               icon={faBurger}
               size="2xl"
-              style={{ color: '#fcd34d' }}
+              className='text-amber-400'
             />
-            <h2 className="text-3xl font-bold uppercase text-amber-300 md:text-3xl">
+            <h2 className="text-3xl font-bold uppercase text-amber-400 md:text-3xl">
               el buen sabor
             </h2>
           </Link>
