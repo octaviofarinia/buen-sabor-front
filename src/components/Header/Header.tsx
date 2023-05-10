@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import { HeaderRouter } from './HeaderRouter';
 import { users } from '../../Interfaces/userInteface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
+import { UserRouter } from './UserRouter';
+import { EmployeeRouter } from './EmployeeRouter';
 interface Users {
   user: users;
 }
@@ -27,10 +28,12 @@ const Header = ({ user }: Users) => {
             </h2>
           </Link>
 
-          <nav className="hidden gap-12 lg:flex"></nav>
+          <nav className="hidden gap-12 lg:flex">
+          
+          </nav>
 
           <div className="-ml-8 hidden flex-col gap-2.5 sm:flex-row sm:justify-center lg:flex lg:justify-start">
-            {HeaderRouter({ user: user })}
+          {user.role=='USER' ? <UserRouter user={user} /> : <EmployeeRouter user={user} />}
           </div>
 
           <button
