@@ -10,11 +10,11 @@ import { Footer } from './components/Footer/Footer';
 function App() {
   const [user,setUser]=useState([]);
   useEffect(()=>{
-   setUser(userData[1]); 
+   setUser(userData[0]); 
   },[])
   return (
     <>
-      <div className="flex flex-col justify-between h-full">
+      <div className={`flex flex-col  h-full ${user.role=="USER" ? "justify-between":""}`}>
         <Header user={user} />
         <Routes>
           {EmployeeRoutesConfigs.map((route, index) => (

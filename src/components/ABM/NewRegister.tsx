@@ -43,7 +43,7 @@ export const NewRegister = ({ registerData }) => {
       });
     }
 
-    navigate(`/employee/${Name}`);
+    navigate(`/employee/${Name}`, { replace: true });
   }
 
   function handleChange(e: React.FormEvent<HTMLFormElement>) {
