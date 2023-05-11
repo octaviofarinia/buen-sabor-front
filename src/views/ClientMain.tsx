@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 import routes from '../Interfaces/UserRoutes.json';
 export const ClientMain = () => {
   return (
-    <div className='w-full flex flex-col'>
+    <div className="flex w-full flex-col">
       <section className="h-92 relative flex flex-1 shrink-0 items-center justify-center   bg-gray-100 py-16 shadow-lg md:py-20 xl:py-48">
         <img
-          src="../../public/imagen-archivo-hamburguesas_98 1 (1).jpg"
+          src="/imagen-archivo-hamburguesas_98 1 (1).jpg"
           loading="lazy"
           alt="Photo by Fakurian Design"
           className="absolute inset-0 h-full w-full object-cover object-center"
@@ -13,8 +13,8 @@ export const ClientMain = () => {
 
         <div className="absolute inset-0 bg-slate-500 mix-blend-multiply"></div>
         <div className="absolute top-0 flex w-full gap-5 px-4 py-3">
-          <img src="../../../public/Take_Away_Cartel.png" alt="" className='w-12 sm:w-20' />
-          <img src="../../../public/Delivery_Cartel.png" alt=""  className='w-12 sm:w-20'/>
+          <img src="/Take_Away_Cartel.png" alt="" className="w-12 sm:w-20" />
+          <img src="/Delivery_Cartel.png" alt="" className="w-12 sm:w-20" />
         </div>
         <div className="relative flex flex-col items-center p-4 sm:max-w-xl">
           <h2 className="mb-4 text-center text-lg uppercase text-zinc-100 sm:text-2xl md:mb-8">

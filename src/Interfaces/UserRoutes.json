@@ -1,19 +1,18 @@
 [
-    {
-      "name": "Hamburguesas",
-      "imagen": "../../public/burga.jpg" 
-    },
-    {
-      "name": "Panchos",
-      "imagen": "../../public/panchos.jpg" 
-    },
-    {
-      "name": "Pizzas",
-      "imagen": "../../public/pizza.jpg" 
-    },
-    {
-      "name": "Papas Fritas",
-      "imagen": "../../public/papas.jpg"
-    }
-  ]
-  
+  {
+    "name": "Hamburguesas",
+    "imagen": "/burga.jpg"
+  },
+  {
+    "name": "Panchos",
+    "imagen": "/panchos.jpg"
+  },
+  {
+    "name": "Pizzas",
+    "imagen": "/pizza.jpg"
+  },
+  {
+    "name": "Papas Fritas",
+    "imagen": "/papas.jpg"
+  }
+]

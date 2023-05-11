@@ -4,7 +4,7 @@ import { users } from '../../Interfaces/userInteface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
-import { faGithub,faGithubSquare } from '@fortawesome/fontawesome-free-brands';
+import { faGithub, faGithubSquare } from '@fortawesome/fontawesome-free-brands';
 
 interface Users {
   user: users;
@@ -12,9 +12,9 @@ interface Users {
 export const Footer = ({ user }: Users) => {
   return user.role == 'USER' ? (
     <footer className="body-font bg-neutral-900 text-slate-900 ">
-      <div className="text sm container mx-auto px-5 lg:text-lg p-3">
+      <div className="text sm container mx-auto p-3 px-5 lg:text-lg">
         <div className="order-first flex  flex-wrap text-center sm:text-left ">
-          <div className="flex w-full  h-72 flex-col  gap-3 overflow-hidden px-4 pt-8 text-zinc-100 sm:w-1/2 lg:w-1/3">
+          <div className="flex h-72  w-full flex-col  gap-3 overflow-hidden px-4 pt-8 text-zinc-100 sm:w-1/2 lg:w-1/3">
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">
               el buen sabor
             </h2>
@@ -58,20 +58,20 @@ export const Footer = ({ user }: Users) => {
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">
               Formas de Retiro
             </h2>
-            <div className="flex gap-5 justify-center items-center sm:items-start sm:justify-start">
-              <img src="../../../public/Take_Away_Cartel.png" alt="" />
-              <img src="../../../public/Delivery_Cartel.png" alt="" />
+            <div className="flex items-center justify-center gap-5 sm:items-start sm:justify-start">
+              <img src="/Take_Away_Cartel.png" alt="" />
+              <img src="/Delivery_Cartel.png" alt="" />
             </div>
           </div>
           <div className="flex w-full flex-col gap-3 overflow-hidden px-4 pt-8 text-zinc-100  lg:w-1/3">
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">
               Medios de pago (PLACEHOLDER)
             </h2>
-            <div className='flex flex-col items-center '>
+            <div className="flex flex-col items-center ">
               <img
-                src="../../../public/mediosPago.png"
+                src="/mediosPago.png"
                 alt=""
-                className="object-contain max-w-fit"
+                className="max-w-fit object-contain"
               />
             </div>
           </div>
@@ -83,29 +83,31 @@ export const Footer = ({ user }: Users) => {
             <FontAwesomeIcon
               icon={faBurger}
               size="2xl"
-              className='text-amber-400'
+              className="text-amber-400"
             />
             <h5 className="ml-3 text-xl uppercase text-amber-400">
               El Buen Sabor
             </h5>
           </a>
-          <h5 className="mt-4 text-sm sm:text-base text-amber-400 sm:ml-6 sm:mt-0 flex flex-col gap-3 items-center sm:flex-row">
-            © 2023 El Buen Sabor 
+          <h5 className="mt-4 flex flex-col items-center gap-3 text-sm text-amber-400 sm:ml-6 sm:mt-0 sm:flex-row sm:text-base">
+            © 2023 El Buen Sabor
             <a
               href="https://github.com/FrancoMinati"
               rel="noopener noreferrer"
-              className="ml-1 text-zinc-400  flex  gap-2 hover:text-zinc-200"
+              className="ml-1 flex  gap-2  text-zinc-400 hover:text-zinc-200"
               target="_blank"
             >
-             <FontAwesomeIcon icon={faGithubSquare} size="xl" />FrancoMinati
+              <FontAwesomeIcon icon={faGithubSquare} size="xl" />
+              FrancoMinati
             </a>
             <a
               href="https://github.com/octaviofarinia"
               rel="noopener noreferrer"
-              className="ml-1 text-sm sm:text-base text-zinc-400 flex  gap-2 hover:text-zinc-200 text-base" 
+              className="ml-1 flex gap-2 text-sm text-base  text-zinc-400 hover:text-zinc-200 sm:text-base"
               target="_blank"
             >
-              <FontAwesomeIcon icon={faGithubSquare} size="xl" />octaviofarinia
+              <FontAwesomeIcon icon={faGithubSquare} size="xl" />
+              octaviofarinia
             </a>
           </h5>
           <span className="mt-4 inline-flex justify-center sm:ml-auto sm:mt-0 sm:justify-start">
