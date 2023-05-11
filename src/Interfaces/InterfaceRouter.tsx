@@ -20,7 +20,7 @@ export const interfaceRouter = ({dataModel}) => {
 
 const base_category_object: Categoria = {
   denominacion: null ?? undefined,
-  id_rubro_padre: null ?? undefined,
+  idRubroPadre: null ?? undefined,
 };
 const base_unidad_object: UnidadDeMedida = {
   nombre: null ?? undefined,
