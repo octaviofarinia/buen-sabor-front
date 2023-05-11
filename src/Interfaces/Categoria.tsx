@@ -1,4 +1,4 @@
 export interface Categoria {
-    denominacion: string | null;
-    id_rubro_padre: Int16Array | null;
+    denominacion: string | null | undefined;
+    idRubroPadre: Int16Array | null | undefined;
   }

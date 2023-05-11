@@ -1,23 +1,22 @@
 [
   {
     "name": "Categorias",
-    "imagen": "../../public/Categorias.png",
+    "imagen": "/Categorias.png",
     "interface": "Categorias"
-    
   },
   {
     "name": "Ingredientes",
-    "imagen": "../../public/Ingredientes.png",
+    "imagen": "/Ingredientes.png",
     "interface": "Ingredientes"
   },
   {
     "name": "Productos",
-    "imagen": "../../public/Productos.png",
+    "imagen": "/Productos.png",
     "interface": "Productos"
   },
   {
     "name": "UnidadDeMedida",
-    "imagen": "../../public/unidadesMedida.png",
+    "imagen": "/unidadesMedida.png",
     "interface": "UnidadDeMedida"
   }
 ]

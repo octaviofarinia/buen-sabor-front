@@ -27,23 +27,23 @@ export const NewRegister = ({ registerData }) => {
     return result;
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (id) {
-      updateRegister({
+      const response = await updateRegister({
         endpoint: APIRouter({ dataModel: Name }),
         persistenObject: persistibleObject,
         id: id,
       });
     } else {
-      createRegister({
+      const response = await createRegister({
         endpoint: APIRouter({ dataModel: Name }),
         persistenObject: persistibleObject,
       });
     }
-
-    navigate(`/employee/${Name}`);
+    
+    navigate(`/employee/${Name}`, { replace: true });
   }
 
   function handleChange(e: React.FormEvent<HTMLFormElement>) {

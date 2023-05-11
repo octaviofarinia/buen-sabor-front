@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import routes from '../../Interfaces/routes.json';
-export const HeaderRouter = ({ user }) => {
-  return user.role == 'EMPLOYEE' ? (
+import routes from '../../Interfaces/EmployeeRoutes.json';
+
+export const EmployeeRouter = ({ user }) => {
+  return (
     <div className="-ml-8 hidden flex-col gap-2.5 sm:flex-row sm:justify-center lg:flex lg:justify-start">
       <Link
         to="/employee"
@@ -23,24 +24,6 @@ export const HeaderRouter = ({ user }) => {
       >
         Perfil
       </Link>
-    </div>
-  ) : (
-    <div className="-ml-8 hidden flex-col gap-2.5 sm:flex-row sm:justify-center lg:flex lg:justify-start">
-      {user.status ? (
-        <Link
-          to="/perfil"
-          className="inline-block rounded-lg px-4 py-3 text-center text-sm font-semibold text-amber-300 outline-none ring-amber-300 transition duration-100 hover:text-amber-400 focus-visible:ring active:text-amber-500 md:text-base"
-        >
-          Perfil
-        </Link>
-      ) : (
-        <Link
-          to="/registro"
-          className="inline-block rounded-lg bg-amber-300 px-8 py-3 text-center text-sm font-semibold text-black outline-none ring-amber-300 transition duration-100 hover:bg-amber-400 focus-visible:ring active:bg-amber-500 md:text-base"
-        >
-          Registrarse
-        </Link>
-      )}
       {user.status ? (
         <Link
           to="/logout"

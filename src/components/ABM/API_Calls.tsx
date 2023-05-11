@@ -22,27 +22,25 @@ export const getRegister = ({ dataSetter, endpoint, id }) => {
   });
 };
 
-export const createRegister = ({ endpoint, persistenObject }) => {
-  axios
-    .post(`http://localhost:8080/${endpoint}`, persistenObject)
-    .then((res) => {})
-    .catch((err) => {
-      console.log(err);
-    });
+export const createRegister = async ({ endpoint, persistenObject }) => {
+  try {
+    const res = await axios.post(`http://localhost:8080/${endpoint}`, persistenObject);
+    return res;
+  } catch (err) {
+    console.error(err);
+    throw err; // or return some error object if you want
+  }
 };
 
-export const updateRegister = ({ endpoint, persistenObject, id }) => {
-  console.log({
-    ...persistenObject,
-    id: id,
-  });
-  axios
-    .put(`http://localhost:8080/${endpoint}/${id}`, {
+export const updateRegister = async ({ endpoint, persistenObject, id }) => {
+  try {
+    const res = await axios.put(`http://localhost:8080/${endpoint}/${id}`, {
       ...persistenObject,
       id: id,
-    })
-    .then((res) => {})
-    .catch((err) => {
-      console.log(err);
     });
+    return res;
+  } catch (err) {
+    console.error(err);
+    throw err; // or return some error object if you want
+  }
 };

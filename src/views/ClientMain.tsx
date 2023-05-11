@@ -1,0 +1,78 @@
+import { Link } from 'react-router-dom';
+import routes from '../Interfaces/UserRoutes.json';
+export const ClientMain = () => {
+  return (
+    <div className="flex w-full flex-col">
+      <section className="h-92 relative flex flex-1 shrink-0 items-center justify-center   bg-gray-100 py-16 shadow-lg md:py-20 xl:py-48">
+        <img
+          src="/imagen-archivo-hamburguesas_98 1 (1).jpg"
+          loading="lazy"
+          alt="Photo by Fakurian Design"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+
+        <div className="absolute inset-0 bg-slate-500 mix-blend-multiply"></div>
+        <div className="absolute top-0 flex w-full gap-5 px-4 py-3">
+          <img src="/Take_Away_Cartel.png" alt="" className="w-12 sm:w-20" />
+          <img src="/Delivery_Cartel.png" alt="" className="w-12 sm:w-20" />
+        </div>
+        <div className="relative flex flex-col items-center p-4 sm:max-w-xl">
+          <h2 className="mb-4 text-center text-lg uppercase text-zinc-100 sm:text-2xl md:mb-8">
+            Bienvenidos al Buen Sabor
+          </h2>
+          <h1 className="mb-8 text-center text-4xl font-bold text-amber-400 sm:text-5xl md:mb-12 md:text-6xl">
+            Donde comer es una revolución
+          </h1>
+
+          <div className="flex w-full flex-col gap-2.5 sm:flex-row sm:justify-center">
+            <Link
+              to="/Productos"
+              className="inline-block rounded-lg bg-amber-400 px-8 py-3 text-center text-sm font-semibold text-neutral-900 outline-none
+           ring-amber-400 transition duration-100 hover:bg-amber-500 focus-visible:ring active:bg-amber-500 md:text-xl"
+            >
+              Ver nuestros productos
+            </Link>
+
+            <Link
+              to="/Nosotros"
+              className="inline-block rounded-lg bg-neutral-900 px-8 py-3 text-center text-sm font-semibold text-amber-400 outline-none
+           ring-neutral-900 transition duration-100 hover:bg-neutral-800 focus-visible:ring active:bg-neutral-800 md:text-xl"
+            >
+              Conocenos
+            </Link>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div className="bg-white py-6 ">
+          <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
+            <div className="grid gap-6 sm:grid-cols-2">
+              {routes.map((route) => (
+                <Link
+                  to={`/Productos/${route.name}`}
+                  key={route.name}
+                  className="group relative flex h-40 items-end overflow-hidden rounded-lg bg-gray-100 p-4 shadow-lg"
+                >
+                  <img
+                    src={route.imagen}
+                    loading="lazy"
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-50"></div>
+
+                  <div className="relative flex flex-col">
+                    <span className="text-gray-300">Categoria</span>
+                    <span className="text-lg font-semibold capitalize text-white lg:text-xl">
+                      {route.name}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};

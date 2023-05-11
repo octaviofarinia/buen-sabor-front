@@ -3,7 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -16,15 +15,29 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-
+html {
+  min-height: 100vh;
+  height: 100%;
+}
 body {
   margin: 0;
-  display: flex;
-  flex-direction: column;
   min-width: 320px;
   min-height: 100vh;
 }
 
-h1,h2,h3,h4,h5,h6 {
+html,
+body,
+#root,
+#root > div {
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a {
   font-family: 'Bebas Neue';
 }

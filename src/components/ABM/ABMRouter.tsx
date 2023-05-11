@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AbmTable from './AbmTable';
-import rutas from '../../Interfaces/routes.json';
+import rutas from '../../Interfaces/EmployeeRoutes.json';
 import { APIRouter } from './APIRouter';
 export const AbmRouter = () => {
   const { Name } = useParams();
