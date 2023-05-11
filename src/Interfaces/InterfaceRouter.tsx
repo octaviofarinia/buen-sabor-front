@@ -22,9 +22,10 @@ const base_category_object: Categoria = {
   denominacion: null ?? undefined,
   idRubroPadre: null ?? undefined,
 };
+
 const base_unidad_object: UnidadDeMedida = {
-  nombre: null ?? undefined,
-  abreviacion: null ?? undefined,
+  denominacion: null ?? undefined,
+  abreviatura: null ?? undefined,
 };
 
 const base_product_object: Producto = {

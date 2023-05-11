@@ -10,7 +10,7 @@ import { Footer } from './components/Footer/Footer';
 function App() {
   const [user,setUser]=useState([]);
   useEffect(()=>{
-   setUser(userData[0]); 
+   setUser(userData[1]); 
   },[])
   return (
     <>

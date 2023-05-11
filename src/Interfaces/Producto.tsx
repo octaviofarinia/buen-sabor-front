@@ -1,3 +1,3 @@
 export interface Producto{
-    nombre: String | null;
+    nombre: String | null | undefined;
 }

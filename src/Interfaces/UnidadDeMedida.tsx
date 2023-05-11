@@ -1,4 +1,4 @@
 export interface UnidadDeMedida{
-    nombre: String | null;
-    abreviacion: String | null;
+    denominacion: String | null | undefined;
+    abreviatura: String | null | undefined;
 }
