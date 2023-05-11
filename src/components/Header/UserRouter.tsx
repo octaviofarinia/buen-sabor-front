@@ -9,19 +9,19 @@ export const UserRouter = () => {
 
   return (
     <div className="-ml-8 hidden flex-col gap-2.5 text-amber-400 sm:flex-row sm:justify-center lg:flex lg:items-center lg:justify-start lg:gap-10 lg:text-xl">
-      <Link to="/Inicio" className="hover:text-amber-500  active:bg-amber-500">
+      <Link to="/Inicio" className="hover:text-amber-500  ">
         Inicio
       </Link>
       <Link
         to="/Productos"
-        className="hover:text-amber-500  active:bg-amber-500"
+        className="hover:text-amber-500  "
       >
         Productos
       </Link>
-      <Link to="/Carrito" className="hover:text-amber-500  active:bg-amber-500">
+      <Link to="/Carrito" className="hover:text-amber-500  ">
         <FontAwesomeIcon
           icon={faCartShopping}
-          className="text-amber-400 hover:text-amber-500  active:bg-amber-500"
+          className="text-amber-400 hover:text-amber-500  "
         />
       </Link>
       {isAuthenticated ? (

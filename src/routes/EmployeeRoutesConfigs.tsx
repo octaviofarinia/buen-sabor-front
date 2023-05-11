@@ -6,6 +6,7 @@ import { Detail } from '../views/Detail';
 import { NewRegister } from '../components/ABM/NewRegister';
 
 const EmployeeRoutesConfigs = [
+  { path: '/' ,element: <EmployeeMain/>},
   { path: 'employee', element: <EmployeeMain /> },
   { path: 'employee/:Name', element: <AbmRouter /> },
   { path: 'employee/:Name/:id', element: <Detail /> },
