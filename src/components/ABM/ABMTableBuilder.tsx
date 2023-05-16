@@ -5,7 +5,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import { deleteRegister, getAllRegisters } from './APIHandler';
+import { deleteRegister, getAllRegisters } from './API/APIHandler';
 
 export const ABMTableBuilder = ({
   headerKeys,
@@ -16,7 +16,7 @@ export const ABMTableBuilder = ({
 }: {
   headerKeys: string[];
   tableRegisters: string[];
-  tableName: string;
+  tableName: string | undefined;
   requestedEndpoint: string;
   TableDataSetter: React.Dispatch<React.SetStateAction<string[]>> | null;
 }) => {

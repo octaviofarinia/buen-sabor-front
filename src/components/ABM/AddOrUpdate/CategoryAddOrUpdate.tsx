@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { createRegister, getRegister, updateRegister } from '../APIHandler';
+import { createRegister, getRegister, updateRegister } from '../API/APIHandler';
 import { APIRouter } from '../API/APIRouter';
 import { Categoria } from '../../../Interfaces/Categoria';
 import { base_category_object } from '../../../Interfaces/InterfaceDelivery';

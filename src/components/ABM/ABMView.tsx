@@ -2,24 +2,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBoxOpen, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
-import {
-  faTrashCan,
-  faEye,
-  faPenToSquare,
-} from '@fortawesome/free-regular-svg-icons';
-import { getAllRegisters, deleteRegister, ApiProps, T } from './APIHandler';
-import { ABMTableBuilder } from './ABMTableBuilder';
 
-interface AbmTableProps {
-  tableName: string;
-  requestedEndpoint: string;
-}
+import { getAllRegisters, deleteRegister, ApiProps, T } from './API/APIHandler';
+import { ABMTableBuilder } from './ABMTableBuilder';
 
 export const ABMView = ({
   tableName,
   requestedEndpoint,
 }: {
-  tableName: string;
+  tableName: string | undefined;
   requestedEndpoint: string;
 }) => {
   const [tableData, setTableData] = useState<string[]>([]);
