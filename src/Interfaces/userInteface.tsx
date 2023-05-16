@@ -1,6 +1,9 @@
-export interface users{
-    id: Int32Array;
-    nombre: string;
-    role: string;
-    status: string;
+import { User } from '@auth0/auth0-react';
+
+export interface users {
+  id: number;
+  nombre: string;
+  isNormalUser: boolean;
+  status: boolean;
 }
+

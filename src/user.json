@@ -1,12 +1,14 @@
 [
   {
-    "username": "Franco Minati",
-    "role": "EMPLOYEE",
+    "id":0,
+    "nombre": "Franco Minati",
+    "isNormalUser": true,
     "status": false
   },
   {
-    "username": "Octavio Fariña",
-    "role": "USER",
-    "status": false
+    "id":1,
+    "nombre": "Juan Perez",
+    "isNormalUser": false,
+    "status": true
   }
 ]

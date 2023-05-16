@@ -1,16 +1,16 @@
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
-
 import { users } from '../../Interfaces/userInteface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
 import { faGithub, faGithubSquare } from '@fortawesome/fontawesome-free-brands';
+import { NavigationProps } from '../../Interfaces/NavigationInterfaces/NavigationInterface';
 
 interface Users {
   user: users;
 }
-export const Footer = ({ user }: Users) => {
-  return user.role == 'USER' ? (
+export const Footer = ({isNormalUser}:NavigationProps) => {
+  return isNormalUser ? (
     <footer className="body-font bg-neutral-900 text-slate-900 ">
       <div className="text sm container mx-auto p-3 px-5 lg:text-lg">
         <div className="order-first flex  flex-wrap text-center sm:text-left ">

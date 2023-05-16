@@ -1,15 +1,16 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
 import { EmployeeMain } from '../views/EmployeeMain';
 import { AbmRouter } from '../components/ABM/ABMRouter';
-import { Detail } from '../views/Detail';
-import { NewRegister } from '../components/ABM/NewRegister';
+import { DetailRouter } from '../components/ABM/Details/DetailRouter';
+import { BaseAddOrUpdateRegister } from '../components/ABM/AddOrUpdate/BaseAddOrUpdateRegister';
+import { AddOrUpdateRouter } from '../components/ABM/AddOrUpdate/AddOrUpdateRouter';
 
 const EmployeeRoutesConfigs = [
+  { path: '/employee', element: <EmployeeMain /> },
   { path: 'employee', element: <EmployeeMain /> },
-  { path: 'employee/:Name', element: <AbmRouter /> },
-  { path: 'employee/:Name/:id', element: <Detail /> },
-  { path: 'employee/:Name/newRegister', element: <NewRegister /> },
+  { path: 'employee/:RequestedEndpoint', element: <AbmRouter /> },
+  { path: 'employee/:RequestedEndpoint/:id', element: <DetailRouter /> },
+  { path: 'employee/:RequestedEndpoint/newRegister', element: <AddOrUpdateRouter /> },
+  { path: 'employee/:RequestedEndpoint/edit/:id', element: <AddOrUpdateRouter /> }
 ];
 
 export default EmployeeRoutesConfigs;
