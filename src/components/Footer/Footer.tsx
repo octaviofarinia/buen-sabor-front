@@ -1,15 +1,13 @@
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
-import { users } from '../../Interfaces/userInteface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
-import { faGithub, faGithubSquare } from '@fortawesome/fontawesome-free-brands';
-import { NavigationProps } from '../../Interfaces/NavigationInterfaces/NavigationInterface';
+import { faGithubSquare } from '@fortawesome/fontawesome-free-brands';
+import { useUser } from '../../context/UserProvider';
 
-interface Props {
-  userRoles: string[];
-}
-export const Footer: React.FC<Props> = ({ userRoles }) => {
+export const Footer: React.FC<{}> = () => {
+  const { userRoles } = useUser();
+
   return !userRoles.includes('employee') ? (
     <footer className="body-font bg-neutral-900 text-slate-900 ">
       <div className="text sm container mx-auto p-3 px-5 lg:text-lg">

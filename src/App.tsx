@@ -2,19 +2,15 @@ import { Route, Routes, useNavigate } from 'react-router';
 import './App.css';
 import Header from './components/Header/Header';
 
-import { useAuth0 } from '@auth0/auth0-react';
 import EmployeeRoutesConfigs from './routes/EmployeeRoutesConfigs';
 import ClientRoutesConfigs from './routes/ClientRoutesConfigs';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Footer } from './components/Footer/Footer';
 import { NotFoundView } from './views/NotFoundView';
-import jwtDecode from 'jwt-decode';
+import { useUser } from './context/UserProvider';
 
 function App() {
-  /* True para trabajar con normalUser, False para trabajar con employee*/
-
-  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
-  const [userRoles, setUserRoles] = useState<string[]>([]);
+  const { userRoles } = useUser();
 
   const navigate = useNavigate();
   const userTypeRedirect = (userRoles: string[]) => {
@@ -22,12 +18,9 @@ function App() {
   };
 
   useEffect(() => {
-    getAccessTokenSilently().then((res) => {
-      const decodedToken: { [key: string]: any } = jwtDecode(res);
-      setUserRoles(decodedToken[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`]);
-      userTypeRedirect(decodedToken[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`]);
-    });
-  }, []);
+    console.log('APP USE EFFECT');
+    userTypeRedirect(userRoles);
+  }, [userRoles]);
 
   return (
     <>
@@ -46,7 +39,7 @@ function App() {
           ))}
           <Route path="*" element={<NotFoundView />} />
         </Routes>
-        <Footer userRoles={userRoles}></Footer>
+        <Footer></Footer>
       </div>
     </>
   );

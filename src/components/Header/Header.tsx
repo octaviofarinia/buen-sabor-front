@@ -3,21 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
 import { UserRouter } from './UserRouter';
 import { EmployeeRouter } from './EmployeeRouter';
-import { useAuth0 } from '@auth0/auth0-react';
-import { useEffect, useState } from 'react';
-import jwtDecode from 'jwt-decode';
+import { useUser } from '../../context/UserProvider';
 
 const Header = () => {
-  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
-  const [userRoles, setUserRoles] = useState<string[]>([]);
-
-  useEffect(() => {
-    const token = getAccessTokenSilently().then((res) => {
-      const decodedToken: { [key: string]: any } = jwtDecode(res);
-      console.log(decodedToken[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`]);
-      setUserRoles(decodedToken[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`]);
-    });
-  }, []);
+  const { userRoles } = useUser();
 
   return (
     <div className="h-32 bg-neutral-900 lg:pb-12">

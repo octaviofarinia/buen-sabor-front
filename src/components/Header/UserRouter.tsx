@@ -3,7 +3,6 @@ import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Header.module.css';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
 
 export const UserRouter = () => {
   const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
