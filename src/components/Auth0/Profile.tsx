@@ -9,9 +9,9 @@ const Profile = () => {
 
   return isAuthenticated ? (
     <div className="flex-col text-center">
-      <img className="mb-2 inline" src={user.picture} alt={user.name} />
-      <h2 className="font-bold">{user.name}</h2>
-      <p>{user.email}</p>
+      <img className="mb-2 inline" src={user?.picture} alt={user?.name} />
+      <h2 className="font-bold">{user?.name}</h2>
+      <p>{user?.email}</p>
     </div>
   ) : (
     <div className="text-center text-xl font-bold">

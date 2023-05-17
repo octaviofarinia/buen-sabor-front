@@ -1,7 +1,6 @@
 import { EmployeeMain } from '../views/EmployeeMain';
 import { AbmRouter } from '../components/ABM/ABMRouter';
 import { DetailRouter } from '../components/ABM/Details/DetailRouter';
-import { BaseAddOrUpdateRegister } from '../components/ABM/AddOrUpdate/BaseAddOrUpdateRegister';
 import { AddOrUpdateRouter } from '../components/ABM/AddOrUpdate/AddOrUpdateRouter';
 
 const EmployeeRoutesConfigs = [
@@ -10,7 +9,7 @@ const EmployeeRoutesConfigs = [
   { path: 'employee/:RequestedEndpoint', element: <AbmRouter /> },
   { path: 'employee/:RequestedEndpoint/:id', element: <DetailRouter /> },
   { path: 'employee/:RequestedEndpoint/newRegister', element: <AddOrUpdateRouter /> },
-  { path: 'employee/:RequestedEndpoint/edit/:id', element: <AddOrUpdateRouter /> }
+  { path: 'employee/:RequestedEndpoint/edit/:id', element: <AddOrUpdateRouter /> },
 ];
 
 export default EmployeeRoutesConfigs;

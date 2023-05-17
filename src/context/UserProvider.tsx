@@ -22,7 +22,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         const decodedToken: { [key: string]: any } = jwtDecode(res);
         setUserRoles(decodedToken[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`]);
       })
-      .catch((err) => {});
+      .catch(() => {});
   }, [getAccessTokenSilently]);
 
   return <UserContext.Provider value={{ userRoles }}>{children}</UserContext.Provider>;

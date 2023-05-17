@@ -1,11 +1,8 @@
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { deleteRegister, getAllRegisters } from './API/APIHandler';
+import { HeaderKey, RegisterRow } from '../../Interfaces/ABM/GenericTableInterfaces';
 
 export const ABMTableBuilder = ({
   headerKeys,
@@ -14,11 +11,11 @@ export const ABMTableBuilder = ({
   requestedEndpoint,
   TableDataSetter,
 }: {
-  headerKeys: string[];
-  tableRegisters: string[];
+  headerKeys: HeaderKey[];
+  tableRegisters: RegisterRow[];
   tableName: string | undefined;
   requestedEndpoint: string;
-  TableDataSetter: React.Dispatch<React.SetStateAction<string[]>> | null;
+  TableDataSetter: React.Dispatch<React.SetStateAction<RegisterRow[]>> | null;
 }) => {
   const handleDeleteRegister = (id: string) => {
     deleteRegister({
@@ -64,18 +61,12 @@ export const ABMTableBuilder = ({
             ))}
 
             <td className="flex h-full items-center justify-center gap-16 px-6 py-4">
-              <Link
-                to={`/employee/${tableName}/edit/${registerRow.id}`}
-              >
+              <Link to={`/employee/${tableName}/edit/${registerRow.id}`}>
                 <button
                   type="button"
                   className="inline-block rounded bg-cyan-400 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-cyan-600 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-cyan-600 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-cyan-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(84,180,211,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)]"
                 >
-                  <FontAwesomeIcon
-                    icon={faPenToSquare}
-                    size="lg"
-                    style={{ color: '#ffffff' }}
-                  />
+                  <FontAwesomeIcon icon={faPenToSquare} size="lg" style={{ color: '#ffffff' }} />
                 </button>
               </Link>
               <Link to={`/employee/${tableName}/${registerRow.id}`}>
@@ -83,11 +74,7 @@ export const ABMTableBuilder = ({
                   type="button"
                   className="inline-block rounded bg-green-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#14a44d] transition duration-150 ease-in-out hover:bg-green-800 hover:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.3),0_4px_18px_0_rgba(20,164,77,0.2)] focus:bg-green-800 focus:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.3),0_4px_18px_0_rgba(20,164,77,0.2)] focus:outline-none focus:ring-0 active:bg-green-900 active:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.3),0_4px_18px_0_rgba(20,164,77,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(20,164,77,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.2),0_4px_18px_0_rgba(20,164,77,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.2),0_4px_18px_0_rgba(20,164,77,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.2),0_4px_18px_0_rgba(20,164,77,0.1)]"
                 >
-                  <FontAwesomeIcon
-                    icon={faEye}
-                    size="lg"
-                    style={{ color: '#ffffff' }}
-                  />
+                  <FontAwesomeIcon icon={faEye} size="lg" style={{ color: '#ffffff' }} />
                 </button>
               </Link>
 
@@ -98,11 +85,7 @@ export const ABMTableBuilder = ({
                   handleDeleteRegister(registerRow.id);
                 }}
               >
-                <FontAwesomeIcon
-                  icon={faTrashCan}
-                  size="lg"
-                  style={{ color: '#ffffff' }}
-                />
+                <FontAwesomeIcon icon={faTrashCan} size="lg" style={{ color: '#ffffff' }} />
               </button>
             </td>
           </tr>

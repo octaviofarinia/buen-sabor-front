@@ -1,14 +1,15 @@
 import axios from 'axios';
-import { Categoria } from '../../Interfaces/Categoria';
-import { Producto } from '../../Interfaces/Producto';
-import { Ingrediente } from '../../Interfaces/Ingrediente';
-import { UnidadDeMedida } from '../../Interfaces/UnidadDeMedida';
+import { Categoria } from '../../../Interfaces/Categoria';
+import { Producto } from '../../../Interfaces/Producto';
+import { Ingrediente } from '../../../Interfaces/Ingrediente';
+import { UnidadDeMedida } from '../../../Interfaces/UnidadDeMedida';
+import { HeaderKey, RegisterRow } from '../../../Interfaces/ABM/GenericTableInterfaces';
 
-export type T = Categoria | Producto | Ingrediente | UnidadDeMedida 
+export type T = Categoria | Producto | Ingrediente | UnidadDeMedida;
 export interface ApiProps<T> {
-  TableDataSetter: React.Dispatch<React.SetStateAction<string[]>> | null;
-  KeyTableDataSetter: React.Dispatch<React.SetStateAction<string[]>> | null;
-  RegisterSetter: React.Dispatch<React.SetStateAction<string|T>> | null;
+  TableDataSetter: React.Dispatch<React.SetStateAction<RegisterRow[]>> | null;
+  KeyTableDataSetter: React.Dispatch<React.SetStateAction<HeaderKey[]>> | null;
+  RegisterSetter: React.Dispatch<React.SetStateAction<T>> | null;
   id: string | undefined;
   requestedEndpoint: string;
   persistenObject: T | null;
@@ -22,7 +23,7 @@ export const getAllRegisters = async ({
   await axios
     .get(`http://localhost:8080/${requestedEndpoint}`)
     .then((res) => {
-      const data = res.data as string[];
+      const data = res.data;
       TableDataSetter != null && TableDataSetter(data);
       KeyTableDataSetter != null && KeyTableDataSetter(Object.keys(data[0]));
     })
@@ -32,32 +33,20 @@ export const getAllRegisters = async ({
     });
 };
 
-export const deleteRegister = async ({ id, requestedEndpoint }: ApiProps<T>) => {
+export const deleteRegister = async <T,>({ id, requestedEndpoint }: ApiProps<T>) => {
   return await axios.delete(`http://localhost:8080/${requestedEndpoint}/${id}`);
 };
 
-export const getRegister = async ({
-  RegisterSetter,
-  requestedEndpoint,
-  id,
-}: ApiProps<T>) => {
-  await axios
-    .get(`http://localhost:8080/${requestedEndpoint}/${id}`)
-    .then((res) => {
-      const data = res.data as string;
-      RegisterSetter != null && RegisterSetter(data);
-    });
+export const getRegister = async <T,>({ RegisterSetter, requestedEndpoint, id }: ApiProps<T>) => {
+  await axios.get(`http://localhost:8080/${requestedEndpoint}/${id}`).then((res) => {
+    const data = res.data;
+    RegisterSetter != null && RegisterSetter(data);
+  });
 };
 
-export const createRegister = async ({
-  requestedEndpoint,
-  persistenObject,
-}: ApiProps<T>) => {
+export const createRegister = async <T,>({ requestedEndpoint, persistenObject }: ApiProps<T>) => {
   try {
-    const res = await axios.post(
-      `http://localhost:8080/${requestedEndpoint}`,
-      persistenObject
-    );
+    const res = await axios.post(`http://localhost:8080/${requestedEndpoint}`, persistenObject);
     return res;
   } catch (err) {
     console.error(err);
@@ -65,19 +54,16 @@ export const createRegister = async ({
   }
 };
 
-export const updateRegister = async ({
+export const updateRegister = async <T,>({
   requestedEndpoint,
   persistenObject,
   id,
 }: ApiProps<T>) => {
   try {
-    const res = await axios.put(
-      `http://localhost:8080/${requestedEndpoint}/${id}`,
-      {
-        ...persistenObject,
-        id: id,
-      }
-    );
+    const res = await axios.put(`http://localhost:8080/${requestedEndpoint}/${id}`, {
+      ...persistenObject,
+      id: id,
+    });
     return res;
   } catch (err) {
     console.error(err);

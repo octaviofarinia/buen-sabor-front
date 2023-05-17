@@ -2,15 +2,15 @@ import { useParams } from 'react-router-dom';
 import { Categoria } from '../../../Interfaces/Categoria';
 import { useEffect, useState } from 'react';
 import { APIRouter } from '../API/APIRouter';
-import { ApiProps, T, getRegister } from '../API/APIHandler';
+import { ApiProps, getRegister } from '../API/APIHandler';
 import { base_category_object } from '../../../Interfaces/InterfaceDelivery';
 
 export const CategoryDetail = () => {
   const { RequestedEndpoint, id } = useParams();
-  const [registerData,setRegisterData]=useState<Categoria>(base_category_object);
+  const [registerData, setRegisterData] = useState<Categoria>(base_category_object);
 
   const getRegisterData = () => {
-    const apiProps: ApiProps<T> = {
+    const apiProps: ApiProps<Categoria> = {
       KeyTableDataSetter: null,
       TableDataSetter: null,
       requestedEndpoint: APIRouter(RequestedEndpoint),
@@ -22,7 +22,7 @@ export const CategoryDetail = () => {
   };
   useEffect(() => {
     getRegisterData();
-    console.log(registerData)
+    console.log(registerData);
   });
   return (
     <div>

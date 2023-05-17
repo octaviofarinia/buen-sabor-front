@@ -1,5 +1,4 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import React from 'react';
 
 const AdminApiCall = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -7,19 +6,18 @@ const AdminApiCall = () => {
   const callApi = async () => {
     try {
       const token = await getAccessTokenSilently({
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+        },
       });
 
       console.log('token: ' + token);
 
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_API_BASE_URL}/admin-only`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_API_BASE_URL}/admin-only`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       console.log(response);
 

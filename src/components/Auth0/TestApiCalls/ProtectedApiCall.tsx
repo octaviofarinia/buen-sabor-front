@@ -1,5 +1,4 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import React from 'react';
 
 const ProtectedApiCall = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -7,17 +6,16 @@ const ProtectedApiCall = () => {
   const callApi = async () => {
     try {
       const token = await getAccessTokenSilently({
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+        authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+        },
       });
 
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_API_BASE_URL}/private`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_API_BASE_URL}/private`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const responseData = await response.json();
 

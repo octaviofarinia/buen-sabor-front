@@ -14,29 +14,29 @@ export const CategoryAddOrUpdate = () => {
     e.preventDefault();
 
     if (id) {
-      const response = await updateRegister({
-        requestedEndpoint: APIRouter(RequestedEndpoint ),
+      await updateRegister({
+        requestedEndpoint: APIRouter(RequestedEndpoint),
         persistenObject: persistibleObject,
         id: id,
         KeyTableDataSetter: null,
         TableDataSetter: null,
-        RegisterSetter:null
+        RegisterSetter: null,
       });
     } else {
-      const response = await createRegister({
+      await createRegister({
         requestedEndpoint: APIRouter(RequestedEndpoint),
         persistenObject: persistibleObject,
         KeyTableDataSetter: null,
         TableDataSetter: null,
-        RegisterSetter:null,
-        id:'',
+        RegisterSetter: null,
+        id: '',
       });
     }
 
     navigate(`/employee/${RequestedEndpoint}`);
   }
 
-  function handleChange(e: React.FormEvent<HTMLFormElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPersistibleObject({
       ...persistibleObject,
       [e.target.name]: e.target.value,
@@ -44,16 +44,16 @@ export const CategoryAddOrUpdate = () => {
   }
 
   useEffect(() => {
-     id != undefined && (
-        getRegister({
-            requestedEndpoint: APIRouter(RequestedEndpoint),
-            RegisterSetter: setPersistibleObject,
-            id: id,
-            KeyTableDataSetter: null,
-            TableDataSetter: null,
-            persistenObject: null,
-        }));
-  },);
+    id != undefined &&
+      getRegister({
+        requestedEndpoint: APIRouter(RequestedEndpoint),
+        RegisterSetter: setPersistibleObject,
+        id: id,
+        KeyTableDataSetter: null,
+        TableDataSetter: null,
+        persistenObject: null,
+      });
+  });
 
   return (
     <div className="bg-white py-6 sm:py-8 lg:py-12">
@@ -74,7 +74,7 @@ export const CategoryAddOrUpdate = () => {
           onSubmit={(e) => handleSubmit(e)}
         >
           {persistibleObject != (null || undefined)
-            ? Object.keys(persistibleObject).map((key) => (
+            ? (Object.keys(persistibleObject) as Array<keyof Categoria>).map((key) => (
                 <div key={key}>
                   <label
                     htmlFor={key}
@@ -87,7 +87,7 @@ export const CategoryAddOrUpdate = () => {
                     id={key}
                     className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
                     onChange={(e) => handleChange(e)}
-                    value={persistibleObject[key] || ''}
+                    value={persistibleObject[key]?.toString() || ''}
                   />
                 </div>
               ))
