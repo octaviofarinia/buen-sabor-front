@@ -3,24 +3,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
 import { UserRouter } from './UserRouter';
 import { EmployeeRouter } from './EmployeeRouter';
-import { NavigationProps } from '../../Interfaces/NavigationInterfaces/NavigationInterface';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useEffect, useState } from 'react';
+import jwtDecode from 'jwt-decode';
 
+const Header = () => {
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const [userRoles, setUserRoles] = useState<string[]>([]);
 
-const Header = ({isNormalUser}:NavigationProps) => {
+  useEffect(() => {
+    const token = getAccessTokenSilently().then((res) => {
+      const decodedToken: { [key: string]: any } = jwtDecode(res);
+      console.log(decodedToken[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`]);
+      setUserRoles(decodedToken[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`]);
+    });
+  }, []);
+
   return (
     <div className="h-32 bg-neutral-900 lg:pb-12">
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
         <header className="flex items-center justify-between py-4 md:py-8">
           <Link
-            to={isNormalUser ? '/' : '/employee'}
+            to={!userRoles.includes('employee') ? '/' : '/employee'}
             className="inline-flex items-center gap-2.5 text-3xl font-bold uppercase text-amber-400 md:text-3xl"
             aria-label="logo"
           >
-            <FontAwesomeIcon
-              icon={faBurger}
-              size="2xl"
-              className="text-amber-400"
-            />
+            <FontAwesomeIcon icon={faBurger} size="2xl" className="text-amber-400" />
             <h2 className="text-3xl font-bold uppercase text-amber-400 md:text-3xl">
               el buen sabor
             </h2>
@@ -29,11 +37,7 @@ const Header = ({isNormalUser}:NavigationProps) => {
           <nav className="hidden gap-12 lg:flex"></nav>
 
           <div className="-ml-8 hidden flex-col gap-2.5 sm:flex-row sm:justify-center lg:flex lg:justify-start">
-            {isNormalUser? (
-              <UserRouter />
-            ) : (
-              <EmployeeRouter />
-            )}
+            {!userRoles.includes('employee') ? <UserRouter /> : <EmployeeRouter />}
           </div>
 
           <button

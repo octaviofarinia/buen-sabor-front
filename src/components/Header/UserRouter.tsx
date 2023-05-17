@@ -3,7 +3,7 @@ import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Header.module.css';
 import { Link } from 'react-router-dom';
-import { HeaderProps } from './Header';
+import { useEffect } from 'react';
 
 export const UserRouter = () => {
   const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
@@ -13,17 +13,11 @@ export const UserRouter = () => {
       <Link to="/Inicio" className="hover:text-amber-500  ">
         Inicio
       </Link>
-      <Link
-        to="/Productos"
-        className="hover:text-amber-500  "
-      >
+      <Link to="/Productos" className="hover:text-amber-500  ">
         Productos
       </Link>
       <Link to="/Carrito" className="hover:text-amber-500  ">
-        <FontAwesomeIcon
-          icon={faCartShopping}
-          className="text-amber-400 hover:text-amber-500  "
-        />
+        <FontAwesomeIcon icon={faCartShopping} className="text-amber-400 hover:text-amber-500  " />
       </Link>
       {isAuthenticated ? (
         <Link
@@ -46,9 +40,7 @@ export const UserRouter = () => {
       )}
       {isAuthenticated ? (
         <button
-          onClick={() =>
-            logout({ logoutParams: { returnTo: window.location.origin } })
-          }
+          onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
           className={`inline-block rounded-lg px-4 py-3 text-center text-sm font-semibold text-amber-400 outline-none ring-amber-400 transition duration-100 hover:text-amber-500 focus-visible:ring active:text-amber-500 md:text-xl ${styles.header_button}`}
         >
           Cerrar sesion

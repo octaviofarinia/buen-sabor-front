@@ -1,3 +1,3 @@
 export interface NavigationProps{
-    isNormalUser: boolean;
+    user: boolean;
 }

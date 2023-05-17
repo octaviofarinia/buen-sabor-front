@@ -6,18 +6,16 @@ import styles from './Footer.module.css';
 import { faGithub, faGithubSquare } from '@fortawesome/fontawesome-free-brands';
 import { NavigationProps } from '../../Interfaces/NavigationInterfaces/NavigationInterface';
 
-interface Users {
-  user: users;
+interface Props {
+  userRoles: string[];
 }
-export const Footer = ({isNormalUser}:NavigationProps) => {
-  return isNormalUser ? (
+export const Footer: React.FC<Props> = ({ userRoles }) => {
+  return !userRoles.includes('employee') ? (
     <footer className="body-font bg-neutral-900 text-slate-900 ">
       <div className="text sm container mx-auto p-3 px-5 lg:text-lg">
         <div className="order-first flex  flex-wrap text-center sm:text-left ">
           <div className="flex h-72  w-full flex-col  gap-3 overflow-hidden px-4 pt-8 text-zinc-100 sm:w-1/2 lg:w-1/3">
-            <h2 className=" mb-3  font-medium uppercase  tracking-wider">
-              el buen sabor
-            </h2>
+            <h2 className=" mb-3  font-medium uppercase  tracking-wider">el buen sabor</h2>
             <Link
               to="/Inicio"
               className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
@@ -55,9 +53,7 @@ export const Footer = ({isNormalUser}:NavigationProps) => {
             </Link>
           </div>
           <div className="flex w-full flex-col gap-3 px-4 pt-8  text-zinc-100 sm:w-1/2  lg:w-1/3">
-            <h2 className=" mb-3  font-medium uppercase  tracking-wider">
-              Formas de Retiro
-            </h2>
+            <h2 className=" mb-3  font-medium uppercase  tracking-wider">Formas de Retiro</h2>
             <div className="flex items-center justify-center gap-5 sm:items-start sm:justify-start">
               <img src="/Take_Away_Cartel.png" alt="" />
               <img src="/Delivery_Cartel.png" alt="" />
@@ -68,11 +64,7 @@ export const Footer = ({isNormalUser}:NavigationProps) => {
               Medios de pago (PLACEHOLDER)
             </h2>
             <div className="flex flex-col items-center ">
-              <img
-                src="/mediosPago.png"
-                alt=""
-                className="max-w-fit object-contain"
-              />
+              <img src="/mediosPago.png" alt="" className="max-w-fit object-contain" />
             </div>
           </div>
         </div>
@@ -80,14 +72,8 @@ export const Footer = ({isNormalUser}:NavigationProps) => {
       <div className="bg-neutral-800">
         <div className="container mx-auto flex flex-col items-center px-5 py-6 sm:flex-row ">
           <a className="title-font flex items-center justify-center p-2 font-medium text-gray-900 sm:justify-start">
-            <FontAwesomeIcon
-              icon={faBurger}
-              size="2xl"
-              className="text-amber-400"
-            />
-            <h5 className="ml-3 text-xl uppercase text-amber-400">
-              El Buen Sabor
-            </h5>
+            <FontAwesomeIcon icon={faBurger} size="2xl" className="text-amber-400" />
+            <h5 className="ml-3 text-xl uppercase text-amber-400">El Buen Sabor</h5>
           </a>
           <h5 className="mt-4 flex flex-col items-center gap-3 text-sm text-amber-400 sm:ml-6 sm:mt-0 sm:flex-row sm:text-base">
             © 2023 El Buen Sabor
