@@ -5,7 +5,7 @@ import { Ingrediente } from '../../../Interfaces/Ingrediente';
 import { UnidadDeMedida } from '../../../Interfaces/UnidadDeMedida';
 import { HeaderKey, RegisterRow } from '../../../Interfaces/ABM/GenericTableInterfaces';
 
-export type T = Categoria | Producto | Ingrediente | UnidadDeMedida;
+export type T  = Categoria | Producto | Ingrediente | UnidadDeMedida;
 export interface ApiProps<T> {
   TableDataSetter: React.Dispatch<React.SetStateAction<RegisterRow[]>> | null;
   KeyTableDataSetter: React.Dispatch<React.SetStateAction<HeaderKey[]>> | null;

@@ -8,19 +8,20 @@ import { useEffect } from 'react';
 import { Footer } from './components/Footer/Footer';
 import { NotFoundView } from './views/NotFoundView';
 import { useUser } from './context/UserProvider';
+import { Breadcrumb } from './components/Breadcrumb/Breadcrumb';
 
 function App() {
   const { userRoles } = useUser();
 
-  const navigate = useNavigate();
-  const userTypeRedirect = (userRoles: string[]) => {
-    userRoles.includes('employee') ? navigate('/employee') : navigate('/');
-  };
+  // const navigate = useNavigate();
+  // const userTypeRedirect = (userRoles: string[]) => {
+  //   userRoles.includes('employee') ? navigate('/employee') : navigate('/');
+  // };
 
-  useEffect(() => {
-    console.log('APP USE EFFECT');
-    userTypeRedirect(userRoles);
-  }, [userRoles]);
+  // useEffect(() => {
+  //   console.log('APP USE EFFECT');
+  //   userTypeRedirect(userRoles);
+  // }, [userRoles]);
 
   return (
     <>
@@ -30,6 +31,7 @@ function App() {
         }`}
       >
         <Header />
+        <Breadcrumb/>
         <Routes>
           {EmployeeRoutesConfigs.map((route, index) => (
             <Route key={index} path={route.path} element={route.element} />

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import routes from '../../Interfaces/EmployeeRoutes.json';
 import { useAuth0 } from '@auth0/auth0-react';
 import styles from './Header.module.css';
+import { parseUnidadDeMedida } from '../../Utils/StringUtils';
 
 export const EmployeeRouter = () => {
   const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
@@ -20,7 +21,7 @@ export const EmployeeRouter = () => {
           key={route.name}
           className="inline-block rounded-lg px-4 py-3 text-center text-sm font-semibold capitalize text-amber-300 outline-none ring-amber-300 transition duration-100 hover:text-amber-400 focus-visible:ring active:text-amber-500 md:text-base"
         >
-          {route.name}
+          {parseUnidadDeMedida(route.name)}
         </Link>
       ))}
       {isAuthenticated && (

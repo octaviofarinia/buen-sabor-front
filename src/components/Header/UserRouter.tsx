@@ -9,7 +9,7 @@ export const UserRouter = () => {
 
   return (
     <div className="-ml-8 hidden flex-col gap-2.5 text-amber-400 sm:flex-row sm:justify-center lg:flex lg:items-center lg:justify-start lg:gap-10 lg:text-xl">
-      <Link to="/Inicio" className="hover:text-amber-500  ">
+      <Link to="/" className="hover:text-amber-500  ">
         Inicio
       </Link>
       <Link to="/Productos" className="hover:text-amber-500  ">

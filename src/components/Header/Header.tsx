@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
 import { UserRouter } from './UserRouter';
@@ -7,11 +7,11 @@ import { useUser } from '../../context/UserProvider';
 
 const Header = () => {
   const { userRoles } = useUser();
-
+  const location = useLocation();
   return (
-    <div className="h-32 bg-neutral-900 lg:pb-12">
-      <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
-        <header className="flex items-center justify-between py-4 md:py-8">
+    <div className="flex h-20 w-full items-center bg-neutral-900 lg:p-6 ">
+      <div className="w-100 flex w-full max-w-screen-2xl items-center justify-between px-4 md:px-8 ">
+        <header className="flex w-full items-center justify-between py-4 md:py-8">
           <Link
             to={!userRoles.includes('employee') ? '/' : '/employee'}
             className="inline-flex items-center gap-2.5 text-3xl font-bold uppercase text-amber-400 md:text-3xl"
@@ -26,7 +26,13 @@ const Header = () => {
           <nav className="hidden gap-12 lg:flex"></nav>
 
           <div className="-ml-8 hidden flex-col gap-2.5 sm:flex-row sm:justify-center lg:flex lg:justify-start">
-            {!userRoles.includes('employee') ? <UserRouter /> : <EmployeeRouter />}
+            {!userRoles.includes('employee') ? (
+              <UserRouter />
+            ) : location.pathname.includes('employee') ? (
+              <EmployeeRouter />
+            ) : (
+              <UserRouter />
+            )}
           </div>
 
           <button

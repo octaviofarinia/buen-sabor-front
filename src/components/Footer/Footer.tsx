@@ -53,8 +53,8 @@ export const Footer: React.FC<{}> = () => {
           <div className="flex w-full flex-col gap-3 px-4 pt-8  text-zinc-100 sm:w-1/2  lg:w-1/3">
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">Formas de Retiro</h2>
             <div className="flex items-center justify-center gap-5 sm:items-start sm:justify-start">
-              <img src="/Take_Away_Cartel.png" alt="" />
-              <img src="/Delivery_Cartel.png" alt="" />
+              <img src="/Take Away Cartel.png" alt="" className='w-24' />
+              <img src="/Delivery Cartel.png" alt=""  className='w-24'/>
             </div>
           </div>
           <div className="flex w-full flex-col gap-3 overflow-hidden px-4 pt-8 text-zinc-100  lg:w-1/3">
