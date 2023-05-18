@@ -75,6 +75,7 @@ export const CategoryAddOrUpdate = () => {
         >
           {persistibleObject != (null || undefined)
             ? (Object.keys(persistibleObject) as Array<keyof Categoria>).map((key) => (
+              key!=="id"&&
                 <div key={key}>
                   <label
                     htmlFor={key}
