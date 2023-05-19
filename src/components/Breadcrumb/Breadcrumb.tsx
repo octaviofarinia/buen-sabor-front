@@ -34,7 +34,7 @@ export const Breadcrumb = () => {
           </Link>
         ) : (
           <Link
-            to={`/${link}/`} key={link + '' + index}
+            to={`/${link}`} key={link + '' + index}
             className={`${
               index === generarBreadcrumb().length - 1 ? 'text-amber-400' : 'text-black'
             } flex gap-1 `}

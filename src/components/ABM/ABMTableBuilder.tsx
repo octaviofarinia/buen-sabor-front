@@ -45,7 +45,7 @@ export const ABMTableBuilder = ({
               {headerColumn}
             </th>
           ))}
-          <th className="text-center"> Acciones</th>
+          {tableRegisters.length != 0 && <th className="text-center"> Acciones</th>}
         </tr>
       </thead>
       <tbody>
