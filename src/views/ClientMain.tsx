@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import routes from '../Interfaces/UserRoutes.json';
+import routes from '../Interfaces/NavigationInterfaces/UserRoutes.json';
 export const ClientMain = () => {
   return (
     <div className="flex w-full flex-col">
       <section className="h-80 relative flex flex-1 shrink-0 items-center justify-center   bg-gray-100 py-16 shadow-lg md:py-20 xl:py-36 ">
         <img
-          src="/imagen-archivo-hamburguesas_98 1 (1).jpg"
+          src="/burgasMain.jpg"
           loading="lazy"
           alt="Photo by Fakurian Design"
           className="absolute inset-0 h-full w-full object-cover object-center"

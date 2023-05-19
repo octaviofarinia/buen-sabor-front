@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import routes from '../Interfaces/EmployeeRoutes.json';
+import routes from '../Interfaces/NavigationInterfaces/EmployeeRoutes.json';
+
 export const EmployeeMain = () => {
   return (
-    <div className="bg-white ">
+    <div className="bg-white pb-10">
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
         <div className="grid gap-6 sm:grid-cols-2">
           {routes.map((route) => (

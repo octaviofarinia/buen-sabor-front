@@ -1,14 +1,13 @@
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './Footer.module.css';
 import { faGithubSquare } from '@fortawesome/fontawesome-free-brands';
-import { useUser } from '../../context/UserProvider';
 
 export const Footer: React.FC<{}> = () => {
-  const { userRoles } = useUser();
+  const  location  = useLocation();
 
-  return !userRoles.includes('employee') ? (
+  return !location.pathname.includes('employee') ? (
     <footer className="body-font bg-neutral-900 text-slate-900 ">
       <div className="text sm container mx-auto p-3 px-5 lg:text-lg">
         <div className="order-first flex  flex-wrap text-center sm:text-left ">

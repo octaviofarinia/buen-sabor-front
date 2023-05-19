@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from 'react-router';
+import { Route, Routes, useNavigate, useLocation } from 'react-router';
 import './App.css';
 import Header from './components/Header/Header';
 
@@ -12,6 +12,7 @@ import { Breadcrumb } from './components/Breadcrumb/Breadcrumb';
 
 function App() {
   const { userRoles } = useUser();
+  const location = useLocation();
 
   // const navigate = useNavigate();
   // const userTypeRedirect = (userRoles: string[]) => {
@@ -31,7 +32,7 @@ function App() {
         }`}
       >
         <Header />
-        <Breadcrumb/>
+        {location.pathname != '/' && <Breadcrumb />}
         <Routes>
           {EmployeeRoutesConfigs.map((route, index) => (
             <Route key={index} path={route.path} element={route.element} />
@@ -41,7 +42,7 @@ function App() {
           ))}
           <Route path="*" element={<NotFoundView />} />
         </Routes>
-        <Footer></Footer>
+        <Footer/>
       </div>
     </>
   );

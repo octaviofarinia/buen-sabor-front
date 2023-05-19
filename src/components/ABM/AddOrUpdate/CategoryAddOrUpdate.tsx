@@ -44,7 +44,6 @@ export const CategoryAddOrUpdate = () => {
   }
 
   useEffect(() => {
-    id != undefined &&
       getRegister({
         requestedEndpoint: APIRouter(RequestedEndpoint),
         RegisterSetter: setPersistibleObject,
@@ -53,7 +52,7 @@ export const CategoryAddOrUpdate = () => {
         TableDataSetter: null,
         persistenObject: null,
       });
-  });
+  },[]);
 
   return (
     <div className="bg-white py-6 sm:py-8 lg:py-12">
@@ -73,8 +72,7 @@ export const CategoryAddOrUpdate = () => {
           className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-2"
           onSubmit={(e) => handleSubmit(e)}
         >
-          {persistibleObject != (null || undefined)
-            ? (Object.keys(persistibleObject) as Array<keyof Categoria>).map((key) => (
+          {(Object.keys(persistibleObject) as Array<keyof Categoria>).map((key) => (
               key!=="id"&&
                 <div key={key}>
                   <label
@@ -91,8 +89,7 @@ export const CategoryAddOrUpdate = () => {
                     value={persistibleObject[key]?.toString() || ''}
                   />
                 </div>
-              ))
-            : ''}
+              ))}
           <button type="submit">Enviar</button>
         </form>
       </div>

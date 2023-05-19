@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import rutas from '../../Interfaces/EmployeeRoutes.json';
+import rutas from '../../Interfaces/NavigationInterfaces/EmployeeRoutes.json';
 import { APIRouter } from './API/APIRouter';
 import { ABMView } from './ABMView';
 import { NotFoundView } from '../../views/NotFoundView';

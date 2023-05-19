@@ -1,5 +1,5 @@
 export interface RegisterRow {
-  id: string;
+  id: string ;
   [key: string]: string | number | boolean;
 }
 

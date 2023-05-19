@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Categorias",
+    "imagen": "/Categorias.png",
+    "interface": "Categorias"
+  },
+  {
+    "name": "Ingredientes",
+    "imagen": "/Ingredientes.png",
+    "interface": "Ingredientes"
+  },
+  {
+    "name": "Productos",
+    "imagen": "/Productos.png",
+    "interface": "Productos"
+  },
+  {
+    "name": "UnidadDeMedida",
+    "imagen": "/unidadesMedida.png",
+    "interface": "UnidadDeMedida"
+  }
+]

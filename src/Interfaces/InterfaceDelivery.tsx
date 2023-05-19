@@ -18,6 +18,8 @@ export const base_unidad_object: UnidadDeMedida = {
 export const base_product_object: Producto = {
   id: '',
   nombre: null ?? undefined,
+  imgRoute: null ?? undefined,
+  precio: null ?? undefined,
 };
 
 export const base_ingredient_object: Ingrediente = {
