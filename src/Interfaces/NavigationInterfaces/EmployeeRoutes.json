@@ -1,22 +1,22 @@
 [
   {
     "name": "Categorias",
-    "imagen": "/Categorias.png",
+    "imagen": "/category.png",
     "interface": "Categorias"
   },
   {
     "name": "Ingredientes",
-    "imagen": "/Ingredientes.png",
+    "imagen": "/ingredient.png",
     "interface": "Ingredientes"
   },
   {
     "name": "Productos",
-    "imagen": "/Productos.png",
+    "imagen": "/burgasMain.jpg",
     "interface": "Productos"
   },
   {
-    "name": "UnidadDeMedida",
-    "imagen": "/unidadesMedida.png",
+    "name": "Unidad De Medida",
+    "imagen": "/measure.png",
     "interface": "UnidadDeMedida"
   }
 ]

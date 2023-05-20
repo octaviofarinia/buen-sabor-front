@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import routes from '../Interfaces/NavigationInterfaces/UserRoutes.json';
+import { Overlay } from '../components/Overlay/Overlay';
 export const ClientMain = () => {
   return (
     <div className="flex w-full flex-col">
-      <section className="h-80 relative flex flex-1 shrink-0 items-center justify-center   bg-gray-100 py-16 shadow-lg md:py-20 xl:py-36 ">
+      <section className="h-80 relative flex flex-1 shrink-0 items-center justify-center  py-16 shadow-lg md:py-20 xl:py-36 ">
         <img
           src="/burgasMain.jpg"
           loading="lazy"
@@ -46,14 +47,14 @@ export const ClientMain = () => {
         </div>
       </section>
       <section>
-        <div className="bg-white py-6 ">
+        <div className="py-6 bg-white dark:bg-neutral-800">
           <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
             <div className="grid gap-6 sm:grid-cols-2">
               {routes.map((route) => (
                 <Link
                   to={`/Productos/${route.name}`}
                   key={route.name}
-                  className="group relative flex h-40 items-end overflow-hidden rounded-lg bg-gray-100 p-4 shadow-lg"
+                  className="group relative flex h-40 items-end overflow-hidden rounded-lg bg-gray-100 dark:bg-neutral-800 p-4 shadow-lg"
                 >
                   <img
                     src={route.imagen}
@@ -61,11 +62,12 @@ export const ClientMain = () => {
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
                   />
+                  <Overlay/>
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-50"></div>
 
                   <div className="relative flex flex-col">
-                    <span className="text-gray-300">Categoria</span>
-                    <span className="text-lg font-semibold capitalize text-white lg:text-xl">
+                    <span className="text-gray-300 text-sm">Ver productos</span>
+                    <span className="text-lg font-semibold capitalize text-white lg:text-3xl">
                       {route.name}
                     </span>
                   </div>

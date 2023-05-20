@@ -4,14 +4,12 @@ import { useEffect, useState } from 'react';
 import { APIRouter } from '../API/APIRouter';
 import { ApiProps, getRegister } from '../API/APIHandler';
 import { base_category_object } from '../../../Interfaces/InterfaceDelivery';
-import { DetailCard } from './DetailCard/DetailCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 
 export const CategoryDetail = () => {
   const { RequestedEndpoint, id } = useParams();
   const [registerData, setRegisterData] = useState<Categoria>(base_category_object);
-
   const getRegisterData = () => {
     const apiProps: ApiProps<Categoria> = {
       KeyTableDataSetter: null,

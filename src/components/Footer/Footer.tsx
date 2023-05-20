@@ -5,46 +5,46 @@ import styles from './Footer.module.css';
 import { faGithubSquare } from '@fortawesome/fontawesome-free-brands';
 
 export const Footer: React.FC<{}> = () => {
-  const  location  = useLocation();
+  const location = useLocation();
 
-  return !location.pathname.includes('employee') ? (
+  return (
     <footer className="body-font bg-neutral-900 text-slate-900 ">
       <div className="text sm container mx-auto p-3 px-5 lg:text-lg">
         <div className="order-first flex  flex-wrap text-center sm:text-left ">
           <div className="flex h-72  w-full flex-col  gap-3 overflow-hidden px-4 pt-8 text-zinc-100 sm:w-1/2 lg:w-1/3">
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">el buen sabor</h2>
             <Link
-              to="/Inicio"
+              to="/"
               className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
-              active:text-slate-900 ${styles}`}
+              active:text-slate-900 `}
             >
               <p>Inicio</p>
             </Link>
             <Link
               to="/Productos"
-              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
-              active:text-slate-900 ${styles}`}
+              className={`flex flex-wrap px-3  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
+              active:text-slate-900 `}
             >
               <p>Productos</p>
             </Link>
             <Link
               to="/Carrito"
-              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
-              active:text-slate-900 ${styles}`}
+              className={`flex flex-wrap px-3  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
+              active:text-slate-900 `}
             >
               <p>Carrito</p>
             </Link>
             <Link
               to="/Nosotros"
-              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400   active:bg-amber-500
-              active:text-slate-900 ${styles}`}
+              className={`flex flex-wrap px-3  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400   active:bg-amber-500
+              active:text-slate-900 `}
             >
               <p>Nosotros</p>
             </Link>
             <Link
               to="/Donde-Estamos"
               className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
-              active:text-slate-900 ${styles}`}
+              active:text-slate-900 `}
             >
               <p>Donde Estamos</p>
             </Link>
@@ -52,8 +52,8 @@ export const Footer: React.FC<{}> = () => {
           <div className="flex w-full flex-col gap-3 px-4 pt-8  text-zinc-100 sm:w-1/2  lg:w-1/3">
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">Formas de Retiro</h2>
             <div className="flex items-center justify-center gap-5 sm:items-start sm:justify-start">
-              <img src="/Take Away Cartel.png" alt="" className='w-24' />
-              <img src="/Delivery Cartel.png" alt=""  className='w-24'/>
+              <img src="/Take Away Cartel.png" alt="" className="w-24" />
+              <img src="/Delivery Cartel.png" alt="" className="w-24" />
             </div>
           </div>
           <div className="flex w-full flex-col gap-3 overflow-hidden px-4 pt-8 text-zinc-100  lg:w-1/3">
@@ -153,5 +153,5 @@ export const Footer: React.FC<{}> = () => {
         </div>
       </div>
     </footer>
-  ) : null;
+  );
 };

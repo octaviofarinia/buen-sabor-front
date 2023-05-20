@@ -1,13 +1,16 @@
 import { ClientMain } from '../views/ClientMain';
 import { Products } from '../views/Products';
 
-const ClientRoutesConfigs = [
-  { path: '/', element: <ClientMain /> },
-  { path:'Productos/:categoria'},
-  { path: '/Productos', element: <Products />},
-  { path: '/Carrito'},
-  { path: '/Nosotros'},
-  { path: '/Donde-Estamos'}
+const ClientDinamicRoutes = [
+  { path:'Productos/:categoria',element:""},
 ];
 
-export default ClientRoutesConfigs;
+export const ClientStaticRoutes=[
+  { name:"Inicio",path: '/', element: <ClientMain /> },
+  { name:"Productos",path: '/Productos', element: <Products />},
+  { name:"Carrito",path: '/Carrito'},
+  { name:"Nosotros",path: '/Nosotros'},
+  { name:"Donde Estamos",path: '/Donde-Estamos'}
+]
+
+export default ClientDinamicRoutes;
