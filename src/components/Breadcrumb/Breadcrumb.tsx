@@ -9,6 +9,11 @@ export const Breadcrumb = () => {
     const apariciones = location.pathname.split('/');
     return apariciones;
   };
+  const generarEnlace=(pathnames:string[],index:number)=>{
+    const porcionesDeLinkNecesarias = pathnames.slice(0, index + 1);
+    const url = porcionesDeLinkNecesarias.join('/');
+    return url;
+  }
 
   return (
     <nav className="flex items-center gap-1 p-4 px-4 text-base md:px-8 bg-slate-100 dark:bg-neutral-700">
@@ -34,7 +39,7 @@ export const Breadcrumb = () => {
           </Link>
         ) : (
           <Link
-            to={`/${link}`} key={link + '' + index}
+            to={generarEnlace(generarBreadcrumb(),index)} key={link + '' + index}
             className={`${
               index === generarBreadcrumb().length - 1 ? 'text-amber-400' : 'text-black dark:text-zinc-50'
             } flex gap-1 `}
