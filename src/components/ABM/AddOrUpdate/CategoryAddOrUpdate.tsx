@@ -17,8 +17,7 @@ export const CategoryAddOrUpdate = () => {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    categoryFather != null && persistibleObject.RubroPadre == categoryFather;
-    categoryFather != null && persistibleObject.idRubroPadre == categoryFather.id;
+
     if (id) {
       await updateRegister({
         requestedEndpoint: APIRouter(RequestedEndpoint),
@@ -48,6 +47,13 @@ export const CategoryAddOrUpdate = () => {
       [e.target.name]: e.target.value,
     });
   }
+
+  const buildPersistibleObject = () => {
+    categoryFather !== null
+      ? ((persistibleObject.RubroPadre = categoryFather),
+        (persistibleObject.idRubroPadre = categoryFather?.id))
+      : ((persistibleObject.RubroPadre = null), (persistibleObject.idRubroPadre = null));
+  };
 
   useEffect(() => {
     getCategoryComplete(
@@ -117,9 +123,9 @@ export const CategoryAddOrUpdate = () => {
             onChange={(e) => handleChange(e)}
             value={categoryFather?.id || 0}
           />
-         
+
           <button
-            onClick={() => setCategoryFather(null)}
+            onClick={() => buildPersistibleObject()}
             type="submit"
             className="col-start-2 inline-block h-full rounded bg-black px-6 py-2 text-xs font-medium uppercase leading-normal text-white shadow-black transition
                      duration-150 ease-in-out hover:bg-gray-700 hover:shadow-gray-700 focus:bg-gray-800 focus:shadow-gray-800 focus:outline-none focus:ring-0 active:bg-gray-800
