@@ -47,8 +47,8 @@ export const CategoryDetail = () => {
         <h2 className="mb-2  flex gap-1 font-semibold leading-none text-neutral-500 dark:text-zinc-300 ">
           <span className='text-neutral-900 dark:text-white '>Denominacion:</span>{registerData.denominacion}
         </h2>
-        {registerData.idRubroPadre!= null && <h2 className="mb-2  flex gap-1 font-semibold leading-none text-neutral-500 dark:text-zinc-300 ">
-          <span className='text-neutral-900 dark:text-white '>Id rubro padre:</span>{registerData.idRubroPadre}
+        {registerData.RubroPadre!= null && <h2 className="mb-2  flex gap-1 font-semibold leading-none text-neutral-500 dark:text-zinc-300 ">
+          <span className='text-neutral-900 dark:text-white '>Id rubro padre:</span>{registerData.RubroPadre}
         </h2>}
         
       </div>

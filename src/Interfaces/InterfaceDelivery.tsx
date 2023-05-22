@@ -4,9 +4,11 @@ import { Producto } from './Producto';
 import { UnidadDeMedida } from './UnidadDeMedida';
 
 export const base_category_object: Categoria = {
-  id: '',
+  id: null,
   denominacion: null,
-  idRubroPadre: null,
+  RubroPadre: null,
+  idRubroPadre:null,
+  subRubros: null
 };
 
 export const base_unidad_object: UnidadDeMedida = {

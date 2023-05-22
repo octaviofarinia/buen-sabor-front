@@ -3,10 +3,10 @@ import { faCubes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-import { getAllRegisters, ApiProps, T } from '../components/ABM/API/APIHandler';
-import { ABMTableBuilder } from '../components/ABM/ABMTableBuilder';
-import { RegisterRow } from '../Interfaces/ABM/GenericTableInterfaces';
-import { HeaderKey } from '../Interfaces/ABM/GenericTableInterfaces';
+import { getAllRegisters, ApiProps, T } from '../../components/ABM/API/APIHandler';
+import { ABMTableBuilder } from '../../components/ABM/ABMTableBuilder';
+import { RegisterRow } from '../../Interfaces/ABM/GenericTableInterfaces';
+import { HeaderKey } from '../../Interfaces/ABM/GenericTableInterfaces';
 
 export const ABMView = ({
   tableName,

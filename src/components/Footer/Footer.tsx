@@ -8,7 +8,7 @@ export const Footer: React.FC<{}> = () => {
   const location = useLocation();
 
   return (
-    <footer className="body-font bg-neutral-900 text-slate-900 ">
+    <footer className="body-font bg-neutral-900 text-slate-900  ">
       <div className="text sm container mx-auto p-3 px-5 lg:text-lg">
         <div className="order-first flex  flex-wrap text-center sm:text-left ">
           <div className="flex h-72  w-full flex-col  gap-3 overflow-hidden px-4 pt-8 text-zinc-100 sm:w-1/2 lg:w-1/3">

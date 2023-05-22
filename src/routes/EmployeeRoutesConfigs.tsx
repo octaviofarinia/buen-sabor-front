@@ -1,4 +1,4 @@
-import { EmployeeMain } from '../views/EmployeeMain';
+import { EmployeeMain } from '../views/EmployeeViews/EmployeeMain';
 import { AbmRouter } from '../components/ABM/ABMRouter';
 import { DetailRouter } from '../components/ABM/Details/DetailRouter';
 import { AddOrUpdateRouter } from '../components/ABM/AddOrUpdate/AddOrUpdateRouter';
