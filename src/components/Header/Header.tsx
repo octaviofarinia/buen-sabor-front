@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, MoonIcon, SunIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useUser } from '../../context/UserProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
@@ -9,19 +9,14 @@ import { EmployeeStaticRoutes } from '../../routes/EmployeeRoutesConfigs';
 import { ClientStaticRoutes } from '../../routes/ClientRoutesConfigs';
 import { DropdownHeader } from './HeaderComponents/DropdownHeader';
 import EmployeeRoutes from '../../Interfaces/NavigationInterfaces/EmployeeRoutes.json';
-import { Login } from './HeaderComponents/Login';
 import { useTheme } from '../../context/ThemeProvider';
 import { useAuth0 } from '@auth0/auth0-react';
 import styles from './Header.module.css';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { frontend_url } from '../../Utils/ConstUtils';
 
 export const Header = () => {
   const { userRoles } = useUser();
   const { isDarkMode, toggleTheme } = useTheme();
-  const location = useLocation();
   const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
   const navigation = userRoles.includes('employee') ? EmployeeStaticRoutes : ClientStaticRoutes;
@@ -57,7 +52,7 @@ export const Header = () => {
                       <Link
                         key={item.path}
                         to={item.path}
-                        className="flex items-center rounded-md p-1 xl:px-3 xl:py-2 text-sm text-amber-400 hover:bg-neutral-800 hover:text-amber-500 active:text-amber-500 lg:text-lg"
+                        className="flex items-center rounded-md p-1 text-sm text-amber-400 hover:bg-neutral-800 hover:text-amber-500 active:text-amber-500 lg:text-lg xl:px-3 xl:py-2"
                       >
                         {item.name}
                       </Link>
@@ -83,9 +78,8 @@ export const Header = () => {
                   <div>
                     <Menu.Button className="flex rounded-full bg-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800">
                       <span className="rounded-full bg-neutral-800 p-1 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800">
-                      <UserIcon className="h-6 w-6" aria-hidden="true" />
+                        <UserIcon className="h-6 w-6" aria-hidden="true" />
                       </span>
-                    
                     </Menu.Button>
                   </div>
                   <Transition
@@ -97,15 +91,16 @@ export const Header = () => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute overflow-hidden right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {isAuthenticated ? (
                         <Menu.Item>
                           <Link
                             to="/perfil"
-                            className={`inline-block  text-sm px-3 py-2 text-start font-semibold
+                            className={`inline-block  px-3 py-2 text-start text-sm font-semibold
                             text-neutral-900  outline-none  transition duration-100
                              focus-visible:ring 
-                             ${styles.header_button} w-full hover:bg-gray-200`}                          >
+                             ${styles.header_button} w-full hover:bg-gray-200`}
+                          >
                             {user?.name}
                           </Link>
                         </Menu.Item>
@@ -114,13 +109,17 @@ export const Header = () => {
                           <button
                             onClick={() =>
                               loginWithRedirect({
-                                authorizationParams: { screen_hint: 'signup' },
+                                authorizationParams: {
+                                  screen_hint: 'signup',
+                                  redirect_uri: `${frontend_url}/cargar_domicilio?new=true`,
+                                },
                               })
                             }
-                            className={`inline-block text-sm px-3 py-2 text-start font-semibold
+                            className={`inline-block px-3 py-2 text-start text-sm font-semibold
                             text-neutral-900  outline-none  transition duration-100
                              focus-visible:ring 
-                             ${styles.header_button} w-full hover:bg-gray-200`}                          >
+                             ${styles.header_button} w-full hover:bg-gray-200`}
+                          >
                             Registrarse
                           </button>
                         </Menu.Item>
@@ -131,7 +130,7 @@ export const Header = () => {
                             onClick={() =>
                               logout({ logoutParams: { returnTo: window.location.origin } })
                             }
-                            className={`inline-block text-sm px-3 py-2 text-start font-semibold
+                            className={`inline-block px-3 py-2 text-start text-sm font-semibold
             text-neutral-900  outline-none  transition duration-100
              focus-visible:ring 
              ${styles.header_button} w-full hover:bg-gray-200`}
@@ -143,10 +142,11 @@ export const Header = () => {
                         <Menu.Item>
                           <button
                             onClick={() => loginWithRedirect()}
-                            className={`inline-block text-sm px-3 py-2 text-start font-semibold
+                            className={`inline-block px-3 py-2 text-start text-sm font-semibold
                             text-neutral-900  outline-none  transition duration-100
                              focus-visible:ring 
-                             ${styles.header_button} w-full hover:bg-gray-200`}                          >
+                             ${styles.header_button} w-full hover:bg-gray-200`}
+                          >
                             Iniciar sesión
                           </button>
                         </Menu.Item>

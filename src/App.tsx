@@ -1,6 +1,6 @@
 import { Route, Routes, useNavigate, useLocation } from 'react-router';
 import './App.css';
-import {Header} from './components/Header/Header';
+import { Header } from './components/Header/Header';
 
 import EmployeeDinamicRoutes, { EmployeeStaticRoutes } from './routes/EmployeeRoutesConfigs';
 import ClientDinamicRoutes, { ClientStaticRoutes } from './routes/ClientRoutesConfigs';
@@ -9,6 +9,7 @@ import { NotFoundView } from './views/NotFoundView';
 import { useUser } from './context/UserProvider';
 import { Breadcrumb } from './components/Breadcrumb/Breadcrumb';
 import { ThemeContextProvider } from './context/ThemeProvider';
+import CargaDomicilioView from './views/CargaDomicilioView';
 
 function App() {
   const { userRoles } = useUser();
@@ -27,9 +28,7 @@ function App() {
   return (
     <>
       <ThemeContextProvider>
-        <div
-          className={`flex h-full flex-col  bg-white dark:bg-neutral-800`}
-        >
+        <div className={`flex h-full flex-col  bg-white dark:bg-neutral-800`}>
           <Header />
           {location.pathname != '/' && <Breadcrumb />}
           <Routes>
@@ -39,15 +38,16 @@ function App() {
             {ClientDinamicRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
             ))}
-             {EmployeeStaticRoutes.map((route, index) => (
+            {EmployeeStaticRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
             ))}
             {ClientStaticRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
             ))}
+            <Route path="/cargar_domicilio" element={<CargaDomicilioView />} />
             <Route path="*" element={<NotFoundView />} />
           </Routes>
-          <article className='flex-1'></article>
+          <article className="flex-1"></article>
           <Footer />
         </div>
       </ThemeContextProvider>
