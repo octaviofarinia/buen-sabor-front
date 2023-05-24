@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate, useLocation } from 'react-router';
+import { Route, Routes, useLocation } from 'react-router';
 import './App.css';
 import { Header } from './components/Header/Header';
 
@@ -6,13 +6,11 @@ import EmployeeDinamicRoutes, { EmployeeStaticRoutes } from './routes/EmployeeRo
 import ClientDinamicRoutes, { ClientStaticRoutes } from './routes/ClientRoutesConfigs';
 import { Footer } from './components/Footer/Footer';
 import { NotFoundView } from './views/NotFoundView';
-import { useUser } from './context/UserProvider';
 import { Breadcrumb } from './components/Breadcrumb/Breadcrumb';
 import { ThemeContextProvider } from './context/ThemeProvider';
 import CargaDomicilioView from './views/CargaDomicilioView';
 
 function App() {
-  const { userRoles } = useUser();
   const location = useLocation();
 
   // const navigate = useNavigate();
