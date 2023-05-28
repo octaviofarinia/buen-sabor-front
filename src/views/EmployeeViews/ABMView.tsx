@@ -33,7 +33,7 @@ export const ABMView = ({
   }, [requestedEndpoint]);
 
   return (
-    <div className=" relative flex w-full flex-col gap-5 bg-white px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 lg:px-32">
+    <div className=" relative flex w-full flex-col gap-5 bg-white px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">
       {isLoading && (
         <div className="absolute inset-0 h-full w-full bg-zinc-300 ">
           <BeatLoader color="#000000" />

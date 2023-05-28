@@ -21,7 +21,8 @@ export const IngredienteAddOrUpdate = () => {
   const [persistibleObject, setPersistibleObject] = useState<Ingrediente>(base_ingredient_object);
   const [category, setCategory] = useState<Categoria | null>(null);
   const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida | null>(null);
-  const [imagen, setImagen] = useState<string | null>(null);
+  const [imagen, setImagen] = useState<File | null>(null);
+
 
   const navigate = useNavigate();
 
@@ -51,9 +52,12 @@ export const IngredienteAddOrUpdate = () => {
       [e.target.name]: e.target.value,
     });
   }
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setImagen(e.target.value);
-  }
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedFile = e.target.files[0];
+      setImagen(selectedFile);
+    }
+  };
   const buildPersistibleObject = () => {
     category !== null && (persistibleObject.idRubroArticulo = category.id);
     unidadDeMedida !== null && (persistibleObject.idUnidadMedida = unidadDeMedida.id);
