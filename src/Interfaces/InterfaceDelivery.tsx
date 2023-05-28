@@ -7,14 +7,14 @@ export const base_category_object: Categoria = {
   id: null,
   denominacion: null,
   RubroPadre: null,
-  idRubroPadre:null,
-  subRubros: null
+  idRubroPadre: null,
+  subRubros: null,
 };
 
 export const base_unidad_object: UnidadDeMedida = {
-  id: '',
-  denominacion: null ?? undefined,
-  abreviatura: null ?? undefined,
+  id: null,
+  denominacion: null,
+  abreviatura: null,
 };
 
 export const base_product_object: Producto = {
@@ -25,7 +25,13 @@ export const base_product_object: Producto = {
 };
 
 export const base_ingredient_object: Ingrediente = {
-  id: '',
-  nombre: null ?? undefined,
-  unidad_de_medida: null ?? undefined,
+  id: null,
+  denominacion: null,
+  urlImagen: null,
+  precioCompra: null,
+  precioVenta: null,
+  stockActual: null,
+  stockMinimo: null,
+  idUnidadMedida: null,
+  idRubroArticulo: null,
 };

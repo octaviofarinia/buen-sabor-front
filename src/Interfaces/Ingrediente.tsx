@@ -1,7 +1,13 @@
 import { UnidadDeMedida } from "./UnidadDeMedida";
 
 export interface Ingrediente{
-    id: string;
-    nombre: String | null | undefined;
-    unidad_de_medida: UnidadDeMedida | null | undefined;
+    id : number | null;
+    denominacion: string | null;
+    urlImagen : string | null;
+    precioCompra: number | null;
+    precioVenta: number | null;
+    stockActual: number | null;
+    stockMinimo: number | null;
+    idUnidadMedida: number | null;
+    idRubroArticulo: number| null;
 }

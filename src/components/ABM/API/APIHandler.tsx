@@ -24,6 +24,7 @@ export const getAllRegisters = async ({
     .get(`http://localhost:8080/${requestedEndpoint}`)
     .then((res) => {
       const data = res.data;
+      
       TableDataSetter != null && TableDataSetter(data);
       KeyTableDataSetter != null && KeyTableDataSetter(Object.keys(data[0]));
     })
@@ -36,6 +37,11 @@ export const getAllRegisters = async ({
 export const deleteRegister = async <T,>({ id, requestedEndpoint }: ApiProps<T>) => {
   return await axios.delete(`http://localhost:8080/${requestedEndpoint}/${id}`);
 };
+
+export const hardDeleteRegister = async <T,>({ id, requestedEndpoint }: ApiProps<T>) => {
+  return await axios.delete(`http://localhost:8080/${requestedEndpoint}/hard_delete/${id}`);
+};
+
 
 export const getRegister = async <T,>({ RegisterSetter, requestedEndpoint, id }: ApiProps<T>) => {
   await axios.get(`http://localhost:8080/${requestedEndpoint}/${id}`).then((res) => {
@@ -70,3 +76,4 @@ export const updateRegister = async <T,>({
     throw err;
   }
 };
+

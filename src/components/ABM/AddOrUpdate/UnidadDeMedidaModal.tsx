@@ -1,41 +1,43 @@
 import { useState, useEffect } from 'react';
-import { Categoria } from '../../../Interfaces/Categoria';
-import { getAllFathers } from '../API/SpecializedEndpoints/CategoryRequests/CategoryRequests';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faXmark } from '@fortawesome/free-solid-svg-icons';
-export interface CategoryModalProps {
-  fatherSetter: React.Dispatch<React.SetStateAction<Categoria|null>>;
+import { UnidadDeMedida } from '../../../Interfaces/UnidadDeMedida';
+import { getAllUnidadesDeMedida } from '../API/SpecializedEndpoints/UnidadDeMedidaRequests/UnidadDeMedidaRequests';
+export interface UnidadDeMedidaModalProps {
+  fatherSetter: React.Dispatch<React.SetStateAction<UnidadDeMedida | null>>;
 }
 
-export const CategoryModal = ({ fatherSetter }: CategoryModalProps) => {
-  const [categories, setCategories] = useState<Categoria[]>([]);
+export const UnidadDeMedidaModal = ({ fatherSetter }: UnidadDeMedidaModalProps) => {
+  const [unidadesDeMedida, setUnidadesDeMedida] = useState<UnidadDeMedida[]>([]);
   const [visible, toggleVisible] = useState(false);
   useEffect(() => {
-    getAllFathers({
-      RegistersSetter: setCategories,
+    getAllUnidadesDeMedida({
+      RegistersSetter: setUnidadesDeMedida,
       id: null,
       IndividualRegisterSetter: null,
     });
+    
   }, []);
-  const setFather = (categoria: Categoria) => {
-    fatherSetter(categoria);
+  const setFather = (unidadDeMedida: UnidadDeMedida) => {
+    fatherSetter(unidadDeMedida);
     toggleVisible(false);
   };
-  const renderFilasCategorias = (categorias: Categoria[]) => {
-    return categorias.map((categoria) => (
-      <React.Fragment key={categoria.id}>
+  const renderFilasUnidadDeMedida = (unidades: UnidadDeMedida[]) => {
+    return unidades.map((unidad) => (
+      <React.Fragment key={unidad.id}>
         <tr
           className="border-b border-b-neutral-200 odd:bg-white
              even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 
               dark:border-b-neutral-400 dark:bg-neutral-500
               dark:text-white dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
         >
-          <td className="whitespace-nowrap px-6 py-4">{categoria.id}</td>
-          <td>{categoria.denominacion}</td>
+          <td className="whitespace-nowrap px-6 py-4">{unidad.id}</td>
+          <td className="whitespace-nowrap px-6 py-4">{unidad.denominacion}</td>
+          <td className="whitespace-nowrap px-6 py-4">{unidad.abreviatura}</td>
           <td>
             <button
-              onClick={()=>setFather(categoria)}
+              onClick={() => setFather(unidad)}
               type="button"
               className="inline-block rounded bg-black px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-black transition
               duration-150 ease-in-out hover:bg-gray-700 hover:shadow-gray-700 focus:bg-gray-800 focus:shadow-gray-800 focus:outline-none focus:ring-0 active:bg-gray-800
@@ -46,9 +48,6 @@ export const CategoryModal = ({ fatherSetter }: CategoryModalProps) => {
             </button>
           </td>
         </tr>
-        {categoria.subRubros !== null &&
-          categoria.subRubros.length > 0 &&
-          renderFilasCategorias(categoria.subRubros)}
       </React.Fragment>
     ));
   };
@@ -56,12 +55,12 @@ export const CategoryModal = ({ fatherSetter }: CategoryModalProps) => {
     <button
       onClick={() => toggleVisible(!visible)}
       type="button"
-      className="inline-block w-full rounded bg-amber-400 px-6 pb-2 pt-2.5 text-xs font-medium uppercase 
+      className="inline-block w-full rounded bg-amber-400  pb-2 pt-2.5 text-xs font-medium uppercase 
               leading-normal text-white shadow-amber-400
                transition duration-150 ease-in-out hover:bg-amber-500 hover:shadow-amber-500
                 focus:bg-amber-600 focus:shadow-amber-600 focus:outline-none focus:ring-0 active:bg-amber-600 active:shadow-amber-600"
     >
-      <h5 className=" md:text-lg">Ver categorías</h5>
+      <h5 className=" md:text-lg">Ver unidades de medida</h5>
     </button>
   );
   const closeButton = (
@@ -77,7 +76,7 @@ export const CategoryModal = ({ fatherSetter }: CategoryModalProps) => {
     </button>
   );
   return (
-    <div>
+    <div className='flex w-1/2 pl-5 '>
       {openButton}
       <div
         className={`${
@@ -98,7 +97,7 @@ export const CategoryModal = ({ fatherSetter }: CategoryModalProps) => {
           sm:max-w-xl sm:align-middle lg:p-6"
           >
             <div className="flex w-full justify-between ">
-              <h2 className="text-2xl text-white">Elige la categoria padre</h2>
+              <h2 className="text-2xl text-white">Elige la unidad de medida</h2>
               {closeButton}
             </div>
             <div className="overflow-hidden overflow-x-auto rounded-lg px-8 sm:-mx-6 lg:-mx-8 ">
@@ -112,9 +111,15 @@ export const CategoryModal = ({ fatherSetter }: CategoryModalProps) => {
                       <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-white">
                         Denominación
                       </th>
+                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-white">
+                        Abreviatura
+                      </th>
                     </tr>
                   </thead>
-                  <tbody>{renderFilasCategorias(categories)}</tbody>
+                  <tbody>
+                    {unidadesDeMedida != (null || undefined) &&
+                      renderFilasUnidadDeMedida(unidadesDeMedida)}
+                  </tbody>
                 </table>
               </div>
             </div>

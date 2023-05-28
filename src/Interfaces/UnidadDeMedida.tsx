@@ -1,5 +1,5 @@
 export interface UnidadDeMedida{
-    id: string;
-    denominacion: String | null | undefined;
-    abreviatura: String | null | undefined;
+    id: number | null;
+    denominacion: string | null ;
+    abreviatura: string | null ;
 }

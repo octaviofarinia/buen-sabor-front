@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { CategoryDetail } from './CategoryDetail';
+import { CategoryDetail } from './CategoriaDetail';
 
 export const DetailRouter = () => {
   const { RequestedEndpoint } = useParams();
