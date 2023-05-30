@@ -37,14 +37,15 @@ export const ABMTableBuilder = ({
       });
     });
   };
-  const getColumnValue = (registerRow: RegisterRow, columnName: string): string => {
+
+  const getColumnValue = (registerRow: RegisterRow, columnName: string) => {
     const value = registerRow[columnName];
     if (typeof value === 'object' && value !== null) {
       // Si el valor es un objeto, mostrar solo el id y la denominacion
       const { denominacion } = value as Record<string, string>;
       return denominacion;
     }
-    return value !== null ? value.toString() : '';
+    return value !== null ? ( value.toLocaleString().includes("cloudinary") ? <img src={value.toString()} alt={"img"} className='mix-blend-multiply'></img> : value.toString()) : '';
   };
   return (
     <table className="min-w-full table-fixed bg-neutral-900 text-left text-sm font-light">

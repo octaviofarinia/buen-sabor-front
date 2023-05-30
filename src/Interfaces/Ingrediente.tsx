@@ -1,4 +1,3 @@
-import { UnidadDeMedida } from "./UnidadDeMedida";
 
 export interface Ingrediente{
     id : number | null;
@@ -9,5 +8,5 @@ export interface Ingrediente{
     stockActual: number | null;
     stockMinimo: number | null;
     idUnidadMedida: number | null;
-    idRubroArticulo: number| null;
+    idRubroArticulo: number | null;
 }

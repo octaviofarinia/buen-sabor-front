@@ -32,6 +32,8 @@ export const base_ingredient_object: Ingrediente = {
   precioVenta: null,
   stockActual: null,
   stockMinimo: null,
+  unidadMedida: null,
+  rubroArticulo: null,
   idUnidadMedida: null,
   idRubroArticulo: null,
 };

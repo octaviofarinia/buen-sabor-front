@@ -5,7 +5,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faXmark } from '@fortawesome/free-solid-svg-icons';
 export interface CategoryModalProps {
-  fatherSetter: React.Dispatch<React.SetStateAction<Categoria | null>>;
+  fatherSetter: React.Dispatch<React.SetStateAction<Categoria>>;
 }
 
 export const CategoryModal = ({ fatherSetter }: CategoryModalProps) => {

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Categoria } from '../../../../../Interfaces/Categoria';
+import { base_category_object } from '../../../../../Interfaces/InterfaceDelivery';
 interface CategoriaRequestProps {
   RegistersSetter: React.Dispatch<React.SetStateAction<Categoria[]>> | null;
   IndividualRegisterSetter: React.Dispatch<React.SetStateAction<Categoria>> | null;
@@ -15,12 +16,10 @@ export const getAllFathers = async ({ RegistersSetter }: CategoriaRequestProps) 
 
 export const getCategoryComplete = async (
   { IndividualRegisterSetter, id }: CategoriaRequestProps,
-  fatherSetter: React.Dispatch<React.SetStateAction<Categoria | null>>
+  fatherSetter: React.Dispatch<React.SetStateAction<Categoria>>
 ) => {
-  await axios.get(`http://localhost:8080/api/v1/rubros-articulos/${id}/complete`).then((res) => {
-    const data = res.data;
-    IndividualRegisterSetter !== null && IndividualRegisterSetter(data);
-    fatherSetter !== null && fatherSetter(data.rubroPadre || null);
-    
-  });
+  const response = await axios.get(`http://localhost:8080/api/v1/rubros-articulos/${id}/complete`);
+  IndividualRegisterSetter !== null && IndividualRegisterSetter(response.data);
+  fatherSetter(response.data.rubroPadre || base_category_object);
+  return response;
 };

@@ -47,6 +47,7 @@ export const getRegister = async <T,>({ RegisterSetter, requestedEndpoint, id }:
   await axios.get(`http://localhost:8080/${requestedEndpoint}/${id}`).then((res) => {
     const data = res.data;
     RegisterSetter != null && RegisterSetter(data);
+    return data;
   });
 };
 

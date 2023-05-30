@@ -5,7 +5,7 @@ import { faEye, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { UnidadDeMedida } from '../../../Interfaces/UnidadDeMedida';
 import { getAllUnidadesDeMedida } from '../API/SpecializedEndpoints/UnidadDeMedidaRequests/UnidadDeMedidaRequests';
 export interface UnidadDeMedidaModalProps {
-  fatherSetter: React.Dispatch<React.SetStateAction<UnidadDeMedida | null>>;
+  fatherSetter: React.Dispatch<React.SetStateAction<UnidadDeMedida>>;
 }
 
 export const UnidadDeMedidaModal = ({ fatherSetter }: UnidadDeMedidaModalProps) => {

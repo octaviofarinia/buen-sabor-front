@@ -1,21 +1,34 @@
 import axios from 'axios';
 import { Ingrediente } from '../../../../../Interfaces/Ingrediente';
-interface IngredienteRequestProps {
-  persistenObject: Ingrediente;
+interface IngredienteAddOrUpdateProps {
+  ingrediente: Ingrediente;
   imagen: File | null;
   id: string | undefined | null;
 }
 
+
+
+export const getIngredienteRegister = async (id:string|undefined) => {
+  const url = `http://localhost:8080/api/v1/articulos-insumo/${id}`;
+  try {
+    const response = await axios.get(url);
+    return response;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
 export const createIngredienteRegister = async ({
-  persistenObject,
+  ingrediente: ingrediente,
   imagen,
-}: IngredienteRequestProps) => {
+}: IngredienteAddOrUpdateProps) => {
   try {
     const url = 'http://localhost:8080/api/v1/articulos-insumo';
     const formData = new FormData();
     formData.append(
       'insumo',
-      new Blob([JSON.stringify(persistenObject)], {
+      new Blob([JSON.stringify(ingrediente)], {
         type: 'application/json',
       })
     );
@@ -27,7 +40,7 @@ export const createIngredienteRegister = async ({
         'Content-Type': 'multipart/form-data',
       },
     });
-    return response.data;
+    return response.status;
   } catch (err) {
     console.error(err);
     throw err;
@@ -35,27 +48,30 @@ export const createIngredienteRegister = async ({
 };
 
 export const updateIngredienteRegister = async ({
-  persistenObject,
+  ingrediente: ingrediente,
   id,
   imagen,
-}: IngredienteRequestProps) => {
+}: IngredienteAddOrUpdateProps) => {
   try {
+    console.log("Request",ingrediente)
+    const url = `http://localhost:8080/api/v1/articulos-insumo/${id}`;
     const formData = new FormData();
-    formData.append('insumo', JSON.stringify(persistenObject));
-    imagen !== null && formData.append('imagen', imagen);
-    const res = await axios.put(
-      `http://localhost:8080/api/v1/articulos-insumo/${id}`,
-      {
-        formData,
-        id: id,
-      },
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
+    formData.append(
+      'insumo',
+      new Blob([JSON.stringify(ingrediente)], {
+        type: 'application/json',
+      })
     );
-    return res;
+
+    imagen !== null && formData.append('imagen', imagen);
+
+    const response = await axios.put(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log("Response",response.data)
+    return response.data;
   } catch (err) {
     console.error(err);
     throw err;

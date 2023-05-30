@@ -1,9 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { createRegister, getRegister, updateRegister } from '../API/APIHandler';
-import { APIRouter } from '../API/APIRouter';
 import styles from './AddOrUpdate.module.css';
-import { base_ingredient_object } from '../../../Interfaces/InterfaceDelivery';
+import {
+  base_category_object,
+  base_ingredient_object,
+  base_unidad_object,
+} from '../../../Interfaces/InterfaceDelivery';
 import { Ingrediente } from '../../../Interfaces/Ingrediente';
 import { Categoria } from '../../../Interfaces/Categoria';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,16 +15,16 @@ import { UnidadDeMedida } from '../../../Interfaces/UnidadDeMedida';
 import { CategoryModal } from './CategoriaModal';
 import {
   createIngredienteRegister,
+  getIngredienteRegister,
   updateIngredienteRegister,
 } from '../API/SpecializedEndpoints/IngredienteRequests/IngredienteRequests';
 
 export const IngredienteAddOrUpdate = () => {
-  const { RequestedEndpoint, id } = useParams();
-  const [persistibleObject, setPersistibleObject] = useState<Ingrediente>(base_ingredient_object);
-  const [category, setCategory] = useState<Categoria | null>(null);
-  const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida | null>(null);
+  const { id } = useParams();
+  const [ingrediente, setIngrediente] = useState<Ingrediente>(base_ingredient_object);
+  const [categoria, setCategoria] = useState<Categoria>(base_category_object);
+  const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad_object);
   const [imagen, setImagen] = useState<File | null>(null);
-
 
   const navigate = useNavigate();
 
@@ -33,13 +35,13 @@ export const IngredienteAddOrUpdate = () => {
       await updateIngredienteRegister({
         id: id,
         imagen: imagen,
-        persistenObject: persistibleObject,
+        ingrediente: ingrediente,
       });
     } else {
       await createIngredienteRegister({
         id: null,
         imagen: imagen,
-        persistenObject: persistibleObject,
+        ingrediente: ingrediente,
       });
     }
 
@@ -47,8 +49,8 @@ export const IngredienteAddOrUpdate = () => {
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setPersistibleObject({
-      ...persistibleObject,
+    setIngrediente({
+      ...ingrediente,
       [e.target.name]: e.target.value,
     });
   }
@@ -58,39 +60,49 @@ export const IngredienteAddOrUpdate = () => {
       setImagen(selectedFile);
     }
   };
-  const buildPersistibleObject = () => {
-    category !== null && (persistibleObject.idRubroArticulo = category.id);
-    unidadDeMedida !== null && (persistibleObject.idUnidadMedida = unidadDeMedida.id);
+  const buildIngrediente = () => {
+    if (categoria.id !== null && ingrediente !== null) {
+      ingrediente.idRubroArticulo = categoria.id;
+    }
+    if (unidadDeMedida.id !== null && ingrediente !== null) {
+      ingrediente.idUnidadMedida = unidadDeMedida.id;
+    }
+  
+  };
+
+  const setPropsOfExistentIngredient = async () => {
+    try {
+      const ingredienteData = await getIngredienteRegister(id);
+      ingredienteData.status === 200 && 
+      setIngrediente(ingredienteData.data);
+      setCategoria(ingredienteData.data.rubroArticulo);
+      setUnidadDeMedida(ingredienteData.data.unidadMedida)
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
-    id !== undefined &&
-      getRegister({
-        id: id,
-        KeyTableDataSetter: null,
-        TableDataSetter: null,
-        requestedEndpoint: 'Ingredientes',
-        persistenObject: persistibleObject,
-        RegisterSetter: setPersistibleObject,
-      });
+    id !== undefined && setPropsOfExistentIngredient();
   }, []);
+
   return (
     <div className="relative bg-white py-6 sm:py-8 lg:py-12 lg:pb-60 ">
-      <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
+      <div className="max-w-screen-2xl mx-auto px-4 md:px-8">
         <div className="mb-10 md:mb-16">
           <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">
             Carga de Registro
           </h2>
 
-          <p className="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg">
+          <h3 className="max-w-screen-md mx-auto text-center text-gray-500 md:text-lg">
             Completa el formulario para ingresar un nuevo registro de :{' '}
-            <span className="text-amber-600">{RequestedEndpoint}</span>
-          </p>
+            <span className="text-amber-600">Ingredientes</span>
+          </h3>
         </div>
 
         <form
           encType="multipart/form-data"
-          className={`mx-auto grid max-w-4xl gap-4 sm:grid-cols-2 lg:gap-10 ${styles} `}
+          className={`max-w-4xl mx-auto grid gap-4 sm:grid-cols-2 lg:gap-10 ${styles} `}
           onSubmit={(e) => handleSubmit(e)}
         >
           <label htmlFor="denominacion" className="lg:text-2xl">
@@ -102,7 +114,7 @@ export const IngredienteAddOrUpdate = () => {
             type="text"
             className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
             onChange={(e) => handleChange(e)}
-            value={persistibleObject.denominacion || ''}
+            value={ingrediente.denominacion || ''}
             required
           />
           <label htmlFor="precioCompra" className="lg:text-2xl">
@@ -114,7 +126,7 @@ export const IngredienteAddOrUpdate = () => {
             type="number"
             className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
             onChange={(e) => handleChange(e)}
-            value={persistibleObject.precioCompra || ''}
+            value={ingrediente.precioCompra || ''}
             required
           />
           <label htmlFor="precioVenta" className="lg:text-2xl">
@@ -126,7 +138,7 @@ export const IngredienteAddOrUpdate = () => {
             type="number"
             className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
             onChange={(e) => handleChange(e)}
-            value={persistibleObject.precioVenta || ''}
+            value={ingrediente.precioVenta || ''}
             required
           />
           <label htmlFor="stockActual" className="lg:text-2xl">
@@ -138,7 +150,7 @@ export const IngredienteAddOrUpdate = () => {
             type="number"
             className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
             onChange={(e) => handleChange(e)}
-            value={persistibleObject.stockActual || ''}
+            value={ingrediente.stockActual || ''}
             required
           />
           <label htmlFor="stockMinimo" className="lg:text-2xl">
@@ -150,32 +162,41 @@ export const IngredienteAddOrUpdate = () => {
             type="number"
             className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
             onChange={(e) => handleChange(e)}
-            value={persistibleObject.stockMinimo || ''}
+            value={ingrediente.stockMinimo || ''}
             required
           />
           <label htmlFor="urlImagen" className="lg:text-2xl">
             Imagen del insumo
           </label>
-          <input
-            name="imagen"
-            id="imagen"
-            type="file"
-            className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
-            onChange={(e) => handleImageChange(e)}
-            required
-          />
+          <div className="flex flex-col">
+            {id !== undefined && (
+              <img
+                src={ingrediente.urlImagen?.toString()}
+                alt={'img'}
+                className="max-w-7.5 mix-blend-multiply"
+              ></img>
+            )}
+            <input
+              name="imagen"
+              id="imagen"
+              type="file"
+              className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
+              onChange={(e) => handleImageChange(e)}
+            />
+          </div>
+
           <div
             className={`flex items-center justify-between gap-5 ${
-              category === null && 'col-span-2'
+              categoria.id === null  && 'col-span-2'
             }`}
           >
             <label htmlFor="idRubroArticulo" className="lg:text-2xl">
               Categoría
             </label>
-            <CategoryModal fatherSetter={setCategory} />
-            {category !== null && (
+            <CategoryModal fatherSetter={setCategoria} />
+            {categoria.id !== null && (
               <button
-                onClick={() => setCategory(null)}
+                onClick={() => setCategoria(base_category_object)}
                 type="button"
                 className="inline-block h-full rounded bg-black px-6 py-1 text-xs font-medium uppercase leading-normal text-white shadow-black transition
                      duration-150 ease-in-out hover:bg-gray-700 hover:shadow-gray-700 focus:bg-gray-800 focus:shadow-gray-800 focus:outline-none focus:ring-0 active:bg-gray-800
@@ -186,9 +207,9 @@ export const IngredienteAddOrUpdate = () => {
               </button>
             )}
           </div>
-          {category !== null && (
+          {categoria.id !== null && (
             <span className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring">
-              {category.denominacion}
+              {categoria.denominacion}
             </span>
           )}
           <input
@@ -196,21 +217,21 @@ export const IngredienteAddOrUpdate = () => {
             id={'idRubroArticulo'}
             className="hidden"
             onChange={(e) => handleChange(e)}
-            value={category?.id || 0}
+            value={categoria?.id || 0}
             required
           />
           <div
             className={`flex items-center justify-between gap-5 ${
-              unidadDeMedida === null ? 'col-span-2' : 'col-span-1'
+              unidadDeMedida.id === null ? 'col-span-2' : 'col-span-1'
             }`}
           >
             <label htmlFor="idunidadDeMedida" className="lg:text-2xl">
               Unidad de Medida
             </label>
             <UnidadDeMedidaModal fatherSetter={setUnidadDeMedida} />
-            {unidadDeMedida !== null && (
+            {unidadDeMedida.id !== null && (
               <button
-                onClick={() => setUnidadDeMedida(null)}
+                onClick={() => setUnidadDeMedida(base_unidad_object)}
                 type="button"
                 className="inline-block h-full rounded bg-black px-6 py-1 text-xs font-medium uppercase leading-normal text-white shadow-black transition
                      duration-150 ease-in-out hover:bg-gray-700 hover:shadow-gray-700 focus:bg-gray-800 focus:shadow-gray-800 focus:outline-none focus:ring-0 active:bg-gray-800
@@ -221,7 +242,7 @@ export const IngredienteAddOrUpdate = () => {
               </button>
             )}
           </div>
-          {unidadDeMedida !== null && (
+          {unidadDeMedida.id !== null && (
             <span className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring">
               {unidadDeMedida.denominacion}
             </span>
@@ -235,7 +256,7 @@ export const IngredienteAddOrUpdate = () => {
             required
           />
           <button
-            onClick={() => buildPersistibleObject()}
+            onClick={() => buildIngrediente()}
             type="submit"
             className="col-start-2 inline-block h-full w-full rounded bg-black px-6 py-2 text-xs font-medium uppercase leading-normal text-white shadow-black transition
                      duration-150 ease-in-out hover:bg-gray-700 hover:shadow-gray-700 focus:bg-gray-800 focus:shadow-gray-800 focus:outline-none focus:ring-0 active:bg-gray-800

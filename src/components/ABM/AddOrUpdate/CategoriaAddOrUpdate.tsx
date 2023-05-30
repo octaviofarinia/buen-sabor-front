@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { createRegister, getRegister, updateRegister } from '../API/APIHandler';
+import { createRegister, updateRegister } from '../API/APIHandler';
 import { APIRouter } from '../API/APIRouter';
 import { Categoria } from '../../../Interfaces/Categoria';
 import { base_category_object } from '../../../Interfaces/InterfaceDelivery';
@@ -9,10 +9,11 @@ import styles from './AddOrUpdate.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { getCategoryComplete } from '../API/SpecializedEndpoints/CategoriaRequests/CategoriaRequests';
+
 export const CategoriaAddOrUpdate = () => {
   const { RequestedEndpoint, id } = useParams();
-  const [persistibleObject, setPersistibleObject] = useState<Categoria>(base_category_object);
-  const [categoryFather, setCategoryFather] = useState<Categoria | null>(null);
+  const [categoria, setCategoria] = useState<Categoria>(base_category_object);
+  const [categoryFather, setCategoryFather] = useState<Categoria>(base_category_object);
   const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -21,7 +22,7 @@ export const CategoriaAddOrUpdate = () => {
     if (id) {
       await updateRegister({
         requestedEndpoint: APIRouter(RequestedEndpoint),
-        persistenObject: persistibleObject,
+        persistenObject: categoria,
         id: id,
         KeyTableDataSetter: null,
         TableDataSetter: null,
@@ -30,58 +31,64 @@ export const CategoriaAddOrUpdate = () => {
     } else {
       await createRegister({
         requestedEndpoint: APIRouter(RequestedEndpoint),
-        persistenObject: persistibleObject,
+        persistenObject: categoria,
         KeyTableDataSetter: null,
         TableDataSetter: null,
         RegisterSetter: null,
         id: '',
       });
     }
-
     navigate(`/employee/Categorias`);
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setPersistibleObject({
-      ...persistibleObject,
+    setCategoria({
+      ...categoria,
       [e.target.name]: e.target.value,
     });
   }
 
   const buildPersistibleObject = () => {
-    categoryFather !== null
-      ? ((persistibleObject.RubroPadre = categoryFather),
-        (persistibleObject.idRubroPadre = categoryFather?.id))
-      : ((persistibleObject.RubroPadre = null), (persistibleObject.idRubroPadre = null));
+    categoryFather.id !== null &&
+      categoria.id == categoryFather.id &&
+      (categoria.RubroPadre = categoryFather.RubroPadre),
+      (categoria.idRubroPadre = categoryFather.id);
   };
 
-  useEffect(() => {
-    id !== undefined &&
-      getCategoryComplete(
+  const setPropsOfExistentCategoria = async () => {
+    try {
+      const categoriaData = await getCategoryComplete(
         {
           RegistersSetter: null,
-          IndividualRegisterSetter: setPersistibleObject,
+          IndividualRegisterSetter: setCategoria,
           id: id,
         },
         setCategoryFather
       );
+    } catch (err) {
+      console.error(err);
+    }
+    
+  };
+  useEffect(() => {
+    id !== undefined && setPropsOfExistentCategoria();
   }, []);
   return (
     <div className="relative bg-white py-6 sm:py-8 lg:py-12 lg:pb-60 ">
-      <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
+      <div className="max-w-screen-2xl mx-auto px-4 md:px-8">
         <div className="mb-10 md:mb-16">
           <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">
             Carga de Registro
           </h2>
 
-          <p className="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg">
+          <p className="max-w-screen-md mx-auto text-center text-gray-500 md:text-lg">
             Completa el formulario para ingresar un nuevo registro de :{' '}
             <span className="text-amber-600">{RequestedEndpoint}</span>
           </p>
         </div>
 
         <form
-          className={`mx-auto grid max-w-4xl gap-4 sm:grid-cols-2 lg:gap-10 ${styles} `}
+          className={`max-w-4xl mx-auto grid gap-4 sm:grid-cols-2 lg:gap-10 ${styles} `}
           onSubmit={(e) => handleSubmit(e)}
         >
           <label htmlFor="denominacion" className="lg:text-2xl">
@@ -92,7 +99,7 @@ export const CategoriaAddOrUpdate = () => {
             id={'denominacion'}
             className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
             onChange={(e) => handleChange(e)}
-            value={persistibleObject.denominacion || ''}
+            value={categoria.denominacion || ''}
             required
           />
           <div className="flex items-center gap-5">
@@ -100,9 +107,9 @@ export const CategoriaAddOrUpdate = () => {
               ID de Categoría padre
             </label>
             <CategoryModal fatherSetter={setCategoryFather} />
-            {categoryFather !== null && (
+            {categoryFather.id !== null && (
               <button
-                onClick={() => setCategoryFather(null)}
+                onClick={() => setCategoryFather(base_category_object)}
                 type="button"
                 className="inline-block h-full rounded bg-black px-6 py-1 text-xs font-medium uppercase leading-normal text-white shadow-black transition
                      duration-150 ease-in-out hover:bg-gray-700 hover:shadow-gray-700 focus:bg-gray-800 focus:shadow-gray-800 focus:outline-none focus:ring-0 active:bg-gray-800
@@ -113,7 +120,7 @@ export const CategoriaAddOrUpdate = () => {
               </button>
             )}
           </div>
-          {categoryFather !== null && (
+          {categoryFather.id !== null && (
             <span className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring">
               {categoryFather.denominacion}
             </span>
