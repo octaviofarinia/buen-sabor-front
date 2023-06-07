@@ -6,9 +6,17 @@ interface IngredienteAddOrUpdateProps {
   id: string | undefined | null;
 }
 
+export const getAllIngredientes = async () => {
+  const response = await axios.get('http://localhost:8080/api/v1/articulos-insumo');
+  try {
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
 
-
-export const getIngredienteRegister = async (id:string|undefined) => {
+export const getIngredienteRegister = async (id: string | undefined) => {
   const url = `http://localhost:8080/api/v1/articulos-insumo/${id}`;
   try {
     const response = await axios.get(url);
@@ -53,7 +61,6 @@ export const updateIngredienteRegister = async ({
   imagen,
 }: IngredienteAddOrUpdateProps) => {
   try {
-    console.log("Request",ingrediente)
     const url = `http://localhost:8080/api/v1/articulos-insumo/${id}`;
     const formData = new FormData();
     formData.append(
@@ -70,8 +77,8 @@ export const updateIngredienteRegister = async ({
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log("Response",response.data)
-    return response.data;
+    console.log('Response', response.data);
+    return response.status;
   } catch (err) {
     console.error(err);
     throw err;

@@ -8,16 +8,19 @@ import {
 } from '../../../Interfaces/InterfaceDelivery';
 import { Ingrediente } from '../../../Interfaces/Ingrediente';
 import { Categoria } from '../../../Interfaces/Categoria';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { UnidadDeMedidaModal } from './UnidadDeMedidaModal';
+import { UnidadDeMedidaModal } from './Modal/UnidadDeMedidaModal';
 import { UnidadDeMedida } from '../../../Interfaces/UnidadDeMedida';
-import { CategoryModal } from './CategoriaModal';
+import { CategoryModal } from './Modal/CategoriaModal';
 import {
   createIngredienteRegister,
   getIngredienteRegister,
   updateIngredienteRegister,
 } from '../API/SpecializedEndpoints/IngredienteRequests/IngredienteRequests';
+import { handleChange, handleImageChange } from '../../../utils/FormUtils';
+import { Button } from '../../Botones/Button';
+import { ClipLoader } from 'react-spinners';
+import { ToastAlert, notify } from '../../Toast/ToastAlert';
+import { AxiosError } from 'axios';
 
 export const IngredienteAddOrUpdate = () => {
   const { id } = useParams();
@@ -25,41 +28,43 @@ export const IngredienteAddOrUpdate = () => {
   const [categoria, setCategoria] = useState<Categoria>(base_category_object);
   const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad_object);
   const [imagen, setImagen] = useState<File | null>(null);
-
+  const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    let status = 0;
+    setLoading(true);
+    try {
+      if (id) {
+        const request = await updateIngredienteRegister({
+          id: id,
+          imagen: imagen,
+          ingrediente: ingrediente,
+        });
+        status = request;
+      } else {
+        const request = await createIngredienteRegister({
+          id: null,
+          imagen: imagen,
+          ingrediente: ingrediente,
+        });
+        status = request;
+      }
 
-    if (id) {
-      await updateIngredienteRegister({
-        id: id,
-        imagen: imagen,
-        ingrediente: ingrediente,
-      });
-    } else {
-      await createIngredienteRegister({
-        id: null,
-        imagen: imagen,
-        ingrediente: ingrediente,
-      });
+      setLoading(false);
+      status === (200 || 201) && notify('Exito', 'success');
+      setTimeout(() => {
+        navigate(`/employee/Ingredientes`);
+      }, 2000);
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      console.log(axiosError);
+      setLoading(false);
+      notify('Algo salió mal! Status: ' + axiosError.response?.status, 'error');
     }
-
-    navigate(`/employee/Ingredientes`);
   }
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setIngrediente({
-      ...ingrediente,
-      [e.target.name]: e.target.value,
-    });
-  }
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const selectedFile = e.target.files[0];
-      setImagen(selectedFile);
-    }
-  };
   const buildIngrediente = () => {
     if (categoria.id !== null && ingrediente !== null) {
       ingrediente.idRubroArticulo = categoria.id;
@@ -67,16 +72,14 @@ export const IngredienteAddOrUpdate = () => {
     if (unidadDeMedida.id !== null && ingrediente !== null) {
       ingrediente.idUnidadMedida = unidadDeMedida.id;
     }
-  
   };
 
   const setPropsOfExistentIngredient = async () => {
     try {
       const ingredienteData = await getIngredienteRegister(id);
-      ingredienteData.status === 200 && 
-      setIngrediente(ingredienteData.data);
+      ingredienteData.status === 200 && setIngrediente(ingredienteData.data);
       setCategoria(ingredienteData.data.rubroArticulo);
-      setUnidadDeMedida(ingredienteData.data.unidadMedida)
+      setUnidadDeMedida(ingredienteData.data.unidadMedida);
     } catch (err) {
       console.error(err);
     }
@@ -87,57 +90,70 @@ export const IngredienteAddOrUpdate = () => {
   }, []);
 
   return (
-    <div className="relative bg-white py-6 sm:py-8 lg:py-12 lg:pb-60 ">
-      <div className="max-w-screen-2xl mx-auto px-4 md:px-8">
-        <div className="mb-10 md:mb-16">
-          <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">
-            Carga de Registro
-          </h2>
-
-          <h3 className="max-w-screen-md mx-auto text-center text-gray-500 md:text-lg">
-            Completa el formulario para ingresar un nuevo registro de :{' '}
-            <span className="text-amber-600">Ingredientes</span>
-          </h3>
+    <div className="relative bg-white py-6 dark:bg-neutral-800 sm:py-8 lg:py-12 ">
+      <div className="mx-auto max-w-screen-xl px-4 md:px-8 lg:px-20">
+        <div className="mb-5 flex w-full items-center justify-between ">
+          <div className="flex flex-col ">
+            <h2 className=" text-center text-2xl font-bold text-gray-800 dark:text-white  lg:text-4xl">
+              {id === undefined ? (
+                <>
+                  <span className="block">Carga de registro </span>
+                </>
+              ) : (
+                <>
+                  <span>Edición de registro </span>
+                </>
+              )}
+            </h2>{' '}
+            <h3 className="mb-4 text-start  text-xl font-bold text-amber-400 md:mb-6 ">
+              Ingrediente | Artículo - Insumo
+            </h3>
+          </div>
         </div>
 
         <form
           encType="multipart/form-data"
-          className={`max-w-4xl mx-auto grid gap-4 sm:grid-cols-2 lg:gap-10 ${styles} `}
+          className={`mx-auto grid max-w-2xl items-center gap-4 sm:grid-cols-3 lg:gap-10 ${styles} text-end dark:text-white`}
           onSubmit={(e) => handleSubmit(e)}
         >
           <label htmlFor="denominacion" className="lg:text-2xl">
-            Denominacion
+            Denominación
           </label>
           <input
             name={'denominacion'}
             id={'denominacion'}
-            type="text"
-            className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
-            onChange={(e) => handleChange(e)}
+            className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
             value={ingrediente.denominacion || ''}
+            placeholder="Denominación..."
             required
           />
           <label htmlFor="precioCompra" className="lg:text-2xl">
-            Precio Compra
+            Precio de Compra
           </label>
           <input
             name={'precioCompra'}
             id={'precioCompra'}
             type="number"
-            className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
-            onChange={(e) => handleChange(e)}
+            placeholder='Precio de Compra...'
+            className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
             value={ingrediente.precioCompra || ''}
             required
           />
           <label htmlFor="precioVenta" className="lg:text-2xl">
-            Precio Venta
+            Precio de Venta
           </label>
           <input
             name={'precioVenta'}
             id={'precioVenta'}
             type="number"
-            className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
-            onChange={(e) => handleChange(e)}
+            className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
+            placeholder='Precio de Venta...'
             value={ingrediente.precioVenta || ''}
             required
           />
@@ -148,8 +164,10 @@ export const IngredienteAddOrUpdate = () => {
             name={'stockActual'}
             id={'stockActual'}
             type="number"
-            className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
-            onChange={(e) => handleChange(e)}
+            className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
+            placeholder='Stock Actual...'
             value={ingrediente.stockActual || ''}
             required
           />
@@ -160,112 +178,99 @@ export const IngredienteAddOrUpdate = () => {
             name={'stockMinimo'}
             id={'stockMinimo'}
             type="number"
-            className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
-            onChange={(e) => handleChange(e)}
+            className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
             value={ingrediente.stockMinimo || ''}
+            placeholder='Stock Mínimo...'
             required
           />
           <label htmlFor="urlImagen" className="lg:text-2xl">
             Imagen del insumo
           </label>
-          <div className="flex flex-col">
+          <div className="col-span-2 flex flex-col gap-3">
             {id !== undefined && (
               <img
                 src={ingrediente.urlImagen?.toString()}
                 alt={'img'}
-                className="max-w-7.5 mix-blend-multiply"
+                className="mx-auto h-72  w-full rounded-md border-4 border-amber-400 dark:border-neutral-400 mix-blend-multiply dark:mix-blend-normal object-cover
+                "
               ></img>
             )}
             <input
               name="imagen"
               id="imagen"
               type="file"
-              className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
-              onChange={(e) => handleImageChange(e)}
+              className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+              onChange={(e) => handleImageChange(e, imagen, setImagen)}
+              {...(ingrediente.id === null ? { required: true } : {})}
             />
           </div>
-
-          <div
-            className={`flex items-center justify-between gap-5 ${
-              categoria.id === null  && 'col-span-2'
-            }`}
-          >
-            <label htmlFor="idRubroArticulo" className="lg:text-2xl">
-              Categoría
-            </label>
-            <CategoryModal fatherSetter={setCategoria} />
+          <label htmlFor="idRubroPadre" className="lg:text-2xl">
+            Categoría
+          </label>
+          <div className="col-span-2 flex items-center gap-5 z-0">
+            {categoria.id === null && (
+              <CategoryModal
+                fatherSetter={setCategoria}
+                id={categoria.id !== null ? categoria.id : undefined}
+              />
+            )}
             {categoria.id !== null && (
-              <button
-                onClick={() => setCategoria(base_category_object)}
-                type="button"
-                className="inline-block h-full rounded bg-black px-6 py-1 text-xs font-medium uppercase leading-normal text-white shadow-black transition
-                     duration-150 ease-in-out hover:bg-gray-700 hover:shadow-gray-700 focus:bg-gray-800 focus:shadow-gray-800 focus:outline-none focus:ring-0 active:bg-gray-800
-                     active:shadow-gray-800 dark:bg-white dark:text-black dark:shadow-white dark:hover:bg-gray-300 dark:hover:shadow-gray-300 dark:focus:bg-gray-100 dark:focus:shadow-gray-100
-                     dark:active:bg-gray-100 dark:active:shadow-gray-100"
+              <span
+                className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-start text-gray-800 outline-none
+              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
               >
-                <FontAwesomeIcon icon={faXmark} size="lg" style={{ color: '#ffffff' }} />
-              </button>
+                {categoria.denominacion}
+              </span>
+            )}
+            {categoria.id !== null && (
+              <Button
+                callback={() => {
+                  setCategoria(base_category_object);
+                }}
+                type="button"
+                content="x"
+                color="rojo"
+              />
             )}
           </div>
-          {categoria.id !== null && (
-            <span className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring">
-              {categoria.denominacion}
-            </span>
-          )}
-          <input
-            name={'id'}
-            id={'idRubroArticulo'}
-            className="hidden"
-            onChange={(e) => handleChange(e)}
-            value={categoria?.id || 0}
-            required
-          />
-          <div
-            className={`flex items-center justify-between gap-5 ${
-              unidadDeMedida.id === null ? 'col-span-2' : 'col-span-1'
-            }`}
-          >
-            <label htmlFor="idunidadDeMedida" className="lg:text-2xl">
-              Unidad de Medida
-            </label>
-            <UnidadDeMedidaModal fatherSetter={setUnidadDeMedida} />
+
+          <label htmlFor="idUnidadDeMedida" className="lg:text-2xl">
+            Unidad de medida
+          </label>
+          <div className="col-span-2 flex items-center gap-5 ">
+            {unidadDeMedida.id === null && <UnidadDeMedidaModal fatherSetter={setUnidadDeMedida} />}
             {unidadDeMedida.id !== null && (
-              <button
-                onClick={() => setUnidadDeMedida(base_unidad_object)}
-                type="button"
-                className="inline-block h-full rounded bg-black px-6 py-1 text-xs font-medium uppercase leading-normal text-white shadow-black transition
-                     duration-150 ease-in-out hover:bg-gray-700 hover:shadow-gray-700 focus:bg-gray-800 focus:shadow-gray-800 focus:outline-none focus:ring-0 active:bg-gray-800
-                     active:shadow-gray-800 dark:bg-white dark:text-black dark:shadow-white dark:hover:bg-gray-300 dark:hover:shadow-gray-300 dark:focus:bg-gray-100 dark:focus:shadow-gray-100
-                     dark:active:bg-gray-100 dark:active:shadow-gray-100"
+              <span
+                className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-start text-gray-800 outline-none
+              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
               >
-                <FontAwesomeIcon icon={faXmark} size="lg" style={{ color: '#ffffff' }} />
-              </button>
+                {unidadDeMedida.denominacion}
+              </span>
+            )}
+            {unidadDeMedida.id !== null && (
+              <Button
+                callback={() => {
+                  setUnidadDeMedida(base_unidad_object);
+                }}
+                type="button"
+                content="x"
+                color="rojo"
+              />
             )}
           </div>
-          {unidadDeMedida.id !== null && (
-            <span className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring">
-              {unidadDeMedida.denominacion}
-            </span>
-          )}
-          <input
-            name={'idunidadDeMedida'}
-            id={'idunidadDeMedida'}
-            className="hidden"
-            onChange={(e) => handleChange(e)}
-            value={unidadDeMedida?.id || 0}
-            required
-          />
-          <button
-            onClick={() => buildIngrediente()}
-            type="submit"
-            className="col-start-2 inline-block h-full w-full rounded bg-black px-6 py-2 text-xs font-medium uppercase leading-normal text-white shadow-black transition
-                     duration-150 ease-in-out hover:bg-gray-700 hover:shadow-gray-700 focus:bg-gray-800 focus:shadow-gray-800 focus:outline-none focus:ring-0 active:bg-gray-800
-                     active:shadow-gray-800 dark:bg-white dark:text-black dark:shadow-white dark:hover:bg-gray-300 dark:hover:shadow-gray-300 dark:focus:bg-gray-100 dark:focus:shadow-gray-100
-                     dark:active:bg-gray-100 dark:active:shadow-gray-100"
-          >
-            <h5 className="lg:text-lg">Agregar</h5>
-          </button>
+          <div className="relative z-0 col-span-3 flex w-full gap-3">
+            <Button callback={buildIngrediente} type="submit" content="add" fullsize={true} />
+            {isLoading && (
+              <div className="absolute -right-20 flex items-center">
+                <ClipLoader size={45} aria-label="Loading Spinner" data-testid="loader" />
+              </div>
+            )}
+          </div>
         </form>
+        <ToastAlert />
       </div>
     </div>
   );

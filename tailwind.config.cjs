@@ -2,11 +2,13 @@
 module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
-    maxWidth: {
-      3.75: '60px',
-      7.5: '120px',
-      9: '144px',
+    extend: {
+      minHeight: {
+        600: '600px',
+      },
+      maxWidth:{
+        120: '120px',
+      }
     },
   },
   darkMode: 'class',

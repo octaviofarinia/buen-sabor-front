@@ -1,7 +1,7 @@
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import { deleteRegister, getAllRegisters } from './API/APIHandler';
+import { softDelete, getAllRegisters } from './API/APIHandler';
 import { HeaderKey, RegisterRow } from '../../Interfaces/ABM/GenericTableInterfaces';
 import { addSpaceBeforeUppercase } from '../../utils/StringUtils';
 
@@ -19,21 +19,13 @@ export const ABMTableBuilder = ({
   TableDataSetter: React.Dispatch<React.SetStateAction<RegisterRow[]>> | null;
 }) => {
   const handleDeleteRegister = (id: string) => {
-    deleteRegister({
-      KeyTableDataSetter: null,
-      TableDataSetter: null,
-      RegisterSetter: null,
-      persistenObject: null,
+    softDelete({
       requestedEndpoint: requestedEndpoint,
       id: id,
     }).then(() => {
       getAllRegisters({
-        KeyTableDataSetter: null,
         TableDataSetter: TableDataSetter,
         requestedEndpoint: requestedEndpoint,
-        RegisterSetter: null,
-        persistenObject: null,
-        id: '',
       });
     });
   };
@@ -45,7 +37,19 @@ export const ABMTableBuilder = ({
       const { denominacion } = value as Record<string, string>;
       return denominacion;
     }
-    return value !== null ? ( value.toLocaleString().includes("cloudinary") ? <img src={value.toString()} alt={"img"} className='mix-blend-multiply'></img> : value.toString()) : '';
+    return value !== null ? (
+      value.toLocaleString().includes('cloudinary') ? (
+        <img
+          src={value.toString()}
+          alt={'img'}
+          className="max-w-120 mix-blend-multiply dark:mix-blend-hard-light "
+        ></img>
+      ) : (
+        value.toString()
+      )
+    ) : (
+      ''
+    );
   };
   return (
     <table className="min-w-full table-fixed bg-neutral-900 text-left text-sm font-light">
@@ -53,7 +57,7 @@ export const ABMTableBuilder = ({
         <tr className="border-b-4 border-b-neutral-500 bg-neutral-900  dark:border-b-white ">
           {headerKeys.map((headerColumn) => (
             <th scope="col" className="px-6 py-4 text-white" key={headerColumn}>
-              <div className="m-0 h-full  max-w-9 break-words p-0">
+              <div className="max-w-9 m-0  h-full break-words p-0">
                 {addSpaceBeforeUppercase(headerColumn)}
               </div>
             </th>
@@ -69,7 +73,7 @@ export const ABMTableBuilder = ({
           >
             {headerKeys.map((headerColumn) => (
               <td className="px-6 py-4" key={headerColumn}>
-                <div className="m-0 h-full w-full max-w-9 break-words p-0">
+                <div className="max-w-9 m-0 h-full w-full break-words p-0">
                   {getColumnValue(registerRow, headerColumn)}
                 </div>
               </td>

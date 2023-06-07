@@ -3,6 +3,7 @@ import { CategoriaAddOrUpdate } from './CategoriaAddOrUpdate';
 import { UnidadDeMedidaAddOrUpdate } from './UnidadDeMedidaAddOrUpdate';
 import { ProductoAddOrUpdate } from './ProductoAddOrUpdate';
 import { IngredienteAddOrUpdate } from './IngredienteAddOrUpdate';
+import { AbmRouter } from '../ABMRouter';
 
 export const AddOrUpdateRouter = () => {
   const { RequestedEndpoint, id } = useParams();
@@ -22,6 +23,7 @@ export const AddOrUpdateRouter = () => {
         return <IngredienteAddOrUpdate />;
         break;
       default:
+        <AbmRouter  />
         break;
     }
   };
