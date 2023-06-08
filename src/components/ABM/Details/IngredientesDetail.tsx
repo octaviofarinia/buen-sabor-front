@@ -42,7 +42,7 @@ export const IngredientesDetail = () => {
         <div className="flex w-full items-center justify-between pb-4" >
           <h1 className="mb-3 flex flex-col items-start justify-between font-bold  text-black dark:text-white md:text-4xl">
             Detalle
-            <span className="text-start text-xl text-amber-400 ">Ingrediente</span>
+            <span className="text-start text-xl text-amber-400 ">Ingrediente | Artículo - Insumo </span>
           </h1>
 
           <Link to={`/employee/Ingredientes`} className="shadow-md">
