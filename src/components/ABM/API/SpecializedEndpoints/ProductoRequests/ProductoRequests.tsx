@@ -68,13 +68,13 @@ export const updateProducto = async ({
   producto: producto,
   detalles: detalles,
   imagen,
-  id
+  id,
 }: ProductoRequestProps) => {
   try {
     const url = `http://localhost:8080/api/v1/articulos-manufacturados/${id}`;
     const formData = new FormData();
     formData.append(
-      'insumo',
+      'producto',
       new Blob([JSON.stringify(producto)], {
         type: 'application/json',
       })
@@ -90,7 +90,8 @@ export const updateProducto = async ({
     const idArticuloManufacturado = response.data.id;
     const promesasDetalles = detalles.map(async (detalle) => {
       try {
-        detalle.id!==null && console.log("El detalle existe: "+detalle.denominacion+"  id:" +detalle.id);
+        detalle.id !== null &&
+          console.log('El detalle existe: ' + detalle.denominacion + '  id:' + detalle.id);
         if (detalle.id === null) {
           detalle.idArticuloManufacturado = idArticuloManufacturado;
           const responseDetalle = await createDetalle({ detalle: detalle });

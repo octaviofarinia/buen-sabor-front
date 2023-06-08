@@ -13,7 +13,7 @@ import {
   createProducto,
 } from '../API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
 import { getDetalles } from '../API/SpecializedEndpoints/ProductoRequests/DetalleProductoRequests';
-import { handleChange, handleImageChange } from '../../../utils/FormUtils';
+import { handleChange, handleImageChange } from '../../../Utils/FormUtils';
 import { Button } from '../../Botones/Button';
 import { ClipLoader } from 'react-spinners';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
@@ -168,6 +168,20 @@ export const ProductoAddOrUpdate = () => {
             onChange={(e) => handleChange(e, producto, setProducto)}
             placeholder="Tiempo Estimado..."
             value={producto.tiempoEstimadoCocina || ''}
+            required
+          />
+          <label htmlFor="precioVenta" className="lg:text-2xl">
+            Precio de Venta
+          </label>
+          <input
+            name={'precioVenta'}
+            id={'precioVenta'}
+            type="number"
+            className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            onChange={(e) => handleChange(e, producto, setProducto)}
+            placeholder="Precio de Venta..."
+            value={producto.precioVenta || ''}
             required
           />
 

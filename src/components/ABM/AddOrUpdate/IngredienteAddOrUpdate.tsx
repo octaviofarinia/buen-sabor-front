@@ -16,7 +16,7 @@ import {
   getIngredienteRegister,
   updateIngredienteRegister,
 } from '../API/SpecializedEndpoints/IngredienteRequests/IngredienteRequests';
-import { handleChange, handleImageChange } from '../../../utils/FormUtils';
+import { handleChange, handleImageChange } from '../../../Utils/FormUtils';
 import { Button } from '../../Botones/Button';
 import { ClipLoader } from 'react-spinners';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
@@ -136,25 +136,11 @@ export const IngredienteAddOrUpdate = () => {
             name={'precioCompra'}
             id={'precioCompra'}
             type="number"
-            placeholder='Precio de Compra...'
+            placeholder="Precio de Compra..."
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
             ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
             onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
             value={ingrediente.precioCompra || ''}
-            required
-          />
-          <label htmlFor="precioVenta" className="lg:text-2xl">
-            Precio de Venta
-          </label>
-          <input
-            name={'precioVenta'}
-            id={'precioVenta'}
-            type="number"
-            className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
-            onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
-            placeholder='Precio de Venta...'
-            value={ingrediente.precioVenta || ''}
             required
           />
           <label htmlFor="stockActual" className="lg:text-2xl">
@@ -167,7 +153,7 @@ export const IngredienteAddOrUpdate = () => {
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
             ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
             onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
-            placeholder='Stock Actual...'
+            placeholder="Stock Actual..."
             value={ingrediente.stockActual || ''}
             required
           />
@@ -182,7 +168,7 @@ export const IngredienteAddOrUpdate = () => {
             ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
             onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
             value={ingrediente.stockMinimo || ''}
-            placeholder='Stock Mínimo...'
+            placeholder="Stock Mínimo..."
             required
           />
           <label htmlFor="urlImagen" className="lg:text-2xl">
@@ -193,7 +179,7 @@ export const IngredienteAddOrUpdate = () => {
               <img
                 src={ingrediente.urlImagen?.toString()}
                 alt={'img'}
-                className="mx-auto h-72  w-full rounded-md border-4 border-amber-400 dark:border-neutral-400 mix-blend-multiply dark:mix-blend-normal object-cover
+                className="mx-auto h-72  w-full rounded-md border-4 border-amber-400 object-cover mix-blend-multiply dark:border-neutral-400 dark:mix-blend-normal
                 "
               ></img>
             )}
@@ -210,7 +196,7 @@ export const IngredienteAddOrUpdate = () => {
           <label htmlFor="idRubroPadre" className="lg:text-2xl">
             Categoría
           </label>
-          <div className="col-span-2 flex items-center gap-5 z-0">
+          <div className="z-0 col-span-2 flex items-center gap-5">
             {categoria.id === null && (
               <CategoryModal
                 fatherSetter={setCategoria}

@@ -10,7 +10,7 @@ import { Button } from '../../Botones/Button';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { ClipLoader } from 'react-spinners';
 import { AxiosError } from 'axios';
-import { handleChange } from '../../../utils/FormUtils';
+import { handleChange } from '../../../Utils/FormUtils';
 
 export const UnidadDeMedidaAddOrUpdate = () => {
   const { RequestedEndpoint, id } = useParams();
