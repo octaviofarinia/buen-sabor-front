@@ -1,3 +1,6 @@
+import { Categoria } from './Categoria';
+import { UnidadDeMedida } from './UnidadDeMedida';
+
 export interface Ingrediente {
   id: number | null;
   denominacion: string | null;
@@ -8,4 +11,6 @@ export interface Ingrediente {
   stockMinimo: number | null;
   idUnidadMedida: number | null;
   idRubroArticulo: number | null;
+  unidadMedida?: UnidadDeMedida | null;
+  rubroArticulo?: Categoria | null;
 }

@@ -30,7 +30,8 @@ export const base_product_object: Producto = {
   denominacion: null,
   descripcion: null,
   urlImagen: null,
-  tiempoEstimadoCocina: null ,
+  precioVenta: null,
+  tiempoEstimadoCocina: null,
 };
 
 export const base_ingredient_object: Ingrediente = {
