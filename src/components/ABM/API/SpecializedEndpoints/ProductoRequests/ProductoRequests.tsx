@@ -8,6 +8,17 @@ interface ProductoRequestProps {
   imagen: File | null;
   id?: string | number | null;
 }
+
+export const getAllProductos = async () => {
+  const url = `http://localhost:8080/api/v1/articulos-manufacturados`;
+  try {
+    const response = await axios.get(url);
+    return response;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
 export const getProductoRegister = async (id: string | undefined) => {
   const url = `http://localhost:8080/api/v1/articulos-manufacturados/${id}`;
   try {

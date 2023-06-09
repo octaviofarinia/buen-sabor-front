@@ -70,7 +70,7 @@ export const UnidadDeMedidaAddOrUpdate = () => {
   useEffect(() => {
     if (id !== (undefined && Number(id) > 0)) {
       setPropsOfExistentUnidadDeMedida();
-      console.log(id);
+      
     }
   }, [id]);
 

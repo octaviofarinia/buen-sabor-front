@@ -80,6 +80,8 @@ export const IngredienteAddOrUpdate = () => {
       ingredienteData.status === 200 && setIngrediente(ingredienteData.data);
       setCategoria(ingredienteData.data.rubroArticulo);
       setUnidadDeMedida(ingredienteData.data.unidadMedida);
+      notify('Se cargo el registro', 'success');
+      setLoading(false);
     } catch (err) {
       console.error(err);
     }

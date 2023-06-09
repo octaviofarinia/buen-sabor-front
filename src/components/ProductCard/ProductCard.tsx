@@ -1,53 +1,39 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Producto } from '../../Interfaces/Producto';
+import { Button } from '../Botones/Button';
 
 interface ProductCardProps {
   producto: Producto;
 }
-
-export const ProductCard: React.FC<ProductCardProps> = ({ producto }) => {
+const agregarAlCarrito = () => {
+  console.log('agregar al carrito');
+};
+export const ProductCard = ({ producto }:ProductCardProps) => {
   return (
-    <div>
+    <div className="">
       <Link
-        to="#"
+        to={`/Productos/Detalle/${producto.id}`}
         className="group relative mb-2 block h-80 overflow-hidden rounded-lg bg-gray-100 dark:bg-neutral-900 lg:mb-3"
       >
         <img
-          src={producto.imgRoute || ''}
+          src={producto.urlImagen || ''}
           loading="lazy"
-          alt={producto.imgRoute || ''}
+          alt={producto.denominacion?.toString()}
           className="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
         />
-
-        {producto.id === '1' && (
-          <span className="absolute left-0 top-0 rounded-br-lg bg-red-500 px-3 py-1.5 text-sm uppercase tracking-wider text-white">
-            Oferta
-          </span>
-        )}
       </Link>
 
-      <div>
-        <a
-          href="#"
-          className="hover:gray-800 mb-1 text-gray-500 dark:text-gray-300 transition duration-100 lg:text-lg"
-        >
-          {producto.nombre}
-        </a>
+      <div className="flex flex-col gap-3  py-2 text-neutral-800  transition duration-100  dark:text-white lg:text-lg xl:text-3xl">
+        <h5 className="hover:text-amber-400">{producto.denominacion}</h5>
 
-        <div className="flex items-end gap-2">
-          {producto.id === '1' ? (
-            <span className="font-bold text-gray-800 dark:text-white lg:text-lg">
-              ${Number(producto.precio) / 2}
-            </span>
-          ) : (
-            <span className="font-bold text-gray-800 dark:text-white lg:text-lg">${producto.precio}</span>
-          )}
-          {producto.id === '1' && (
-            <span className="mb-0.5 text-red-500 dark:text-red-400 line-through">
-              ${producto.precio}
-            </span>
-          )}
+        <div className="flex items-end justify-between gap-2 ">
+          <h6 className="hover:text-red-600">${producto.precioVenta}</h6>
+          <Button
+            color="amarillo"
+            type="button"
+            content="Agregar al carrito"
+            callback={() => agregarAlCarrito}
+          />
         </div>
       </div>
     </div>

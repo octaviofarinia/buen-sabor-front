@@ -23,9 +23,9 @@ export const AddOrUpdateRouter = () => {
         return <IngredienteAddOrUpdate />;
         break;
       default:
-        <AbmRouter  />
+        <AbmRouter />;
         break;
     }
   };
-  return redirectToComponent();
+  return <div>{redirectToComponent()}</div>;
 };

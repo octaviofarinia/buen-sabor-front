@@ -13,20 +13,15 @@ export const DetailRouter = () => {
     switch (RequestedEndpoint) {
       case 'Categorias':
         return <CategoryDetail />;
-        break;
       case 'UnidadDeMedida':
         return <UnidadDeMedidaDetail />;
-        break;
       case 'Productos':
         return <ProductoDetail />;
-        break;
       case 'Ingredientes':
         return <IngredientesDetail />;
-        break;
       default:
-        <AbmRouter  />
-        break;
+        <AbmRouter />;
     }
   };
-  return redirectToComponent();
+  return <div>{redirectToComponent()}</div>;
 };

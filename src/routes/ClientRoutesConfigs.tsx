@@ -1,7 +1,11 @@
 import { ClientMain } from '../views/ClientMain';
+import { ProductDetailView } from '../views/ProductDetail';
 import { Products } from '../views/Products';
 
-const ClientDinamicRoutes = [{ path: 'Productos/:categoria', element: '' }];
+const ClientDinamicRoutes = [
+  { path: 'Productos/:categoria', element: '' },
+  { path: '/Productos/Detalle/:id', element: <ProductDetailView /> },
+];
 
 export const ClientStaticRoutes = [
   { name: 'Inicio', path: '/', element: <ClientMain /> },

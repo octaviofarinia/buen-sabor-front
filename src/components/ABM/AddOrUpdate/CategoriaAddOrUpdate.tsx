@@ -64,6 +64,8 @@ export const CategoriaAddOrUpdate = () => {
       categoria.id == categoryFather.id &&
       (categoria.RubroPadre = categoryFather.RubroPadre),
       (categoria.idRubroPadre = categoryFather.id);
+      notify('Se cargo el registro ', 'success');
+      setLoading(false);
   };
 
   const setPropsOfExistentCategoria = async () => {
