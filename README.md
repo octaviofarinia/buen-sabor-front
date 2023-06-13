@@ -4,7 +4,7 @@ Los clientes tienen a disposición un menú que describe para cada una de las co
 
 Este proyecto implementa la interfaz visual a la que accedera el cliente para realizar sus pedidos. La misma sera desarrollada utilizando Vite, React y TailwindCSS.
 
-Link Wireframes Usuario: https://drive.google.com/file/d/1UqCLEJwA0inXAXHVGx9Cp3Gfmv7NAvG9/view?usp=share_link
+Link Figma: [https://drive.google.com/file/d/1UqCLEJwA0inXAXHVGx9Cp3Gfmv7NAvG9/view?usp=share_link](https://www.figma.com/file/QJ3mQ4kL4IE47FQeHrrJ6R/El-Buen-Sabor?type=design&node-id=0-1)
 
 ## Público Objetivo:
 El público objetivo de este proyecto es para todas las edades (sin embargo el rango etario esperado es 15 a 50 años). Ya que está aplicación brinda un servicio que lo puede hacer cualquier persona que tenga la aplicación y también que de opciones de formas de pago (efectivo,tarjeta,billetera virtual) para ampliar a la mayor cantidad posible de personas.
