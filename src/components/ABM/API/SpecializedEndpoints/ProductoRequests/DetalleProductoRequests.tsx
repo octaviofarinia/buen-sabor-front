@@ -28,8 +28,19 @@ export const createDetalle = async ({ detalle }: DetalleProductoRequestProps) =>
   }
 };
 
+export const updateDetalle = async ({ detalle }: DetalleProductoRequestProps) => {
+  try {
+    const url = 'http://localhost:8080/api/v1/detalles-articulos-manufacturados/' + detalle?.id;
+    const response = await axios.put(url, detalle);
+    return response;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
 export const deleteDetalle = async ({ id }: DetalleProductoRequestProps) => {
-  const response= await axios.delete(
+  const response = await axios.delete(
     `http://localhost:8080/api/v1/detalles-articulos-manufacturados/${id}`
   );
   return response;
