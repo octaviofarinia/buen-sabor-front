@@ -54,7 +54,8 @@ export const createProducto = async ({
     });
 
     const idArticuloManufacturado = response.data.id;
-    const promesasDetalles = detalles.map(async (detalle) => {
+
+    for (const detalle of detalles) {
       try {
         detalle.idArticuloManufacturado = idArticuloManufacturado;
         console.log('Detalle: ', detalle);
@@ -64,10 +65,8 @@ export const createProducto = async ({
         console.error(err);
         throw err;
       }
-    });
+    }
 
-    const resultados = await Promise.all(promesasDetalles);
-    console.log(resultados);
     return response.status;
   } catch (err) {
     console.error(err);
@@ -98,8 +97,10 @@ export const updateProducto = async ({
         'Content-Type': 'multipart/form-data',
       },
     });
+
     const idArticuloManufacturado = response.data.id;
-    const promesasDetalles = detalles.map(async (detalle) => {
+
+    for (const detalle of detalles) {
       try {
         detalle.id != null &&
           console.log('El detalle existe: ' + detalle.denominacion + '  id:' + detalle.id);
@@ -117,10 +118,8 @@ export const updateProducto = async ({
         console.error(err);
         throw err;
       }
-    });
+    }
 
-    const resultados = await Promise.all(promesasDetalles);
-    console.log(resultados);
     return response.status;
   } catch (err) {
     console.error(err);
