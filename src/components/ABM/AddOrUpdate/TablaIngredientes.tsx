@@ -12,13 +12,19 @@ const TablaIngredientes = ({ detalles, setDetalle }: TablaDetallesProps) => {
     const indice = copiaDetalles.indexOf(elemento);
     copiaDetalles.splice(indice, 1);
 
-
     elemento.id !== undefined && deleteDetalle({ id: elemento.id });
     setDetalle(copiaDetalles);
   }
 
-  useEffect(() => {
-  }, [detalles]);
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>, index: number) {
+    const { value } = e.target;
+    const copiaDetalles = [...detalles];
+    copiaDetalles[index].cantidad = Number(value);
+    console.log('index: ' + index + ' detalle: ', copiaDetalles[index]);
+    setDetalle(copiaDetalles);
+  }
+
+  useEffect(() => {}, [detalles]);
   return (
     <div className="mt-16 rounded-md bg-white shadow-md">
       <div className="rounded-t-md bg-gray-200 px-4 py-2">
@@ -45,9 +51,24 @@ const TablaIngredientes = ({ detalles, setDetalle }: TablaDetallesProps) => {
           <tbody>
             {detalles.map((detalle, index) => (
               <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
-                <td className="px-4 py-2">{detalle.articuloInsumo?.id ? detalle.articuloInsumo?.id : detalle.idArticuloInsumo}</td>
-                <td className="px-4 py-2">{detalle.articuloInsumo?.denominacion ? detalle.articuloInsumo?.denominacion : detalle.denominacion}</td>
-                <td className="px-4 py-2">{detalle.cantidad}</td>
+                <td className="px-4 py-2">
+                  {detalle.articuloInsumo?.id
+                    ? detalle.articuloInsumo?.id
+                    : detalle.idArticuloInsumo}
+                </td>
+                <td className="px-4 py-2">
+                  {detalle.articuloInsumo?.denominacion
+                    ? detalle.articuloInsumo?.denominacion
+                    : detalle.denominacion}
+                </td>
+                <td className="px-4 py-2">
+                  <input
+                    type="number"
+                    value={detalle.cantidad as number}
+                    onChange={(e) => handleChange(e, index)}
+                    className="text-grey-darker w-full rounded border py-2 px-3"
+                  />
+                </td>
                 <td className="px-4 py-2">
                   <button
                     onClick={() => eliminarDetalle(detalles, detalle)}

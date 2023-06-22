@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Producto } from '../../../../../Interfaces/Producto';
-import { createDetalle } from './DetalleProductoRequests';
+import { createDetalle, updateDetalle } from './DetalleProductoRequests';
 import { DetalleProducto } from '../../../../../Interfaces/DetalleProducto';
 interface ProductoRequestProps {
   producto: Producto;
@@ -101,12 +101,17 @@ export const updateProducto = async ({
     const idArticuloManufacturado = response.data.id;
     const promesasDetalles = detalles.map(async (detalle) => {
       try {
-        detalle.id !== null &&
+        detalle.id != null &&
           console.log('El detalle existe: ' + detalle.denominacion + '  id:' + detalle.id);
-        if (detalle.id === null) {
+        if (detalle.id == null) {
           detalle.idArticuloManufacturado = idArticuloManufacturado;
           const responseDetalle = await createDetalle({ detalle: detalle });
-          console.log('Status detalle', responseDetalle.status);
+          console.log('Status create detalle', responseDetalle.status);
+        } else {
+          detalle.idArticuloManufacturado = idArticuloManufacturado;
+          detalle.idArticuloInsumo = detalle.articuloInsumo?.id || null;
+          const responseDetalle = await updateDetalle({ detalle: detalle });
+          console.log('Status update detalle', responseDetalle.status);
         }
       } catch (err) {
         console.error(err);
