@@ -37,93 +37,47 @@ export const ProductDetailView = () => {
   }, []);
   return (
     <div className="bg-white pb-6 dark:bg-neutral-800">
-      <div className="bg-white py-6 sm:py-8 lg:py-12">
-        <div className="mx-auto max-w-screen-lg px-4 md:px-8">
-          <div className="grid gap-8 md:grid-cols-2">
-            {/* images - start */}
-            <div className="space-y-4">
-              <div className="relative overflow-hidden rounded-lg bg-gray-100">
-                <img
-                  src={producto.urlImagen !== null ? producto.urlImagen : ''}
-                  loading="lazy"
-                  alt={producto.denominacion !== null ? producto.denominacion : ''}
-                  className="h-full w-full object-cover object-center"
-                />
-                {/* <span className="absolute left-0 top-0 rounded-br-lg bg-red-500 px-3 py-1.5 text-sm uppercase tracking-wider text-white">
-                  En venta
-                </span> */}
+      <section className="body-font overflow-hidden text-neutral-600 dark:text-white">
+        <div className="container mx-auto px-5 py-24">
+          <div className="mx-auto flex flex-wrap lg:w-4/5">
+            <div className="mb-6 w-full lg:mb-0 lg:w-1/2 lg:py-6 lg:pr-10">
+              <h2 className="title-font text-sm tracking-widest text-neutral-500 dark:text-zinc-200">el buen sabor</h2>
+              <h1 className="title-font mb-4 text-3xl font-medium text-neutral-900 dark:text-white">
+                {producto.denominacion}
+              </h1>
+              <div className="mb-4 flex">
+                <a className="flex-grow border-b-2 border-amber-400 py-2 px-1 text-lg text-amber-400">
+                  Descripción
+                </a>
               </div>
-              {/* <div className="grid grid-cols-2 gap-4">
-                <div className="overflow-hidden rounded-lg bg-gray-100">
-                  <img
-                    src="https://images.unsplash.com/flagged/photo-1571366992791-2ad2078656cb?auto=format&q=75&fit=crop&w=250"
-                    loading="lazy"
-                    alt="Photo by Himanshu Dewangan"
-                    className="h-full w-full object-cover object-center"
-                  />
-                </div>
-                <div className="overflow-hidden rounded-lg bg-gray-100">
-                  <img
-                    src="https://images.unsplash.com/flagged/photo-1571366992968-15b65708ee76?auto=format&q=75&fit=crop&w=250"
-                    loading="lazy"
-                    alt="Photo by Himanshu Dewangan"
-                    className="h-full w-full object-cover object-center"
-                  />
-                </div>
-              </div> */}
+              <p className="mb-4 leading-relaxed">
+                {producto.descripcion}
+              </p>
+              <div className="flex border-t border-neutral-200 py-2">
+                <span className="text-neutral-500 dark:text-zinc-200">Tiempo estimado</span>
+                <span className="ml-auto text-neutral-900 dark:text-zinc-100">{producto.tiempoEstimadoCocina} minutos</span>
+              </div>
+              <div className="flex border-t border-neutral-200 py-2">
+                <span className="text-neutral-500 dark:text-zinc-200">Precio</span>
+                <span className="ml-auto text-neutral-900 dark:text-zinc-100">${producto.precioVenta}</span>
+              </div>
+              <div className="mb-6 flex border-t border-b border-neutral-200 py-2">
+                <span className="text-neutral-500 dark:text-zinc-200">Cantidad</span>
+                <span className="ml-auto text-neutral-900 dark:text-zinc-100">1</span>
+              </div>
+              <div className="flex justify-between">
+              <h5 className="title-font text-2xl font-medium text-neutral-900 dark:text-zinc-100">${producto.precioVenta}</h5>
+                <Button content='Agregar al carrito' color='amarillo' type='button' callback={()=>{}}/>
+              </div>
             </div>
-            {/* images - end */}
-            {/* content - start */}
-            <div className="md:py-8">
-              {/* name - start */}
-              <div className="mb-2 md:mb-3">
-                <h5 className="mb-0.5 inline-block text-xl text-amber-400">El Buen Sabor</h5>
-                <h2 className="text-2xl font-bold text-neutral-800 dark:text-white lg:text-3xl">
-                  {producto.denominacion}
-                </h2>
-              </div>
-              {/* name - end */}
-              {/* price - start */}
-              <div className="mb-4">
-                <div className="flex items-end gap-2">
-                  <h2 className="text-xl font-bold text-gray-800 md:text-2xl">
-                    ${producto.precioVenta}
-                  </h2>
-                </div>
-              </div>
-              {/* price - end */}
-              {/* shipping notice - start */}
-              <div className="mb-6 flex items-center gap-2 text-gray-500">
-                <FontAwesomeIcon icon={faClock} />
-                <span className="text-sm">
-                  Tiempo estimado de demora: {producto.tiempoEstimadoCocina}
-                </span>
-              </div>
-              {/* shipping notice - end */}
-              {/* buttons - start */}
-              <div className="flex gap-2.5">
-                <Button
-                  color="amarillo"
-                  type="button"
-                  callback={() => {}}
-                  content="Agregar al carrito"
-                />
-              </div>
-              {/* buttons - end */}
-              {/* description - start */}
-              <div className="mt-10 ">
-                <div className="mb-3 text-lg font-semibold text-neutral-800 dark:text-white">
-                  <h5 className="text-2xl">Descripción</h5>
-                </div>
-                <p className="text-neutral-500 dark:text-zinc-400">{producto.descripcion}</p>
-              </div>
-              {/* description - end */}
-            </div>
-            {/* content - end */}
+            <img
+              alt="ecommerce"
+              className="h-64 w-full rounded object-cover object-center  lg:h-auto lg:w-1/2"
+              src={producto.urlImagen?.toString()}
+            />
           </div>
         </div>
-      </div>
-
+      </section>
       <ToastAlert />
     </div>
   );

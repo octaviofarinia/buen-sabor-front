@@ -43,11 +43,10 @@ export const Header = () => {
                   className="inline-flex items-center gap-2.5 text-lg font-bold uppercase text-amber-400 md:text-3xl"
                   aria-label="logo"
                 >
-                  <FontAwesomeIcon icon={faBurger} />
-                  <h2 className="whitespace-nowrap">el buen sabor</h2>
+                  <img src="./logo5.png" alt="logo" className='object-contain max-w-100 '/>
                 </Link>
-                <div className="hidden md:ml-6 md:block">
-                  <div className="flex gap-2.5">
+                <div className="hidden md:ml-6 md:flex md:items-center">
+                  <div className="flex gap-2.5 items-center">
                     {navigation.map((item) => (
                       <Link
                         key={item.path}

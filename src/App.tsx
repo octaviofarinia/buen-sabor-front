@@ -1,7 +1,6 @@
 import { Route, Routes, useLocation } from 'react-router';
 import './App.css';
 import { Header } from './components/Header/Header';
-
 import EmployeeDinamicRoutes, { EmployeeStaticRoutes } from './routes/EmployeeRoutesConfigs';
 import ClientDinamicRoutes, { ClientStaticRoutes } from './routes/ClientRoutesConfigs';
 import { Footer } from './components/Footer/Footer';
@@ -22,7 +21,7 @@ function App() {
   //   console.log('APP USE EFFECT');
   //   userTypeRedirect(userRoles);
   // }, [userRoles]);
-
+  
   return (
     <>
       <ThemeContextProvider>

@@ -8,7 +8,8 @@ module.exports = {
       },
       maxWidth:{
         120: '120px',
-      }
+        100: '100px',
+      },
     },
   },
   darkMode: 'class',

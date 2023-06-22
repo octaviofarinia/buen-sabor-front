@@ -1,3 +1,4 @@
+import { CarritoView } from '../views/CarritoView';
 import { ClientMain } from '../views/ClientMain';
 import { ProductDetailView } from '../views/ProductDetail';
 import { Products } from '../views/Products';
@@ -10,7 +11,7 @@ const ClientDinamicRoutes = [
 export const ClientStaticRoutes = [
   { name: 'Inicio', path: '/', element: <ClientMain /> },
   { name: 'Productos', path: '/Productos', element: <Products /> },
-  { name: 'Carrito', path: '/Carrito' },
+  { name: 'Carrito', path: '/Carrito', element: <CarritoView /> },
   { name: 'Nosotros', path: '/Nosotros' },
   { name: 'Donde Estamos', path: '/Donde-Estamos' },
 ];
