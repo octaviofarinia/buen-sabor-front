@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Producto } from '../Interfaces/Producto';
+import { Producto } from '../Interfaces/ABM/Producto';
 import { ProductCard } from '../components/ProductCard/ProductCard';
 import { AxiosError } from 'axios';
 import { ToastAlert, notify } from '../components/Toast/ToastAlert';
-import { getAllRegisters } from '../components/ABM/API/APIHandler';
-import { APIRouter } from '../components/ABM/API/APIRouter';
-import { getAllProductos } from '../components/ABM/API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
+import { getAllRegisters } from '../API/APIHandler';
+import { APIRouter } from '../API/APIRouter';
+import { getAllProductos } from '../API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';

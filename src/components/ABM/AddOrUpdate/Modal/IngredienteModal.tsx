@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
-import { Ingrediente } from '../../../../Interfaces/Ingrediente';
-import { getAllIngredientes } from '../../API/SpecializedEndpoints/IngredienteRequests/IngredienteRequests';
+import { Ingrediente } from '../../../../Interfaces/ABM/Ingrediente';
+import { getAllIngredientes } from '../../../../API/SpecializedEndpoints/IngredienteRequests/IngredienteRequests';
 import { Button } from '../../../Botones/Button';
 import { ToastAlert } from '../../../Toast/ToastAlert';
 export interface IngredienteModalProps {

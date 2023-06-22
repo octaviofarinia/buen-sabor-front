@@ -2,7 +2,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type Props = {
-  callback: () => void;
+  callback?: () => void;
   type: string;
   content: string;
   color?: string;
@@ -45,7 +45,7 @@ export const Button = ({ callback, type, content, color, fullsize }: Props) => {
   };
   return (
     <button
-      onClick={() => callback()}
+      onClick={() => callback!==undefined && callback()}
       type={type === 'submit' ? 'submit' : 'button'}
       className={getColor() + `${fullsize === (false || undefined) ? '  ' : ' w-full '}`}
     >

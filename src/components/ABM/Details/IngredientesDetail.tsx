@@ -1,16 +1,16 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { APIRouter } from '../API/APIRouter';
-import { getRegister } from '../API/APIHandler';
-import { base_ingredient_object } from '../../../Interfaces/InterfaceDelivery';
+import { APIRouter } from '../../../API/APIRouter';
+import { getRegister } from '../../../API/APIHandler';
+import { base_ingredient } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { AxiosError } from 'axios';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { Button } from '../../Botones/Button';
-import { Ingrediente } from '../../../Interfaces/Ingrediente';
+import { Ingrediente } from '../../../Interfaces/ABM/Ingrediente';
 
 export const IngredientesDetail = () => {
   const { RequestedEndpoint, id } = useParams();
-  const [ingrediente, setIngrediente] = useState<Ingrediente>(base_ingredient_object);
+  const [ingrediente, setIngrediente] = useState<Ingrediente>(base_ingredient);
   const [loading, setLoading] = useState(false);
 
   const getRegisterData = async () => {
@@ -46,7 +46,7 @@ export const IngredientesDetail = () => {
           </h1>
 
           <Link to={`/employee/Ingredientes`} className="shadow-md">
-            <Button content="Volver" color="amarillo" type="button" callback={() => {}} />
+            <Button content="Volver" color="amarillo" type="button" />
           </Link>
         </div>
         <div className="flex flex-col gap-5">

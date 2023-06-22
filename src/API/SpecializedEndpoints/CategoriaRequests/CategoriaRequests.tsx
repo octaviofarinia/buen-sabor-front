@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { Categoria } from '../../../../../Interfaces/Categoria';
-import { base_category_object } from '../../../../../Interfaces/InterfaceDelivery';
+import { Categoria } from '../../../Interfaces/ABM/Categoria'; 
+import { base_category } from '../../../Interfaces/ABM/InterfaceDelivery'; 
 interface CategoriaRequestProps {
   RegistersSetter: React.Dispatch<React.SetStateAction<Categoria[]>> | null;
   IndividualRegisterSetter: React.Dispatch<React.SetStateAction<Categoria>> | null;
@@ -20,6 +20,6 @@ export const getCategoryComplete = async (
 ) => {
   const response = await axios.get(`http://localhost:8080/api/v1/rubros-articulos/${id}/complete`);
   IndividualRegisterSetter !== null && IndividualRegisterSetter(response.data);
-  fatherSetter(response.data.rubroPadre || base_category_object);
+  fatherSetter(response.data.rubroPadre || base_category);
   return response;
 };

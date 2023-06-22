@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { Producto } from '../../../../../Interfaces/Producto';
+import { Producto } from '../../../Interfaces/ABM/Producto'; 
 import { createDetalle, updateDetalle } from './DetalleProductoRequests';
-import { DetalleProducto } from '../../../../../Interfaces/DetalleProducto';
+import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto';
 interface ProductoRequestProps {
   producto: Producto;
   detalles: DetalleProducto[];

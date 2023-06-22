@@ -3,7 +3,7 @@ import { faCubes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { BeatLoader } from 'react-spinners';
-import { getAllRegisters, ApiProps, T } from '../../components/ABM/API/APIHandler';
+import { getAllRegisters, ApiProps, T } from '../../API/APIHandler';
 import { ABMTableBuilder } from '../../components/ABM/ABMTableBuilder';
 import { RegisterRow } from '../../Interfaces/ABM/GenericTableInterfaces';
 import { HeaderKey } from '../../Interfaces/ABM/GenericTableInterfaces';

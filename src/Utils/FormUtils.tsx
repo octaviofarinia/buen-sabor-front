@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
-import { T } from '../components/ABM/API/APIHandler';
+import { T } from '../API/APIHandler';
 type StateSetter<T> = Dispatch<SetStateAction<T>>;
 
 type ChangeHandler<T> = (
@@ -20,4 +20,12 @@ export const handleImageChange: ChangeHandler<File | null> = (e, state, setState
     const selectedFile = e.target.files[0];
     setState(selectedFile);
   }
+};
+
+export const handleCheckboxChange: ChangeHandler<T | any> = (e, variable, setVariable) => {
+  
+  setVariable({
+    ...variable,
+    [e.target.name]: e.target.checked,
+  });
 };

@@ -1,10 +1,11 @@
+import { Domicilio } from '../Domicilio';
 import { Categoria } from './Categoria';
 import { DetalleProducto } from './DetalleProducto';
 import { Ingrediente } from './Ingrediente';
 import { Producto } from './Producto';
 import { UnidadDeMedida } from './UnidadDeMedida';
 
-export const base_category_object: Categoria = {
+export const base_category: Categoria = {
   id: null,
   denominacion: null,
   RubroPadre: null,
@@ -12,20 +13,20 @@ export const base_category_object: Categoria = {
   subRubros: null,
 };
 
-export const base_unidad_object: UnidadDeMedida = {
+export const base_unidad: UnidadDeMedida = {
   id: null,
   denominacion: null,
   abreviatura: null,
 };
 
-export const base_detalle_producto_object: DetalleProducto = {
+export const base_detalle_producto: DetalleProducto = {
   id: null,
   cantidad: null,
   idArticuloInsumo: null,
   idArticuloManufacturado: null,
 };
 
-export const base_product_object: Producto = {
+export const base_product: Producto = {
   id: null,
   denominacion: null,
   descripcion: null,
@@ -34,7 +35,7 @@ export const base_product_object: Producto = {
   tiempoEstimadoCocina: null,
 };
 
-export const base_ingredient_object: Ingrediente = {
+export const base_ingredient: Ingrediente = {
   id: null,
   denominacion: null,
   urlImagen: null,
@@ -46,4 +47,12 @@ export const base_ingredient_object: Ingrediente = {
   rubroArticulo: null,
   idUnidadMedida: null,
   idRubroArticulo: null,
+};
+
+export const base_domicilio: Domicilio = {
+  id: null,
+  nombreCalle: null,
+  numero: null,
+  ciudad: null,
+  codigoPostal: null,
 };

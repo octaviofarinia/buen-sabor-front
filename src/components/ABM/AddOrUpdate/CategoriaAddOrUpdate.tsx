@@ -1,12 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { createRegister, updateRegister } from '../API/APIHandler';
-import { APIRouter } from '../API/APIRouter';
-import { Categoria } from '../../../Interfaces/Categoria';
-import { base_category_object } from '../../../Interfaces/InterfaceDelivery';
+import { createRegister, updateRegister } from '../../../API/APIHandler';
+import { APIRouter } from '../../../API/APIRouter';
+import { Categoria } from '../../../Interfaces/ABM/Categoria';
+import { base_category } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { CategoryModal } from './Modal/CategoriaModal';
 import styles from './AddOrUpdate.module.css';
-import { getCategoryComplete } from '../API/SpecializedEndpoints/CategoriaRequests/CategoriaRequests';
+import { getCategoryComplete } from '../../../API/SpecializedEndpoints/CategoriaRequests/CategoriaRequests';
 import { HardDeleteButton } from '../../Botones/HardDeleteButton';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { Button } from '../../Botones/Button';
@@ -15,8 +15,8 @@ import { AxiosError } from 'axios';
 
 export const CategoriaAddOrUpdate = () => {
   const { RequestedEndpoint, id } = useParams();
-  const [categoria, setCategoria] = useState<Categoria>(base_category_object);
-  const [categoryFather, setCategoryFather] = useState<Categoria>(base_category_object);
+  const [categoria, setCategoria] = useState<Categoria>(base_category);
+  const [categoryFather, setCategoryFather] = useState<Categoria>(base_category);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -147,7 +147,7 @@ export const CategoriaAddOrUpdate = () => {
             {categoryFather.id !== null && (
               <Button
                 callback={() => {
-                  setCategoryFather(base_category_object);
+                  setCategoryFather(base_category);
                 }}
                 type="button"
                 content="x"

@@ -1,18 +1,18 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import styles from './AddOrUpdate.module.css';
-import { base_ingredient_object, base_product_object } from '../../../Interfaces/InterfaceDelivery';
-import { Ingrediente } from '../../../Interfaces/Ingrediente';
-import { Producto } from '../../../Interfaces/Producto';
+import { base_ingredient, base_product } from '../../../Interfaces/ABM/InterfaceDelivery';
+import { Ingrediente } from '../../../Interfaces/ABM/Ingrediente';
+import { Producto } from '../../../Interfaces/ABM/Producto';
 import { IngredienteModal } from './Modal/IngredienteModal';
 import TablaIngredientes from './TablaIngredientes';
-import { DetalleProducto } from '../../../Interfaces/DetalleProducto';
+import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto';
 import {
   updateProducto,
   getProductoRegister,
   createProducto,
-} from '../API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
-import { getDetalles } from '../API/SpecializedEndpoints/ProductoRequests/DetalleProductoRequests';
+} from '../../../API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
+import { getDetalles } from '../../../API/SpecializedEndpoints/ProductoRequests/DetalleProductoRequests';
 import { handleChange, handleImageChange } from '../../../Utils/FormUtils';
 import { Button } from '../../Botones/Button';
 import { ClipLoader } from 'react-spinners';
@@ -24,8 +24,8 @@ export const ProductoAddOrUpdate = () => {
   const [imagen, setImagen] = useState<File | null>(null);
   const [detalle, setDetalle] = useState<DetalleProducto[]>([]);
   const [cantidad, setCantidad] = useState(0);
-  const [producto, setProducto] = useState<Producto>(base_product_object);
-  const [ingrediente, setIngrediente] = useState<Ingrediente>(base_ingredient_object);
+  const [producto, setProducto] = useState<Producto>(base_product);
+  const [ingrediente, setIngrediente] = useState<Ingrediente>(base_ingredient);
   const [isLoading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ export const ProductoAddOrUpdate = () => {
     setDetalle([...detalle, nuevoDetalle]);
     notify('Se agrego el ingrediente', 'success');
     setCantidad(0);
-    setIngrediente(base_ingredient_object);
+    setIngrediente(base_ingredient);
   };
 
   const setPropsOfExistentProduct = async () => {
@@ -248,7 +248,7 @@ export const ProductoAddOrUpdate = () => {
                 {ingrediente.id !== null && (
                   <Button
                     callback={() => {
-                      setIngrediente(base_ingredient_object);
+                      setIngrediente(base_ingredient);
                     }}
                     type="button"
                     content="x"
@@ -270,7 +270,7 @@ export const ProductoAddOrUpdate = () => {
           </div>
 
           <div className="relative z-0 col-span-2 col-start-2 flex w-full gap-3">
-            <Button callback={() => {}} type="submit" content="add" fullsize={true} />
+            <Button type="submit" content="add" fullsize={true} />
             {isLoading && (
               <div className="absolute -right-20 flex items-center">
                 <ClipLoader size={45} aria-label="Loading Spinner" data-testid="loader" />

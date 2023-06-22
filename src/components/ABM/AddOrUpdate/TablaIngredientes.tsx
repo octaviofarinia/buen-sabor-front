@@ -1,6 +1,6 @@
-import { DetalleProducto } from '../../../Interfaces/DetalleProducto';
+import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto';
 import { useEffect } from 'react';
-import { deleteDetalle } from '../API/SpecializedEndpoints/ProductoRequests/DetalleProductoRequests';
+import { deleteDetalle } from '../../../API/SpecializedEndpoints/ProductoRequests/DetalleProductoRequests';
 interface TablaDetallesProps {
   detalles: DetalleProducto[];
   setDetalle: React.Dispatch<React.SetStateAction<DetalleProducto[]>>;

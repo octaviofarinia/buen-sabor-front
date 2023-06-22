@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Categoria } from '../../../../Interfaces/Categoria';
-import { getAllFathers } from '../../API/SpecializedEndpoints/CategoriaRequests/CategoriaRequests';
+import { Categoria } from '../../../../Interfaces/ABM/Categoria';
+import { getAllFathers } from '../../../../API/SpecializedEndpoints/CategoriaRequests/CategoriaRequests';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';

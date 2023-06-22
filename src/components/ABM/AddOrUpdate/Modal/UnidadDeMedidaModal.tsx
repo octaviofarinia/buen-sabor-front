@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { getAllUnidadesDeMedida } from '../../API/SpecializedEndpoints/UnidadDeMedidaRequests/UnidadDeMedidaRequests';
-import { UnidadDeMedida } from '../../../../Interfaces/UnidadDeMedida';
+import { getAllUnidadesDeMedida } from '../../../../API/SpecializedEndpoints/UnidadDeMedidaRequests/UnidadDeMedidaRequests';
+import { UnidadDeMedida } from '../../../../Interfaces/ABM/UnidadDeMedida';
 import { Button } from '../../../Botones/Button';
 import { ToastAlert } from '../../../Toast/ToastAlert';
 export interface UnidadDeMedidaModalProps {

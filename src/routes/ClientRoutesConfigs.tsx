@@ -1,3 +1,5 @@
+import { AuthenticationGuard } from '../components/Auth0/AuthenticationGuard';
+import CargaDomicilioView from '../views/CargaDomicilioView';
 import { CarritoView } from '../views/CarritoView';
 import { ClientMain } from '../views/ClientMain';
 import { ProductDetailView } from '../views/ProductDetail';
@@ -6,6 +8,7 @@ import { Products } from '../views/Products';
 const ClientDinamicRoutes = [
   { path: 'Productos/:categoria', element: '' },
   { path: '/Productos/Detalle/:id', element: <ProductDetailView /> },
+  { path: '/Domicilio', element: <AuthenticationGuard component={CargaDomicilioView} /> },
 ];
 
 export const ClientStaticRoutes = [

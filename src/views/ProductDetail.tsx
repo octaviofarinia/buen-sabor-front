@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Producto } from '../Interfaces/Producto';
+import { Producto } from '../Interfaces/ABM/Producto';
 import { AxiosError } from 'axios';
 import { ToastAlert, notify } from '../components/Toast/ToastAlert';
-import { getProductoRegister } from '../components/ABM/API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
+import { getProductoRegister } from '../API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
 import { useNavigate, useParams } from 'react-router-dom';
-import { base_product_object } from '../Interfaces/InterfaceDelivery';
+import { base_product } from '../Interfaces/ABM/InterfaceDelivery';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../components/Botones/Button';
 
 export const ProductDetailView = () => {
   const { id } = useParams();
-  const [producto, setProducto] = useState<Producto>(base_product_object);
+  const [producto, setProducto] = useState<Producto>(base_product);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const getProducto = async () => {
@@ -67,7 +67,7 @@ export const ProductDetailView = () => {
               </div>
               <div className="flex justify-between">
               <h5 className="title-font text-2xl font-medium text-neutral-900 dark:text-zinc-100">${producto.precioVenta}</h5>
-                <Button content='Agregar al carrito' color='amarillo' type='button' callback={()=>{}}/>
+                <Button content='Agregar al carrito' color='amarillo' type='button'/>
               </div>
             </div>
             <img

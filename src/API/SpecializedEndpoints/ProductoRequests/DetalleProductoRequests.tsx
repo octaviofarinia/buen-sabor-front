@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DetalleProducto } from '../../../../../Interfaces/DetalleProducto';
+import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto'; 
 
 interface DetalleProductoRequestProps {
   detalle?: DetalleProducto;

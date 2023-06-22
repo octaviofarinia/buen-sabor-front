@@ -1,9 +1,10 @@
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import { softDelete, getAllRegisters } from './API/APIHandler';
+import { softDelete, getAllRegisters } from '../../API/APIHandler';
 import { HeaderKey, RegisterRow } from '../../Interfaces/ABM/GenericTableInterfaces';
 import { addSpaceBeforeUppercase } from '../../utils/StringUtils';
+
 
 export const ABMTableBuilder = ({
   headerKeys,
@@ -38,7 +39,7 @@ export const ABMTableBuilder = ({
       return denominacion;
     }
     return value !== null ? (
-      value.toLocaleString().includes('cloudinary') ? (
+      value.toString().includes('cloudinary') ? (
         <img
           src={value.toString()}
           alt={'img'}

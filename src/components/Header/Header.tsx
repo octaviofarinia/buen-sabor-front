@@ -43,7 +43,7 @@ export const Header = () => {
                   className="inline-flex items-center gap-2.5 text-lg font-bold uppercase text-amber-400 md:text-3xl"
                   aria-label="logo"
                 >
-                  <img src="./logo5.png" alt="logo" className='object-contain max-w-100 '/>
+                  <img src={"/logo5.png"} alt="logo" className='object-contain max-w-100 '/>
                 </Link>
                 <div className="hidden md:ml-6 md:flex md:items-center">
                   <div className="flex gap-2.5 items-center">
@@ -107,11 +107,11 @@ export const Header = () => {
                         <Menu.Item>
                           <button
                             onClick={() => {
-                              console.log(`${frontend_url}/cargar_domicilio?new=true`);
+                              console.log(`${frontend_url}/Domicilio?new=true`);
                               loginWithRedirect({
                                 authorizationParams: {
                                   screen_hint: 'signup',
-                                  redirect_uri: `${frontend_url}/cargar_domicilio?new=true`,
+                                  redirect_uri: `${frontend_url}/Domicilio?new=true`,
                                 },
                               });
                             }}

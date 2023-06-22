@@ -1,5 +1,5 @@
 import axios from "axios";
-import { UnidadDeMedida } from "../../../../../Interfaces/UnidadDeMedida";
+import { UnidadDeMedida } from "../../../Interfaces/ABM/UnidadDeMedida"; 
 
 
 interface UnidadDeMedidaRequestProps {

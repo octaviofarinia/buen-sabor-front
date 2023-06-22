@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { Categoria } from '../../../Interfaces/Categoria';
-import { Producto } from '../../../Interfaces/Producto';
-import { Ingrediente } from '../../../Interfaces/Ingrediente';
-import { UnidadDeMedida } from '../../../Interfaces/UnidadDeMedida';
-import { HeaderKey, RegisterRow } from '../../../Interfaces/ABM/GenericTableInterfaces';
-import { DetalleProducto } from '../../../Interfaces/DetalleProducto';
+import { Categoria } from '../Interfaces/ABM/Categoria'; 
+import { Producto } from '../Interfaces/ABM/Producto'; 
+import { Ingrediente } from '../Interfaces/ABM/Ingrediente'; 
+import { UnidadDeMedida } from '../Interfaces/ABM/UnidadDeMedida'; 
+import { DetalleProducto } from '../Interfaces/ABM/DetalleProducto'; 
+import { HeaderKey, RegisterRow } from '../Interfaces/ABM/GenericTableInterfaces';
 
 export type T = Categoria | Producto | Ingrediente | UnidadDeMedida | DetalleProducto;
 export interface ApiProps<T> {

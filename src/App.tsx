@@ -13,16 +13,7 @@ import CallbackPage from './components/Auth0/CallbackPage';
 function App() {
   const location = useLocation();
 
-  // const navigate = useNavigate();
-  // const userTypeRedirect = (userRoles: string[]) => {
-  //   userRoles.includes('employee') ? navigate('/employee') : navigate('/');
-  // };
 
-  // useEffect(() => {
-  //   console.log('APP USE EFFECT');
-  //   userTypeRedirect(userRoles);
-  // }, [userRoles]);
-  
   return (
     <>
       <ThemeContextProvider>
@@ -43,7 +34,6 @@ function App() {
               <Route key={index} path={route.path} element={route.element} />
             ))}
             <Route path="/callback" element={<CallbackPage />} />
-            <Route path="/cargar_domicilio" element={<CargaDomicilioView />} />
             <Route path="*" element={<NotFoundView />} />
           </Routes>
           <article className="flex-1"></article>
@@ -54,21 +44,5 @@ function App() {
   );
 }
 
-/*
-<button
-          onClick={() => {
-            setUser(userData[1]);
-          }}
-        >
-          Set User Employee
-        </button>
-        <button
-          onClick={() => {
-            setUser(userData[0]);
-          }}
-        >
-          Set User Client
-        </button>
-*/
 
 export default App;

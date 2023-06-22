@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { hardDelete } from '../ABM/API/APIHandler';
+import { hardDelete } from '../../API/APIHandler';
 import { useNavigate } from 'react-router-dom';
-import { APIRouter } from '../ABM/API/APIRouter';
+import { APIRouter } from '../../API/APIRouter';
 
 export const HardDeleteButton = ({
   id,

@@ -1,9 +1,9 @@
 import { Link, useParams } from 'react-router-dom';
-import { Categoria } from '../../../Interfaces/Categoria';
+import { Categoria } from '../../../Interfaces/ABM/Categoria';
 import { useEffect, useState } from 'react';
-import { APIRouter } from '../API/APIRouter';
-import { ApiProps, getRegister } from '../API/APIHandler';
-import { base_category_object } from '../../../Interfaces/InterfaceDelivery';
+import { APIRouter } from '../../../API/APIRouter';
+import { ApiProps, getRegister } from '../../../API/APIHandler';
+import { base_category } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { AxiosError } from 'axios';
@@ -12,7 +12,7 @@ import { Button } from '../../Botones/Button';
 
 export const CategoryDetail = () => {
   const { RequestedEndpoint, id } = useParams();
-  const [categoria, setCategoria] = useState<Categoria>(base_category_object);
+  const [categoria, setCategoria] = useState<Categoria>(base_category);
   const [loading, setLoading] = useState(false);
 
   const getRegisterData = async () => {
@@ -48,7 +48,7 @@ export const CategoryDetail = () => {
           </h1>
 
           <Link to={`/employee/Categorias`} className="shadow-md">
-            <Button content="Volver" color="amarillo" type="button" callback={() => {}} />
+            <Button content="Volver" color="amarillo" type="button" />
           </Link>
         </div>
         <div className="flex flex-col gap-5">

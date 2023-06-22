@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Ingrediente } from '../../../../../Interfaces/Ingrediente';
+import { Ingrediente } from '../../../Interfaces/ABM/Ingrediente'; 
 interface IngredienteAddOrUpdateProps {
   ingrediente: Ingrediente;
   imagen: File | null;

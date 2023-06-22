@@ -1,19 +1,19 @@
 import { Link, useParams } from 'react-router-dom';
-import { Categoria } from '../../../Interfaces/Categoria';
+import { Categoria } from '../../../Interfaces/ABM/Categoria';
 import { useEffect, useState } from 'react';
-import { APIRouter } from '../API/APIRouter';
-import { ApiProps, getRegister } from '../API/APIHandler';
-import { base_category_object, base_unidad_object } from '../../../Interfaces/InterfaceDelivery';
+import { APIRouter } from '../../../API/APIRouter';
+import { ApiProps, getRegister } from '../../../API/APIHandler';
+import { base_category, base_unidad } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { AxiosError } from 'axios';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { Button } from '../../Botones/Button';
-import { UnidadDeMedida } from '../../../Interfaces/UnidadDeMedida';
+import { UnidadDeMedida } from '../../../Interfaces/ABM/UnidadDeMedida';
 
 export const UnidadDeMedidaDetail = () => {
   const { RequestedEndpoint, id } = useParams();
-  const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad_object);
+  const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad);
   const [loading, setLoading] = useState(false);
 
   const getRegisterData = async () => {
@@ -49,7 +49,7 @@ export const UnidadDeMedidaDetail = () => {
           </h1>
 
           <Link to={`/employee/UnidadDeMedida`} className="shadow-md">
-            <Button content="Volver" color="amarillo" type="button" callback={() => {}} />
+            <Button content="Volver" color="amarillo" type="button"  />
           </Link>
         </div>
         <div className="flex flex-col gap-5">
