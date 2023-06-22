@@ -9,6 +9,7 @@ import { NotFoundView } from './views/NotFoundView';
 import { Breadcrumb } from './components/Breadcrumb/Breadcrumb';
 import { ThemeContextProvider } from './context/ThemeProvider';
 import CargaDomicilioView from './views/CargaDomicilioView';
+import CallbackPage from './components/Auth0/CallbackPage';
 
 function App() {
   const location = useLocation();
@@ -42,6 +43,7 @@ function App() {
             {ClientStaticRoutes.map((route, index) => (
               <Route key={index} path={route.path} element={route.element} />
             ))}
+            <Route path="/callback" element={<CallbackPage />} />
             <Route path="/cargar_domicilio" element={<CargaDomicilioView />} />
             <Route path="*" element={<NotFoundView />} />
           </Routes>

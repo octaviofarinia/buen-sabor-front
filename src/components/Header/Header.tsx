@@ -107,14 +107,15 @@ export const Header = () => {
                       ) : (
                         <Menu.Item>
                           <button
-                            onClick={() =>
+                            onClick={() => {
+                              console.log(`${frontend_url}/cargar_domicilio?new=true`);
                               loginWithRedirect({
                                 authorizationParams: {
                                   screen_hint: 'signup',
                                   redirect_uri: `${frontend_url}/cargar_domicilio?new=true`,
                                 },
-                              })
-                            }
+                              });
+                            }}
                             className={`inline-block px-3 py-2 text-start text-sm font-semibold
                             text-neutral-900  outline-none  transition duration-100
                              focus-visible:ring 
