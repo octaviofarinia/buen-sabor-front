@@ -175,7 +175,6 @@ const CargaDomicilioView: React.FC = () => {
                   className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-white focus:outline-none"
                   type="text"
                   placeholder="Departamento 1..."
-                  required
                   aria-errormessage="Debe ingresar el departamento."
                   name="numeroDpto"
                   onChange={(e) => handleChange(e, domicilio, setDomicilio)}
@@ -193,7 +192,6 @@ const CargaDomicilioView: React.FC = () => {
                   id="grid-last-name"
                   type="text"
                   placeholder="Primer piso..."
-                  required
                   aria-errormessage="Debe ingresar el piso."
                   name="pisoDpto"
                   onChange={(e) => handleChange(e, domicilio, setDomicilio)}

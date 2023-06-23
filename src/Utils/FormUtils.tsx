@@ -1,31 +1,57 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
-import { T } from '../API/APIHandler';
+import { Base } from '../API/BaseAPIInterface';
 type StateSetter<T> = Dispatch<SetStateAction<T>>;
 
-type ChangeHandler<T> = (
-  e: ChangeEvent<HTMLInputElement>,
+type BaseChangeHandler<T> = (
   variable: T,
   setVariable: StateSetter<T>
 ) => void;
 
-export const handleChange: ChangeHandler<T | any> = (e, variable, setVariable) => {
+type SelectChangeHandler<T> = (
+  e: ChangeEvent<HTMLSelectElement>,
+  variable: T,
+  setVariable: StateSetter<T>
+) => void | BaseChangeHandler<T>;
+
+type InputChangeHandler<T> = (
+  e: ChangeEvent<HTMLInputElement>,
+  variable: T,
+  setVariable: StateSetter<T>
+) => void | BaseChangeHandler<T>;
+
+
+
+export const handleChange: InputChangeHandler<Base | any> = (e, variable, setVariable) => {
   setVariable({
     ...variable,
     [e.target.name]: e.target.value,
   });
 };
+export const simpleHandleChange: InputChangeHandler<Base | any> = (e, variable, setVariable) => {
+  setVariable(e.target.value);
+};
 
-export const handleImageChange: ChangeHandler<File | null> = (e, state, setState) => {
+
+export const handleImageChange: InputChangeHandler<File | null> = (e, state, setState) => {
   if (e.target.files && e.target.files.length > 0) {
     const selectedFile = e.target.files[0];
     setState(selectedFile);
   }
 };
 
-export const handleCheckboxChange: ChangeHandler<T | any> = (e, variable, setVariable) => {
-  
+export const handleCheckboxChange: InputChangeHandler<Base | any> = (e, variable, setVariable) => {
   setVariable({
     ...variable,
     [e.target.name]: e.target.checked,
   });
+};
+
+export const handleSelectChange: SelectChangeHandler<Base | any> = (e, variable, setVariable) => {
+  const selectedValue = e.target.value;
+  const variableAux = variable.filter((varItem: { id: string }) => varItem?.id === selectedValue);
+  setVariable({
+    ...variable,
+    [e.target.name]: variableAux,
+  });
+
 };

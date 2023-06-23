@@ -1,14 +1,20 @@
 import { Link } from 'react-router-dom';
 import { Producto } from '../../Interfaces/ABM/Producto';
 import { Button } from '../Botones/Button';
-
+import { CartContext } from '../../context/CarritoProvider';
+import { useContext } from 'react';
 interface ProductCardProps {
   producto: Producto;
 }
-const agregarAlCarrito = () => {
-  console.log('agregar al carrito');
-};
-export const ProductCard = ({ producto }:ProductCardProps) => {
+
+export const ProductCard = ({ producto }: ProductCardProps) => {
+  const carritoContext = useContext(CartContext);
+
+  const agregarAlCarrito = () => {
+    carritoContext.addToCart(producto);
+    console.log(producto);
+  };
+
   return (
     <div className="">
       <Link
@@ -32,7 +38,7 @@ export const ProductCard = ({ producto }:ProductCardProps) => {
             color="amarillo"
             type="button"
             content="Agregar al carrito"
-            callback={() => agregarAlCarrito}
+            callback={() => agregarAlCarrito()}
           />
         </div>
       </div>
