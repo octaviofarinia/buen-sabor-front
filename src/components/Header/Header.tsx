@@ -43,10 +43,10 @@ export const Header = () => {
                   className="inline-flex items-center gap-2.5 text-lg font-bold uppercase text-amber-400 md:text-3xl"
                   aria-label="logo"
                 >
-                  <img src={"/logo5.png"} alt="logo" className='object-contain max-w-100 '/>
+                  <img src={'/logo5.png'} alt="logo" className="max-w-100 object-contain " />
                 </Link>
                 <div className="hidden md:ml-6 md:flex md:items-center">
-                  <div className="flex gap-2.5 items-center">
+                  <div className="flex items-center gap-2.5">
                     {navigation.map((item) => (
                       <Link
                         key={item.path}
@@ -109,9 +109,11 @@ export const Header = () => {
                             onClick={() => {
                               console.log(`${frontend_url}/Domicilio?new=true`);
                               loginWithRedirect({
+                                appState: {
+                                  returnTo: `/Domicilio?new=true`,
+                                },
                                 authorizationParams: {
                                   screen_hint: 'signup',
-                                  redirect_uri: `${frontend_url}/Domicilio?new=true`,
                                 },
                               });
                             }}
@@ -141,7 +143,13 @@ export const Header = () => {
                       ) : (
                         <Menu.Item>
                           <button
-                            onClick={() => loginWithRedirect()}
+                            onClick={() =>
+                              loginWithRedirect({
+                                appState: {
+                                  returnTo: window.location.pathname,
+                                },
+                              })
+                            }
                             className={`inline-block px-3 py-2 text-start text-sm font-semibold
                             text-neutral-900  outline-none  transition duration-100
                              focus-visible:ring 
