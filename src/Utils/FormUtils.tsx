@@ -48,10 +48,6 @@ export const handleCheckboxChange: InputChangeHandler<Base | any> = (e, variable
 
 export const handleSelectChange: SelectChangeHandler<Base | any> = (e, variable, setVariable) => {
   const selectedValue = e.target.value;
-  const variableAux = variable.filter((varItem: { id: string }) => varItem?.id === selectedValue);
-  setVariable({
-    ...variable,
-    [e.target.name]: variableAux,
-  });
+  setVariable(selectedValue);
 
 };

@@ -9,16 +9,14 @@ export const postDomicilio = async (domicilio: Domicilio) => {
 
 export const getDomicilios = async (userId: string) => {
   try {
-    if (userId == undefined) {
-      throw new Error();
-    }
-
     const response = await axios.get(`${backend_url}/domicilios/listar`, {
-      headers: { auth0Id: userId.toString() },
+      headers: { auth0Id: userId },
     });
     
     return response;
   } catch (err) {
     console.error(err);
+    throw err;
   }
+
 };

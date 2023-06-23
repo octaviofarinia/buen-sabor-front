@@ -1,19 +1,18 @@
 import {
   faCheckCircle,
-  faCircleCheck,
   faCreditCard,
   faMotorcycle,
   faShoppingCart,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Button } from '../components/Botones/Button';
 import { handleChange, handleSelectChange } from '../Utils/FormUtils';
-import { ToastAlert, notify } from '../components/Toast/ToastAlert';
+import { ToastAlert } from '../components/Toast/ToastAlert';
 import { Domicilio } from '../Interfaces/Domicilio';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getDomicilios } from '../API/SpecializedEndpoints/DomicilioRequests/DomicilioRequests';
-import { CircleLoader, ClipLoader } from 'react-spinners';
+import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import { calcularSubtotal, calcularTiempoEspera } from '../Utils/CalculosUtils';
 import { useCart } from '../context/CarritoProvider';
@@ -25,9 +24,11 @@ interface CarritoInterface {
 }
 
 export const CarritoView = () => {
+  const { cart } = useCart();
   const { user } = useAuth0();
   const navigate = useNavigate();
   const [domicilios, setDomicilios] = useState<Domicilio[]>([]);
+  const [selectedOption, setSelectedOption] = useState('');
   const [loading, setLoading] = useState(false);
   const [informacionPedido, setInformacionPedido] = useState<CarritoInterface>({
     medioDePago: 'EFECTIVO',
@@ -36,23 +37,18 @@ export const CarritoView = () => {
   });
 
   const getDomiciliosUsuario = async () => {
-    if (cart.length > 0) {
-      setLoading(true);
-      const response = await getDomicilios(user?.sub != undefined ? user?.sub : '');
-      setDomicilios(response?.data);
-      setLoading(false);
-      notify('Domicilios cargados. Status: ' + response?.status, 'success');
-    }
+    const response = await getDomicilios(user?.sub != undefined ? user?.sub : '');
+    setDomicilios(response.data);
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(informacionPedido);
+    informacionPedido.domicilioId = Number(selectedOption);
   };
-  const { cart } = useCart();
 
   useEffect(() => {
+    console.log(user?.sub)
     getDomiciliosUsuario();
-  }, []);
+  }, [user]);
   return cart.length !== 0 ? (
     <div className="grid grid-cols-3">
       <form
@@ -79,9 +75,9 @@ export const CarritoView = () => {
                 <div className="mb-1 " key={item.id}>
                   <div className="flex h-full flex-col items-center justify-center border-b-2 border-neutral-200 p-3 text-center sm:flex-row sm:justify-start sm:text-left ">
                     <img
-                      alt={item.denominacion.toString()}
+                      alt={item.denominacion != null ? item.denominacion.toString() : ''}
                       className="mb-4 h-48 w-48 flex-shrink-0 rounded-lg object-cover object-center sm:mb-0"
-                      src={item.urlImagen.toString()}
+                      src={item.urlImagen != null ? item.urlImagen.toString() : ''}
                     />
                     <div className=" flex-grow sm:pl-8">
                       <div className="flex h-full flex-col ">
@@ -230,10 +226,13 @@ export const CarritoView = () => {
                       name="domicilio"
                       required
                       className="focus:shadow-outline block w-full appearance-none rounded border border-neutral-400 bg-white px-4 py-2 pr-8 leading-tight shadow hover:border-neutral-500 focus:outline-none"
-                      onChange={(e) => handleSelectChange(e, domicilios, setInformacionPedido)}
+                      value={selectedOption}
+                      onChange={(e) => handleSelectChange(e, selectedOption, setSelectedOption)}
                     >
                       {domicilios.map((domicilio) => (
-                        <option key={domicilio.id} value={domicilio.id?.toString()}>
+                        <option key={domicilio.id}
+                        
+                        value={domicilio.id?.toString()}>
                           {domicilio.calle + ' ' + domicilio.numero}
                         </option>
                       ))}

@@ -1,19 +1,18 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Producto } from '../Interfaces/ABM/Producto';
 import { ProductCard } from '../components/ProductCard/ProductCard';
 import { AxiosError } from 'axios';
 import { ToastAlert, notify } from '../components/Toast/ToastAlert';
 import { getAllProductos } from '../API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { simpleHandleChange } from '../Utils/FormUtils';
+import { MoonLoader } from 'react-spinners';
 
 export const Products = () => {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const getProductos = async () => {
     setLoading(true);
     try {
@@ -37,7 +36,11 @@ export const Products = () => {
       product.denominacion !== null &&
       product.denominacion.toLowerCase().includes(inputValue.toLowerCase())
   );
-  return (
+  return loading ? (
+    <div className="flex justify-center p-20">
+      <MoonLoader size={120} color="#FBBF24" />
+    </div>
+  ) : (
     <div className="bg-white pb-6 dark:bg-neutral-800">
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
         <div className="mb-6 flex items-end justify-between gap-4">

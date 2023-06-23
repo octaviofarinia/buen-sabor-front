@@ -10,10 +10,7 @@ interface ProductCardProps {
 export const ProductCard = ({ producto }: ProductCardProps) => {
   const carritoContext = useContext(CartContext);
 
-  const agregarAlCarrito = () => {
-    carritoContext.addToCart(producto);
-    console.log(producto);
-  };
+ 
 
   return (
     <div className="">
@@ -38,7 +35,7 @@ export const ProductCard = ({ producto }: ProductCardProps) => {
             color="amarillo"
             type="button"
             content="Agregar al carrito"
-            callback={() => agregarAlCarrito()}
+            callback={() => carritoContext.addToCart(producto)}
           />
         </div>
       </div>

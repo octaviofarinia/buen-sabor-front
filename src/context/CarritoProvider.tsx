@@ -5,6 +5,7 @@ interface CartContextProps {
   cart: Producto[];
   addToCart: (product: Producto) => void;
   removeFromCart: (product: Producto) => void;
+  
 }
 
 interface CartProviderProps {
@@ -17,7 +18,9 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<Producto[]>([]);
 
   useEffect(() => {
+    
     const storedCart = localStorage.getItem('buenSaborCart');
+    
     if (storedCart === null) {
       localStorage.setItem('buenSaborCart', JSON.stringify(cart));
     } else {
@@ -25,6 +28,7 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     }
   }, []);
 
+  
   const addToCart = async (product: Producto) => {
     const newCart = [...cart, product];
     setCart([...cart, product]);
@@ -32,10 +36,9 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   };
 
   const removeFromCart = (product: Producto) => {
-    const newCart=cart.filter((producto) => producto.id !== product.id);
+    const newCart = cart.filter((producto) => producto.id !== product.id);
     setCart(newCart);
     localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
-
   };
 
   return (
