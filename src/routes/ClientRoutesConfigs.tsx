@@ -14,7 +14,7 @@ const ClientDinamicRoutes = [
 export const ClientStaticRoutes = [
   { name: 'Inicio', path: '/', element: <ClientMain /> },
   { name: 'Productos', path: '/Productos', element: <Products /> },
-  { name: 'Carrito', path: '/Carrito', element: <CarritoView /> },
+  { name: 'Carrito', path: '/Carrito', element: <AuthenticationGuard component={CarritoView} /> },
   { name: 'Nosotros', path: '/Nosotros' },
   { name: 'Donde Estamos', path: '/Donde-Estamos' },
 ];
