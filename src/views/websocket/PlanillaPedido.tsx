@@ -23,13 +23,13 @@ const PlanillaPedido = () => {
   };
 
   const handleCambioEstado = async (id: number | null, estado: string) => {
-    if (stompClient) {
-      let message = {
+    console.log("HANDLE CAMBIO ESTADO: " + id + " | " + estado);
+    await axios.put("http://localhost:8080/api/v1/pedidos-ws/cambiar-estado", null, {
+      params: {
         id: id,
         estado: estado
       }
-      stompClient.send("/app/cambiar-estado", {}, JSON.stringify(message))
-    }
+    })
   };
 
   useEffect(() => {
@@ -104,14 +104,14 @@ const PlanillaPedido = () => {
                 <td className="px-6 py-4">{pedido.fechaModificacion ? pedido.fechaModificacion : "---"}</td>
                 <td className="px-6 py-4">
                   <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className="bg-blue-300 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
                     onClick={() => handleCambioEstado(pedido.id, "PREPARACION")}>
                     PREPARACION
                   </button>
                 </td>
                 <td className="px-6 py-4">
                   <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className="bg-green-300 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
                     onClick={() => handleCambioEstado(pedido.id, "ENTREGADO")}>
                     ENTREGADO
                   </button>
