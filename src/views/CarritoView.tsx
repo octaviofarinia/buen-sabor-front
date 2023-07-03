@@ -48,6 +48,7 @@ export const CarritoView = () => {
   useEffect(() => {
     console.log(user?.sub)
     getDomiciliosUsuario();
+    
   }, [user]);
   return cart.length !== 0 ? (
     <div className="grid grid-cols-3">

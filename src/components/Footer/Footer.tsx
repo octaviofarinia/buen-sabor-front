@@ -1,7 +1,6 @@
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useLocation } from 'react-router-dom';
-import styles from './Footer.module.css';
 import { faGithubSquare } from '@fortawesome/fontawesome-free-brands';
 
 export const Footer: React.FC<{}> = () => {

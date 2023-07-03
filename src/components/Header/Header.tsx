@@ -1,6 +1,13 @@
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Bars3Icon, MoonIcon, SunIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import {
+  Bars3Icon,
+  MoonIcon,
+  ShoppingCartIcon,
+  SunIcon,
+  UserIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { useUser } from '../../context/UserProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -60,8 +67,13 @@ export const Header = () => {
                   </div>
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
-                {/* Perfil dropdown */}
+              <div className="absolute inset-y-0 right-0 flex items-center gap-3 pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
+                <Link
+                  to={'/Carrito'}
+                  className="rounded-full bg-neutral-800 p-1 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800"
+                >
+                  <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
+                </Link>{' '}
                 <button
                   onClick={toggleTheme}
                   type="button"
@@ -73,7 +85,7 @@ export const Header = () => {
                     <SunIcon className="h-6 w-6" aria-hidden="true" />
                   )}
                 </button>
-                <Menu as="div" className="relative ml-3">
+                <Menu as="div" className="relative ">
                   <div>
                     <Menu.Button className="flex rounded-full bg-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800">
                       <span className="rounded-full bg-neutral-800 p-1 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800">
