@@ -5,6 +5,7 @@ import { ClientMain } from '../views/ClientMain';
 import { PreguntasView } from '../views/PreguntasView';
 import { ProductDetailView } from '../views/ProductDetail';
 import { Products } from '../views/Products';
+import PlanillaPedido from '../views/websocket/PlanillaPedido';
 import { TeamView } from '../views/TeamView';
 
 const ClientDinamicRoutes = [
@@ -19,6 +20,7 @@ export const ClientStaticRoutes = [
   { name: 'Productos', path: '/Productos', element: <Products /> },
   { name: 'Nuestro Equipo', path: '/NuestroEquipo', element: <TeamView /> },
   { name: 'Preguntas', path: '/Preguntas', element: <PreguntasView /> },
+  { name: 'PEDIDOS', path: '/Pedidos', element: <PlanillaPedido /> },
 ];
 
 export default ClientDinamicRoutes;
