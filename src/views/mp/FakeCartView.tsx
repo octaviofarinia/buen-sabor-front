@@ -1,5 +1,7 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
+import { backend_url } from "../../Utils/ConstUtils";
 
 const FakeCartView = () => {
     const [preferenceId, setPreferenceId] = useState<string>("");
@@ -8,10 +10,21 @@ const FakeCartView = () => {
 
     const handleClick = () => {
         setIsLoading(true);
-        setTimeout(() => {
-            setPreferenceId("123456789");
-            setIsLoading(false);
-        }, 2000);
+        axios.post(backend_url + "/api/v1/mercado-pago/create-preference", null, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => {
+                console.log("PREFERENCE DATA: ", response.data)
+                setPreferenceId(response.data.id);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     const renderSpinner = () => {
