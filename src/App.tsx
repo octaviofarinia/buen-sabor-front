@@ -9,6 +9,9 @@ import { Breadcrumb } from './components/Breadcrumb/Breadcrumb';
 import { ThemeContextProvider } from './context/ThemeProvider';
 import CallbackPage from './components/Auth0/CallbackPage';
 import { CartProvider } from './context/CarritoProvider';
+import { initMercadoPago } from '@mercadopago/sdk-react';
+
+initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY);
 
 function App() {
   const location = useLocation();
