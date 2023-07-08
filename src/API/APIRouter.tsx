@@ -1,3 +1,4 @@
+
 export const APIRouter = (requestedCrud: string | undefined): string => {
   let endpointUrl = '';
   switch (requestedCrud) {

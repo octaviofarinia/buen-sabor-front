@@ -39,7 +39,7 @@ function App() {
               <Route path="/callback" element={<CallbackPage />} />
               <Route path="*" element={<NotFoundView />} />
             </Routes>
-            <article className="flex-1"></article>
+            <article className="flex-auto"></article>
             <Footer />
           </div>
         </CartProvider>
