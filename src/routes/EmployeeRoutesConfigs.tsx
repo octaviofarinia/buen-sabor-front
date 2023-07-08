@@ -7,7 +7,9 @@ import { AuthenticationGuard } from '../components/Auth0/AuthenticationGuard';
 
 const EmployeeDinamicRoutes = [
   ...ClientDinamicRoutes,
-  { path: 'employee/:RequestedEndpoint', element: <AuthenticationGuard component={AbmRouter} /> },
+  { path: 'employee/:Tipo/:RequestedEndpoint', element: <AuthenticationGuard component={AbmRouter} /> },
+ 
+
   {
     path: 'employee/:RequestedEndpoint/:id',
     element: <AuthenticationGuard component={DetailRouter} />,

@@ -1,27 +1,50 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import rutas from '../../Interfaces/NavigationInterfaces/EmployeeRoutes.json';
 import { APIRouter } from '../../API/APIRouter';
 import { ABMView } from '../../views/EmployeeViews/ABMView';
 import { NotFoundView } from '../../views/NotFoundView';
-interface ABMRouter {
-  name: string;
-  imagen: string;
-  interface: string;
-}
+import { FacturasView } from '../../views/EmployeeViews/FacturasView';
+import { PedidosView } from '../../views/EmployeeViews/PedidosView';
+import routes from '../../Interfaces/NavigationInterfaces/ABMRoutes';
+import { Route } from '../../Interfaces/NavigationInterfaces/NavigationInterface';
+
 export const AbmRouter = () => {
-  const { RequestedEndpoint } = useParams();
-  const [possibleRoutes, setPossibleRoutes] = useState<ABMRouter[]>([]);
+  const { RequestedEndpoint, Tipo } = useParams();
+  const [possibleRoutes, setPossibleRoutes] = useState<Route[]>([]);
 
   useEffect(() => {
-    setPossibleRoutes(rutas);
+    setPossibleRoutes(routes);
   });
-  return possibleRoutes.find((obj) => obj.interface === RequestedEndpoint) ? (
-    <ABMView
-      tableName={RequestedEndpoint}
-      requestedEndpoint={APIRouter(RequestedEndpoint)}
-    />
-  ) : (
-    <NotFoundView />
-  );
+
+  function findRoute() {
+    switch (Tipo) {
+      case 'ABM':
+        return getABMRoute()
+      case 'Planilla':
+        return getPlanilaRoute()
+      default:
+        return <NotFoundView />;
+    }
+  }
+  function getPlanilaRoute() {
+    switch (RequestedEndpoint) {
+      case 'Facturas':
+        return <FacturasView />;
+      case 'Pedidos':
+        return <PedidosView />;
+      default:
+        return <NotFoundView />;
+    }
+  }
+  function getABMRoute() {
+    const route = possibleRoutes.find((obj) => obj.route === RequestedEndpoint);
+  
+    if (route) {
+      return <ABMView tableName={RequestedEndpoint} requestedEndpoint={APIRouter(RequestedEndpoint)} />;
+    } else {
+      return <NotFoundView />;
+    }
+  }
+  
+  return <div>{findRoute()}</div>;
 };

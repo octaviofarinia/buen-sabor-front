@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 type Props = {
   callback?: () => void;
   type: string;
-  content: string;
+  content: string | JSX.Element;
   color?: string;
   fullsize?: boolean;
   textSize?: string;

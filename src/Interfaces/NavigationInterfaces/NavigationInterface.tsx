@@ -2,11 +2,11 @@ export interface NavigationProps{
     user: boolean;
 }
 export interface DropdownProps{
-    routes: RoutesProps[];
-    
+    routes: Route[];
 }
-export interface RoutesProps {
-    name: string;
-    imagen: string;
-    interface: string;
+export interface Route{
+    name: string,
+    imagen: string,
+    route: string,
+    type: string,
   }
