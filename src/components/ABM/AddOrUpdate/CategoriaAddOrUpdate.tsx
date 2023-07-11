@@ -42,7 +42,7 @@ export const CategoriaAddOrUpdate = () => {
       setLoading(false);
       status === (200 || 201) ? notify('Exito', 'success') : notify('Algo salió mal!', 'error');
       setTimeout(() => {
-        navigate(`/employee/Categorias`);
+        navigate(`/employee/ABM/Categorias`);
       }, 2000);
     } catch (error) {
       const AxiosError = error as AxiosError;
@@ -64,8 +64,8 @@ export const CategoriaAddOrUpdate = () => {
       categoria.id == categoryFather.id &&
       (categoria.RubroPadre = categoryFather.RubroPadre),
       (categoria.idRubroPadre = categoryFather.id);
-      notify('Se cargo el registro ', 'success');
-      setLoading(false);
+    notify('Se cargo el registro ', 'success');
+    setLoading(false);
   };
 
   const setPropsOfExistentCategoria = async () => {

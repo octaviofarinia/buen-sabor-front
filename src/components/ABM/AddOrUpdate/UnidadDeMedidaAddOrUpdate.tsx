@@ -40,7 +40,7 @@ export const UnidadDeMedidaAddOrUpdate = () => {
         setLoading(false);
         status === (200 || 201) && notify('Exito', 'success');
         setTimeout(() => {
-          navigate(`/employee/UnidadDeMedida`);
+          navigate(`/employee/ABM/UnidadDeMedida`);
         }, 2000);
       }
     } catch (error) {
@@ -127,7 +127,7 @@ export const UnidadDeMedidaAddOrUpdate = () => {
             required
           />
           <div className="relative z-0 col-span-3 flex w-full gap-3">
-            <Button  type="submit" content="add" fullsize={true} />
+            <Button type="submit" content="add" fullsize={true} />
             {isLoading && (
               <div className="absolute -right-20 flex items-center">
                 <ClipLoader size={45} aria-label="Loading Spinner" data-testid="loader" color="" />

@@ -55,7 +55,7 @@ export const IngredienteAddOrUpdate = () => {
       setLoading(false);
       status === (200 || 201) && notify('Exito', 'success');
       setTimeout(() => {
-        navigate(`/employee/Ingredientes`);
+        navigate(`/employee/ABM/Ingredientes`);
       }, 2000);
     } catch (err) {
       const axiosError = err as AxiosError;

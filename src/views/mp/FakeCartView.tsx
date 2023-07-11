@@ -17,7 +17,7 @@ const FakeCartView = () => {
   const handleClick = () => {
     setIsLoading(true);
     axios
-      .post(backend_url + '/api/v1/mercado-pago/create-preference', null, {
+      .post(backend_url + '/mercado-pago/create-preference', null, {
         headers: {
           'Content-Type': 'application/json',
         },

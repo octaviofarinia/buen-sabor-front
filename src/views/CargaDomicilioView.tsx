@@ -160,9 +160,8 @@ const CargaDomicilioView: React.FC = () => {
             </div>
 
             <div
-              className={`-mx-3 mb-6 flex flex-wrap ${
-                domicilio.esDepartamento ? 'visible' : 'hidden'
-              }`}
+              className={`-mx-3 mb-6 flex flex-wrap ${domicilio.esDepartamento ? 'visible' : 'hidden'
+                }`}
             >
               <div className="mb-6 w-full px-3 md:mb-0 md:w-1/2">
                 <label
