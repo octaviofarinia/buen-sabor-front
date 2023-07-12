@@ -1,7 +1,9 @@
+import { backend_url } from '../../../Utils/ConstUtils';
+
 const PublicApiCall = () => {
   const callApi = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_API_BASE_URL}/public`);
+      const response = await fetch(`${backend_url}/public`);
 
       const responseData = await response.json();
 

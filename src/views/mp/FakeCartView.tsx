@@ -17,11 +17,24 @@ const FakeCartView = () => {
   const handleClick = () => {
     setIsLoading(true);
     axios
-      .post(backend_url + '/mercado-pago/create-preference', null, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      .post(
+        backend_url + '/mercado-pago/create-preference',
+        [
+          {
+            idArticuloManufacturado: 1,
+            cantidad: 1,
+          },
+          {
+            idArticuloManufacturado: 2,
+            cantidad: 1,
+          },
+        ],
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
       .then((response) => {
         console.log('PREFERENCE DATA: ', response.data);
         setPreferenceId(response.data.id);
