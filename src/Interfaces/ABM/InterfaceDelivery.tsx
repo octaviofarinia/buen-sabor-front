@@ -1,4 +1,7 @@
+import CartConstants from '../../Utils/Constants/CartConstants';
+import { Carrito } from '../Carrito';
 import { Domicilio } from '../Domicilio';
+import { Pedido } from '../Pedido';
 import { Categoria } from './Categoria';
 import { DetalleProducto } from './DetalleProducto';
 import { Ingrediente } from './Ingrediente';
@@ -51,8 +54,16 @@ export const base_ingredient: Ingrediente = {
 
 export const base_domicilio: Domicilio = {
   id: null,
-  nombreCalle: null,
+  calle: null,
   numero: null,
-  ciudad: null,
+  localidad: null,
   codigoPostal: null,
+};
+export const base_pedido: Pedido = {
+  total: 0,
+  tipoEnvio: CartConstants.RETIRO_EN_LOCAL,
+  medioDePago:CartConstants.EFECTIVO,
+  auth0Id: undefined,
+  tiempoEstimadoFinalizacion: 0,
+  productos: null,
 };

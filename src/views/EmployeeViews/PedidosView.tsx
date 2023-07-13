@@ -6,28 +6,72 @@ import { faCheck, faFaceSadCry, faTruck, faXmark } from '@fortawesome/free-solid
 import { PedidoWS } from '../../Interfaces/PedidoWS';
 import { Loader } from '../../components/Loader/Loader';
 import { Button } from '../../components/Botones/Button';
+import { over } from 'stompjs';
+import SockJS from 'sockjs-client/dist/sockjs';
+
+import axios from 'axios';
+import { backend_url } from '../../Utils/ConstUtils';
 export const PedidosView = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [pedidos, setPedidos] = useState<PedidoWS[]>([]);
-  const setPedidoState = (id: number | null) => {
-    notify('Pedido Compledo', 'success');
+  const [conectado, setConectado] = useState<boolean>(false);
+  var stompClient: any = null;
+
+  const getPedidos = () => {
+    axios
+      .get(`http://localhost:8080/api/v1/pedidos-ws`)
+      .then((res) => {
+        setPedidos(res.data);
+      })
+      .catch((err) => console.error(err));
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setPedidos([
-        { id: 1, total: 2500, estado: 'ACTIVO', fechaAlta: '2023-07-07', fechaModificacion: null },
-        {
-          id: 2,
-          total: 3400,
-          estado: 'FINALIZADO',
-          fechaAlta: '2023-06-07',
-          fechaModificacion: null,
+  const setPedidoState = async (id: number | null, estado: string | null) => {
+    await axios
+      .put(backend_url + '/cambiar-estado', null, {
+        params: {
+          id: id,
+          estado: estado,
         },
-      ]);
-      setIsLoading(false);
-    }, 5000);
-  });
+      })
+      .then(() => {
+        notify('Pedido Completado', 'success');
+      })
+      .catch(() => {
+        notify('Ocurrio un error', 'error');
+      });
+  };
+  useEffect(() => {
+    setIsLoading(true);
+    if (!conectado) {
+      createSocket();
+    }
+    setIsLoading(false);
+  }, []);
+
+  //WEB SOCKET
+  const createSocket = () => {
+    let Sock = new SockJS('http://localhost:8080/ws');
+    stompClient = over(Sock);
+    stompClient.connect({}, onConnected, onError);
+  };
+
+  const onConnected = () => {
+    setConectado(true);
+    getPedidos();
+    stompClient.subscribe('/pedidos', onMessageReceived);
+  };
+
+  const onMessageReceived = (payload: any) => {
+    let payloadData = JSON.parse(payload.body);
+    console.log(payloadData);
+    getPedidos();
+  };
+
+  const onError = (err: any) => {
+    console.log(err);
+  };
+
   return (
     <div className=" relative flex w-full flex-1 flex-col gap-5 bg-neutral-50 px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">
       {isLoading && (
@@ -91,11 +135,11 @@ export const PedidosView = () => {
                                   </h5>
                                 }
                                 callback={() => {
-                                  setPedidoState(pedido.id);
+                                  setPedidoState(pedido.id, 'APROBADO');
                                 }}
                               />
                             ) : (
-                              <h5 className="flex gap-3 text- md:text-xl">
+                              <h5 className="text- flex gap-3 md:text-xl">
                                 Pedido finalizado
                                 <FontAwesomeIcon icon={faCheck} size="lg" />
                               </h5>

@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Producto } from '../Interfaces/ABM/Producto';
+import { DetallePedido } from '../Interfaces/DetallePedido';
+
 
 interface CartContextProps {
-  cart: Producto[];
-  addToCart: (product: Producto) => void;
-  removeFromCart: (product: Producto) => void;
-  
+  cart: DetallePedido[];
+  addToCart: (detalle: DetallePedido) => void;
+  removeFromCart: (detalle: DetallePedido) => void;
+  reduceAmountFromCart: (detalle: DetallePedido) => void;
 }
 
 interface CartProviderProps {
@@ -15,12 +16,10 @@ interface CartProviderProps {
 const CartContext = createContext<CartContextProps>({} as CartContextProps);
 
 const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-  const [cart, setCart] = useState<Producto[]>([]);
+  const [cart, setCart] = useState<DetallePedido[]>([]);
 
   useEffect(() => {
-    
     const storedCart = localStorage.getItem('buenSaborCart');
-    
     if (storedCart === null) {
       localStorage.setItem('buenSaborCart', JSON.stringify(cart));
     } else {
@@ -28,21 +27,52 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     }
   }, []);
 
-  
-  const addToCart = async (product: Producto) => {
-    const newCart = [...cart, product];
-    setCart([...cart, product]);
-    localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
+  const addToCart = async (detalle: DetallePedido) => {
+    let addProduct = false;
+    for (const detallePedido of cart) {
+      if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
+        detalle.cantidad = detallePedido.cantidad++;
+        const newCart = [...cart];
+        setCart([...cart]);
+        localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
+        addProduct = true;
+        break;
+      }
+    }
+
+    if (addProduct === false) {
+      const newCart = [...cart, detalle];
+      setCart([...cart, detalle]);
+      localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
+    }
   };
 
-  const removeFromCart = (product: Producto) => {
-    const newCart = cart.filter((producto) => producto.id !== product.id);
-    setCart(newCart);
-    localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
+  const removeFromCart = (detalle: DetallePedido) => {
+    for (const detallePedido of cart) {
+      if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
+        cart.splice(cart.indexOf(detallePedido), 1);
+        const newCart = [...cart];
+        localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
+        setCart([...cart]);
+        break;
+      }
+    }
   };
-
+  const reduceAmountFromCart = (detalle: DetallePedido) => {
+    for (const detallePedido of cart) {
+      if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
+        detalle.cantidad = detalle.cantidad--;
+        const newCart = [...cart];
+        localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
+        setCart([...cart]);
+        break;
+      }
+    }
+  };
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider
+      value={{ cart, addToCart, removeFromCart, reduceAmountFromCart }}
+    >
       {children}
     </CartContext.Provider>
   );

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Producto } from '../../../Interfaces/ABM/Producto'; 
+import { Producto } from '../../../Interfaces/ABM/Producto';
 import { createDetalle, updateDetalle } from './DetalleProductoRequests';
 import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto';
 interface ProductoRequestProps {
@@ -19,7 +19,7 @@ export const getAllProductos = async () => {
     throw err;
   }
 };
-export const getProductoRegister = async (id: string | undefined) => {
+export const getProductoRegister = async (id: string | number | undefined) => {
   const url = `http://localhost:8080/api/v1/articulos-manufacturados/${id}`;
   try {
     const response = await axios.get(url);

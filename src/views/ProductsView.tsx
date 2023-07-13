@@ -9,7 +9,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { simpleHandleChange } from '../Utils/FormUtils';
 import { MoonLoader } from 'react-spinners';
 
-export const Products = () => {
+export const ProductsView = () => {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);

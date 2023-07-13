@@ -16,45 +16,76 @@ import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import { calcularSubtotal, calcularTiempoEspera } from '../Utils/CalculosUtils';
 import { useCart } from '../context/CarritoProvider';
-
-interface CarritoInterface {
-  medioDePago: 'EFECTIVO' | 'MERCADO_PAGO';
-  metodoDeEnvio: 'RETIRO' | 'DELIVERY';
-  domicilioId?: number;
-}
+import axios from 'axios';
+import { backend_url } from '../Utils/ConstUtils';
+import { Wallet } from '@mercadopago/sdk-react';
+import CartConstants from '../Utils/Constants/CartConstants';
+import { base_pedido } from '../Interfaces/ABM/InterfaceDelivery';
+import { getProductosDelCarrito } from '../API/SpecializedEndpoints/PedidoRequests/CarritoRequest';
+import { Producto } from '../Interfaces/ABM/Producto';
+import { Pedido } from '../Interfaces/Pedido';
 
 export const CarritoView = () => {
   const { cart } = useCart();
   const { user } = useAuth0();
   const navigate = useNavigate();
-  const [domicilios, setDomicilios] = useState<Domicilio[]>([]);
-  const [selectedOption, setSelectedOption] = useState('');
   const [loading, setLoading] = useState(false);
-  const [informacionPedido, setInformacionPedido] = useState<CarritoInterface>({
-    medioDePago: 'EFECTIVO',
-    metodoDeEnvio: 'RETIRO',
-    domicilioId: undefined,
-  });
+  const [domicilios, setDomicilios] = useState<Domicilio[]>([]);
+  const [selectedOption, setSelectedOption] = useState<string>('');
+  const [preferenceId, setPreferenceId] = useState<string>('');
+  const [informacionPedido, setInformacionPedido] = useState<Pedido>(base_pedido);
+  const [cartItems, setCartItems] = useState<Producto[]>([]);
 
+  const savePedidoData = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    informacionPedido.auth0Id = user?.sub;
+    if (informacionPedido.tipoEnvio === CartConstants.RETIRO_EN_LOCAL) {
+      informacionPedido.idDomicilioEntrega = Number(selectedOption);
+    }
+    informacionPedido.productos = cart;
+    informacionPedido.total = calcularSubtotal(cartItems, cart);
+    informacionPedido.tiempoEstimadoFinalizacion = calcularTiempoEspera(cartItems);
+    localStorage.setItem('informacionPedido', JSON.stringify(informacionPedido));
+  };
   const getDomiciliosUsuario = async () => {
     const response = await getDomicilios(user?.sub != undefined ? user?.sub : '');
     setDomicilios(response.data);
+    informacionPedido.idDomicilioEntrega = response.data[0].id;
+    console.log(response.data[0].id)
   };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    informacionPedido.domicilioId = Number(selectedOption);
+  const mercadoPagoPayment = () => {
+    axios
+      .post(backend_url + '/mercado-pago/create-preference', cart, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        setPreferenceId(response.data.id);
+        console.log(response.data);
+        localStorage.setItem('buenSaborCompra', response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  const obtenerProductosDelCarrito = async () => {
+    const productos = await getProductosDelCarrito();
+    setCartItems(productos);
   };
 
   useEffect(() => {
-    console.log(user?.sub)
     getDomiciliosUsuario();
+    obtenerProductosDelCarrito();
+    informacionPedido.medioDePago === CartConstants.MERCADO_PAGO && mercadoPagoPayment();
     
-  }, [user]);
+  }, [user, informacionPedido.medioDePago, informacionPedido.tipoEnvio]);
+
   return cart.length !== 0 ? (
     <div className="grid grid-cols-3">
       <form
         className="col-span-3 flex w-full flex-wrap bg-zinc-100 px-5 py-5 dark:bg-neutral-800 xl:col-span-2"
-        onSubmit={(e) => handleSubmit(e)}
+        onSubmit={(e) => savePedidoData(e)}
       >
         <div className="relative mx-auto flex w-full pt-10 pb-20 sm:items-center md:w-11/12">
           <div className="absolute inset-0 flex h-full w-6 items-center justify-center">
@@ -72,7 +103,7 @@ export const CarritoView = () => {
                 Tus productos
               </h2>
 
-              {cart.map((item) => (
+              {cartItems.map((item, index) => (
                 <div className="mb-1 " key={item.id}>
                   <div className="flex h-full flex-col items-center justify-center border-b-2 border-neutral-200 p-3 text-center sm:flex-row sm:justify-start sm:text-left ">
                     <img
@@ -92,6 +123,9 @@ export const CarritoView = () => {
                           <p className="mb-4 dark:text-zinc-100">{item.descripcion}</p>
                         </div>
                         <div className=" mt-auto">
+                          <h5 className="mb-4 text-2xl font-bold dark:text-zinc-100">
+                            Cantidad: <span className="text-amber-500">{cart[index].cantidad}</span>
+                          </h5>
                           <h5 className="mb-4 text-2xl font-bold dark:text-zinc-100">
                             ${item.precioVenta}
                           </h5>
@@ -125,10 +159,10 @@ export const CarritoView = () => {
                   <label className="flex items-center gap-3 dark:text-zinc-100">
                     <input
                       type="radio"
-                      value="EFECTIVO"
+                      value={CartConstants.EFECTIVO}
                       name="medioDePago"
                       required
-                      defaultChecked
+                      defaultChecked={true}
                       onChange={(e) => handleChange(e, informacionPedido, setInformacionPedido)}
                       className="h-4 w-4 border-neutral-300 bg-neutral-100 text-amber-400 focus:rounded-full focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-amber-400"
                     />
@@ -138,7 +172,7 @@ export const CarritoView = () => {
                   <label className="flex items-center gap-3 dark:text-zinc-100">
                     <input
                       type="radio"
-                      value="MERCADO_PAGO"
+                      value={CartConstants.MERCADO_PAGO}
                       required
                       name="medioDePago"
                       className="h-4 w-4 border-neutral-300 bg-neutral-100 text-amber-400 focus:rounded-full focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-amber-400"
@@ -191,8 +225,8 @@ export const CarritoView = () => {
                   <label className="flex items-center gap-3 dark:text-zinc-100">
                     <input
                       type="radio"
-                      value="RETIRO"
-                      name="metodoDeEnvio"
+                      value={CartConstants.RETIRO_EN_LOCAL}
+                      name="tipoEnvio"
                       defaultChecked
                       required
                       onChange={(e) => handleChange(e, informacionPedido, setInformacionPedido)}
@@ -204,8 +238,8 @@ export const CarritoView = () => {
                   <label className="flex items-center gap-3 dark:text-zinc-100">
                     <input
                       type="radio"
-                      value="DELIVERY"
-                      name="metodoDeEnvio"
+                      value={CartConstants.DELIVERY}
+                      name="tipoEnvio"
                       required
                       className="h-4 w-4 border-neutral-300 bg-neutral-100 text-amber-400 focus:rounded-full focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-amber-400"
                       onChange={(e) => handleChange(e, informacionPedido, setInformacionPedido)}
@@ -218,7 +252,7 @@ export const CarritoView = () => {
                     </div>
                   )}
                 </div>
-                {informacionPedido.metodoDeEnvio === 'DELIVERY' && (
+                {informacionPedido.tipoEnvio === CartConstants.DELIVERY && (
                   <div className="flex flex-col px-4 md:gap-3">
                     <h2 className="text-xl text-neutral-800 dark:text-zinc-100">
                       Selecciona tu domicilio
@@ -227,13 +261,10 @@ export const CarritoView = () => {
                       name="domicilio"
                       required
                       className="focus:shadow-outline block w-full appearance-none rounded border border-neutral-400 bg-white px-4 py-2 pr-8 leading-tight shadow hover:border-neutral-500 focus:outline-none"
-                      value={selectedOption}
                       onChange={(e) => handleSelectChange(e, selectedOption, setSelectedOption)}
                     >
                       {domicilios.map((domicilio) => (
-                        <option key={domicilio.id}
-                        
-                        value={domicilio.id?.toString()}>
+                        <option key={domicilio.id} value={domicilio.id?.toString()}>
                           {domicilio.calle + ' ' + domicilio.numero}
                         </option>
                       ))}
@@ -277,24 +308,31 @@ export const CarritoView = () => {
                     Tiempo estimado de entrega
                   </span>
                   <span className="ml-auto text-neutral-900 dark:text-zinc-100">
-                    {calcularTiempoEspera(cart)} minutos
+                    {calcularTiempoEspera(cartItems)} minutos
                   </span>
                 </div>
                 <div className="flex border-t border-neutral-200 py-2">
                   <span className="text-neutral-500 dark:text-zinc-200">Subtotal</span>
                   <span className="ml-auto text-neutral-900 dark:text-zinc-100">
-                    ${calcularSubtotal(cart)}
+                    ${calcularSubtotal(cartItems, cart)}
                   </span>
                 </div>
-                <div className="flex border-t border-neutral-200 py-2">
-                  <Button
-                    callback={() => handleSubmit}
-                    color="rojo"
-                    fullsize={true}
-                    type="submit"
-                    textSize="text-2xl"
-                    content="Confirmar pedido y pagar"
-                  />
+                <div className="flex flex-col border-t border-neutral-200 py-2 transition-all duration-300 ease-in-out ">
+                  {informacionPedido.medioDePago !== CartConstants.MERCADO_PAGO ? (
+                    <Button
+                      callback={() => savePedidoData}
+                      color="rojo"
+                      fullsize={true}
+                      type="submit"
+                      textSize="text-2xl"
+                      content="Confirmar pedido y pagar"
+                    />
+                  ) : (
+                    <Wallet
+                      initialization={{ preferenceId: preferenceId }}
+                      customization={{ texts: { action: 'pay' } }}
+                    />
+                  )}
                 </div>
               </div>
             </div>
