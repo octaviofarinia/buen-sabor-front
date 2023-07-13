@@ -17,4 +17,5 @@ export interface MPfactura {
   mpMerchantOrderId: number | null;
   mpPreferenceId: string | null;
   mpPaymentType: string | null;
+  formaPago: string | null;
 }

@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { backend_url } from '../Utils/ConstUtils';
 import { MPfactura, Pedido } from '../Interfaces/Pedido';
+import CartConstants from '../Utils/Constants/CartConstants';
 export const MP_PostPagoView = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,11 +59,11 @@ export const MP_PostPagoView = () => {
       mpMerchantOrderId: Number(queryParams.get('merchant_order_id')),
       mpPreferenceId: queryParams.get('preference_id'),
       mpPaymentType: queryParams.get('payment_type'),
+      formaPago: CartConstants.MERCADO_PAGO,
     };
     if (informacionPedidoString !== null) {
       let pedido: Pedido = JSON.parse(informacionPedidoString);
       pedido.factura = mpStatus;
-      console.log(pedido);
       if (status === 'approved') {
         await axios
           .post(`${backend_url}/pedidos`, pedido)
