@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { backend_url } from '../../../Utils/ConstUtils';
 
 const AdminApiCall = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -13,7 +14,7 @@ const AdminApiCall = () => {
 
       console.log('token: ' + token);
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_API_BASE_URL}/admin-only`, {
+      const response = await fetch(`${backend_url}/admin-only`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

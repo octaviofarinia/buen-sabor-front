@@ -2,20 +2,20 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import styles from './AddOrUpdate.module.css';
 import {
-  base_category_object,
-  base_ingredient_object,
-  base_unidad_object,
-} from '../../../Interfaces/InterfaceDelivery';
-import { Ingrediente } from '../../../Interfaces/Ingrediente';
-import { Categoria } from '../../../Interfaces/Categoria';
+  base_category,
+  base_ingredient,
+  base_unidad,
+} from '../../../Interfaces/ABM/InterfaceDelivery';
+import { Ingrediente } from '../../../Interfaces/ABM/Ingrediente';
+import { Categoria } from '../../../Interfaces/ABM/Categoria';
 import { UnidadDeMedidaModal } from './Modal/UnidadDeMedidaModal';
-import { UnidadDeMedida } from '../../../Interfaces/UnidadDeMedida';
+import { UnidadDeMedida } from '../../../Interfaces/ABM/UnidadDeMedida';
 import { CategoryModal } from './Modal/CategoriaModal';
 import {
   createIngredienteRegister,
   getIngredienteRegister,
   updateIngredienteRegister,
-} from '../API/SpecializedEndpoints/IngredienteRequests/IngredienteRequests';
+} from '../../../API/SpecializedEndpoints/IngredienteRequests/IngredienteRequests';
 import { handleChange, handleImageChange } from '../../../Utils/FormUtils';
 import { Button } from '../../Botones/Button';
 import { ClipLoader } from 'react-spinners';
@@ -24,9 +24,9 @@ import { AxiosError } from 'axios';
 
 export const IngredienteAddOrUpdate = () => {
   const { id } = useParams();
-  const [ingrediente, setIngrediente] = useState<Ingrediente>(base_ingredient_object);
-  const [categoria, setCategoria] = useState<Categoria>(base_category_object);
-  const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad_object);
+  const [ingrediente, setIngrediente] = useState<Ingrediente>(base_ingredient);
+  const [categoria, setCategoria] = useState<Categoria>(base_category);
+  const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad);
   const [imagen, setImagen] = useState<File | null>(null);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ export const IngredienteAddOrUpdate = () => {
       setLoading(false);
       status === (200 || 201) && notify('Exito', 'success');
       setTimeout(() => {
-        navigate(`/employee/Ingredientes`);
+        navigate(`/employee/ABM/Ingredientes`);
       }, 2000);
     } catch (err) {
       const axiosError = err as AxiosError;
@@ -216,7 +216,7 @@ export const IngredienteAddOrUpdate = () => {
             {categoria.id !== null && (
               <Button
                 callback={() => {
-                  setCategoria(base_category_object);
+                  setCategoria(base_category);
                 }}
                 type="button"
                 content="x"
@@ -241,7 +241,7 @@ export const IngredienteAddOrUpdate = () => {
             {unidadDeMedida.id !== null && (
               <Button
                 callback={() => {
-                  setUnidadDeMedida(base_unidad_object);
+                  setUnidadDeMedida(base_unidad);
                 }}
                 type="button"
                 content="x"

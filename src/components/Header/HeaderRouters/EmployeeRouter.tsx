@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import routes from '../../../Interfaces/NavigationInterfaces/EmployeeRoutes.json';
+import routes from '../../../Interfaces/NavigationInterfaces/ABMRoutes';
 import { DropdownHeader } from '../HeaderComponents/DropdownHeader';
 import { UserRouter } from './UserRouter';
 

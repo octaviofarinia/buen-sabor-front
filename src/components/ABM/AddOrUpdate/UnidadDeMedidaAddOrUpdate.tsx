@@ -1,10 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { createRegister, getRegister, updateRegister } from '../API/APIHandler';
-import { APIRouter } from '../API/APIRouter';
+import { createRegister, getRegister, updateRegister } from '../../../API/APIHandler';
+import { APIRouter } from '../../../API/APIRouter';
 import styles from './AddOrUpdate.module.css';
-import { UnidadDeMedida } from '../../../Interfaces/UnidadDeMedida';
-import { base_unidad_object } from '../../../Interfaces/InterfaceDelivery';
+import { UnidadDeMedida } from '../../../Interfaces/ABM/UnidadDeMedida';
+import { base_unidad } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { HardDeleteButton } from '../../Botones/HardDeleteButton';
 import { Button } from '../../Botones/Button';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
@@ -14,7 +14,7 @@ import { handleChange } from '../../../Utils/FormUtils';
 
 export const UnidadDeMedidaAddOrUpdate = () => {
   const { RequestedEndpoint, id } = useParams();
-  const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad_object);
+  const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ export const UnidadDeMedidaAddOrUpdate = () => {
         setLoading(false);
         status === (200 || 201) && notify('Exito', 'success');
         setTimeout(() => {
-          navigate(`/employee/UnidadDeMedida`);
+          navigate(`/employee/ABM/UnidadDeMedida`);
         }, 2000);
       }
     } catch (error) {
@@ -70,7 +70,6 @@ export const UnidadDeMedidaAddOrUpdate = () => {
   useEffect(() => {
     if (id !== (undefined && Number(id) > 0)) {
       setPropsOfExistentUnidadDeMedida();
-      
     }
   }, [id]);
 
@@ -128,7 +127,7 @@ export const UnidadDeMedidaAddOrUpdate = () => {
             required
           />
           <div className="relative z-0 col-span-3 flex w-full gap-3">
-            <Button callback={() => handleSubmit} type="submit" content="add" />
+            <Button type="submit" content="add" fullsize={true} />
             {isLoading && (
               <div className="absolute -right-20 flex items-center">
                 <ClipLoader size={45} aria-label="Loading Spinner" data-testid="loader" color="" />

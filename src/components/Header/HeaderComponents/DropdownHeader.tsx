@@ -36,7 +36,7 @@ export const DropdownHeader = ({ routes }: DropdownProps) => {
               <Menu.Item key={"Ruta"+index}>
                 {({ active }) => (
                   <Link
-                     to={!userRoles.includes('employee') ? route.name : `/employee/${route.interface}`}
+                     to={!userRoles.includes('employee') ? route.name : `/employee/${route.type}/${route.route}`}
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block px-4 py-2 text-sm'

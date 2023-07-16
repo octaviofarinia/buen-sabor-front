@@ -3,11 +3,12 @@ import { faCubes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { BeatLoader } from 'react-spinners';
-import { getAllRegisters, ApiProps, T } from '../../components/ABM/API/APIHandler';
+import { getAllRegisters, ApiProps, T } from '../../API/APIHandler';
 import { ABMTableBuilder } from '../../components/ABM/ABMTableBuilder';
 import { RegisterRow } from '../../Interfaces/ABM/GenericTableInterfaces';
 import { HeaderKey } from '../../Interfaces/ABM/GenericTableInterfaces';
-import { parseUnidadDeMedida } from '../../utils/StringUtils';
+import { parseUnidadDeMedida } from '../../Utils/StringUtils';
+import { Loader } from '../../components/Loader/Loader';
 
 export const ABMView = ({
   tableName,
@@ -35,9 +36,11 @@ export const ABMView = ({
   return (
     <div className=" relative flex w-full flex-col gap-5 bg-white px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">
       {isLoading && (
-        <div className="absolute inset-0 h-full w-full bg-zinc-300 ">
-          <BeatLoader color="#000000" />
-        </div>
+        <Loader
+          texto="Cargando las facturas..."
+          closeLoading={setIsLoading}
+          showCloseLoading={true}
+        />
       )}
       <div className="flex items-center justify-between">
         <h1 className="flex items-center gap-3 text-3xl font-extrabold uppercase text-black dark:text-white">

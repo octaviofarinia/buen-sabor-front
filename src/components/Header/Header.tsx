@@ -1,14 +1,19 @@
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Bars3Icon, MoonIcon, SunIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import {
+  Bars3Icon,
+  MoonIcon,
+  ShoppingCartIcon,
+  SunIcon,
+  UserIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { useUser } from '../../context/UserProvider';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBurger } from '@fortawesome/free-solid-svg-icons';
 import { EmployeeStaticRoutes } from '../../routes/EmployeeRoutesConfigs';
 import { ClientStaticRoutes } from '../../routes/ClientRoutesConfigs';
 import { DropdownHeader } from './HeaderComponents/DropdownHeader';
-import EmployeeRoutes from '../../Interfaces/NavigationInterfaces/EmployeeRoutes.json';
+import EmployeeRoutes from '../../Interfaces/NavigationInterfaces/ABMRoutes';
 import { useTheme } from '../../context/ThemeProvider';
 import { useAuth0 } from '@auth0/auth0-react';
 import styles from './Header.module.css';
@@ -43,11 +48,10 @@ export const Header = () => {
                   className="inline-flex items-center gap-2.5 text-lg font-bold uppercase text-amber-400 md:text-3xl"
                   aria-label="logo"
                 >
-                  <FontAwesomeIcon icon={faBurger} />
-                  <h2 className="whitespace-nowrap">el buen sabor</h2>
+                  <img src={'/logo5.png'} alt="logo" className="max-w-100 object-contain " />
                 </Link>
-                <div className="hidden md:ml-6 md:block">
-                  <div className="flex gap-2.5">
+                <div className="hidden md:ml-6 md:flex md:items-center">
+                  <div className="flex items-center gap-2.5">
                     {navigation.map((item) => (
                       <Link
                         key={item.path}
@@ -61,8 +65,13 @@ export const Header = () => {
                   </div>
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
-                {/* Perfil dropdown */}
+              <div className="absolute inset-y-0 right-0 flex items-center gap-3 pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
+                <Link
+                  to={'/Carrito'}
+                  className="rounded-full bg-neutral-800 p-1 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800"
+                >
+                  <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
+                </Link>{' '}
                 <button
                   onClick={toggleTheme}
                   type="button"
@@ -74,7 +83,7 @@ export const Header = () => {
                     <SunIcon className="h-6 w-6" aria-hidden="true" />
                   )}
                 </button>
-                <Menu as="div" className="relative ml-3">
+                <Menu as="div" className="relative ">
                   <div>
                     <Menu.Button className="flex rounded-full bg-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800">
                       <span className="rounded-full bg-neutral-800 p-1 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800">
@@ -107,14 +116,17 @@ export const Header = () => {
                       ) : (
                         <Menu.Item>
                           <button
-                            onClick={() =>
+                            onClick={() => {
+                              console.log(`${frontend_url}/Domicilio?new=true`);
                               loginWithRedirect({
+                                appState: {
+                                  returnTo: `/Domicilio?new=true`,
+                                },
                                 authorizationParams: {
                                   screen_hint: 'signup',
-                                  redirect_uri: `${frontend_url}/cargar_domicilio?new=true`,
                                 },
-                              })
-                            }
+                              });
+                            }}
                             className={`inline-block px-3 py-2 text-start text-sm font-semibold
                             text-neutral-900  outline-none  transition duration-100
                              focus-visible:ring 
@@ -141,7 +153,13 @@ export const Header = () => {
                       ) : (
                         <Menu.Item>
                           <button
-                            onClick={() => loginWithRedirect()}
+                            onClick={() =>
+                              loginWithRedirect({
+                                appState: {
+                                  returnTo: window.location.pathname,
+                                },
+                              })
+                            }
                             className={`inline-block px-3 py-2 text-start text-sm font-semibold
                             text-neutral-900  outline-none  transition duration-100
                              focus-visible:ring 
