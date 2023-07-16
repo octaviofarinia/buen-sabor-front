@@ -7,7 +7,7 @@ import { getAllRegisters, ApiProps, T } from '../../API/APIHandler';
 import { ABMTableBuilder } from '../../components/ABM/ABMTableBuilder';
 import { RegisterRow } from '../../Interfaces/ABM/GenericTableInterfaces';
 import { HeaderKey } from '../../Interfaces/ABM/GenericTableInterfaces';
-import { parseUnidadDeMedida } from '../../utils/StringUtils';
+import { parseUnidadDeMedida } from '../../Utils/StringUtils';
 import { Loader } from '../../components/Loader/Loader';
 
 export const ABMView = ({
