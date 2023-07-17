@@ -1,6 +1,7 @@
 import { DetallePedido } from './DetallePedido';
 
 export interface Pedido {
+  id: number | null;
   total: number;
   mpStatus?: string | null;
   tipoEnvio: string | null;

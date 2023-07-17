@@ -3,6 +3,7 @@ import { Producto } from '../../Interfaces/ABM/Producto';
 import { Button } from '../Botones/Button';
 import { CartContext } from '../../context/CarritoProvider';
 import { useContext } from 'react';
+import { ToastAlert, notify } from '../Toast/ToastAlert';
 interface ProductCardProps {
   producto: Producto;
 }
@@ -33,9 +34,10 @@ export const ProductCard = ({ producto }: ProductCardProps) => {
             color="amarillo"
             type="button"
             content="Agregar al carrito"
-            callback={() =>
-              carritoContext.addToCart({ idArticuloManufacturado: producto.id, cantidad: 1 })
-            }
+            callback={() => {
+              carritoContext.addToCart({ idArticuloManufacturado: producto.id, cantidad: 1 });
+              notify('Se agrego ' + producto.denominacion + ' al carrito', 'success');
+            }}
           />
         </div>
       </div>

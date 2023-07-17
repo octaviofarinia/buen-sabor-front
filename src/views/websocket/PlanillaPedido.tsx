@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PedidoWS } from "../../Interfaces/PedidoWS";
+import { PedidoPlanilla } from "../../Interfaces/PedidoWS";
 import axios from "axios";
 import { over } from "stompjs";
 import SockJS from "sockjs-client/dist/sockjs"
@@ -8,7 +8,7 @@ var stompClient: any = null;
 
 const PlanillaPedido = () => {
   const [conectado, setConectado] = useState<boolean>(false);
-  const [pedidos, setPedidos] = useState<PedidoWS[]>([]);
+  const [pedidos, setPedidos] = useState<PedidoPlanilla[]>([]);
 
   const getInstrumentos = () => {
     axios

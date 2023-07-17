@@ -1,4 +1,4 @@
-export interface PedidoWS {
+export interface PedidoPlanilla {
     id: number | null;
     total: number | null;
     estado: string | null;

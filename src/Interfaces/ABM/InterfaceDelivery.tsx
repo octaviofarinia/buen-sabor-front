@@ -60,9 +60,11 @@ export const base_domicilio: Domicilio = {
   codigoPostal: null,
 };
 export const base_pedido: Pedido = {
+  id: null,
   total: 0,
   tipoEnvio: CartConstants.RETIRO_EN_LOCAL,
   medioDePago:CartConstants.EFECTIVO,
+  idDomicilioEntrega:0,
   auth0Id: undefined,
   tiempoEstimadoFinalizacion: 0,
   productos: null,

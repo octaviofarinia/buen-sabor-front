@@ -46,12 +46,13 @@ export const CarritoView = () => {
     informacionPedido.total = calcularSubtotal(cartItems, cart);
     informacionPedido.tiempoEstimadoFinalizacion = calcularTiempoEspera(cartItems);
     localStorage.setItem('informacionPedido', JSON.stringify(informacionPedido));
+    navigate('/PostPayment');
   };
   const getDomiciliosUsuario = async () => {
     const response = await getDomicilios(user?.sub != undefined ? user?.sub : '');
     setDomicilios(response.data);
     informacionPedido.idDomicilioEntrega = response.data[0].id;
-    console.log(response.data[0].id)
+    console.log(response.data[0].id);
   };
   const mercadoPagoPayment = () => {
     axios
@@ -78,7 +79,6 @@ export const CarritoView = () => {
     getDomiciliosUsuario();
     obtenerProductosDelCarrito();
     informacionPedido.medioDePago === CartConstants.MERCADO_PAGO && mercadoPagoPayment();
-    
   }, [user, informacionPedido.medioDePago, informacionPedido.tipoEnvio]);
 
   return cart.length !== 0 ? (
@@ -320,7 +320,6 @@ export const CarritoView = () => {
                 <div className="flex flex-col border-t border-neutral-200 py-2 transition-all duration-300 ease-in-out ">
                   {informacionPedido.medioDePago !== CartConstants.MERCADO_PAGO ? (
                     <Button
-                      callback={() => savePedidoData}
                       color="rojo"
                       fullsize={true}
                       type="submit"

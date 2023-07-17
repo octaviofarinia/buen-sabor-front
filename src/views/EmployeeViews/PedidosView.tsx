@@ -1,47 +1,42 @@
 import { HashLoader } from 'react-spinners';
-import { notify } from '../../components/Toast/ToastAlert';
+import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faFaceSadCry, faTruck, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { PedidoWS } from '../../Interfaces/PedidoWS';
+import {
+  faCheck,
+  faFaceSadCry,
+  faHourglass2,
+  faTruck,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
+import { PedidoPlanilla } from '../../Interfaces/PedidoWS';
 import { Loader } from '../../components/Loader/Loader';
 import { Button } from '../../components/Botones/Button';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
-
 import axios from 'axios';
-import { backend_url } from '../../Utils/ConstUtils';
+import { EstadosSelect, PedidoStatus, setEstadoDePedido } from '../../Utils/PlanillaUtils';
+
 export const PedidosView = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [pedidos, setPedidos] = useState<PedidoWS[]>([]);
+  const [pedidos, setPedidos] = useState<PedidoPlanilla[]>([]);
   const [conectado, setConectado] = useState<boolean>(false);
+  const [estadoPedidos, setEstadoPedidos] = useState<string>('');
   var stompClient: any = null;
 
-  const getPedidos = () => {
+  const getPedidos = (estado: string | null) => {
     axios
-      .get(`http://localhost:8080/api/v1/pedidos/ws`)
+      .get(`http://localhost:8080/api/v1/pedidos/listar`, {
+        params: {
+          estado: estado,
+        },
+      })
       .then((res) => {
         setPedidos(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.error(err));
   };
 
-  const setPedidoState = async (id: number | null, estado: string | null) => {
-    await axios
-      .put(backend_url + '/cambiar-estado', null, {
-        params: {
-          id: id,
-          estado: estado,
-        },
-      })
-      .then(() => {
-        notify('Pedido Completado', 'success');
-      })
-      .catch(() => {
-        notify('Ocurrio un error', 'error');
-      });
-  };
   useEffect(() => {
     setIsLoading(true);
     if (!conectado) {
@@ -59,14 +54,14 @@ export const PedidosView = () => {
 
   const onConnected = () => {
     setConectado(true);
-    getPedidos();
+    getPedidos(estadoPedidos);
     stompClient.subscribe('/pedidos', onMessageReceived);
   };
 
   const onMessageReceived = (payload: any) => {
     let payloadData = JSON.parse(payload.body);
     console.log(payloadData);
-    getPedidos();
+    getPedidos(estadoPedidos);
   };
 
   const onError = (err: any) => {
@@ -87,8 +82,25 @@ export const PedidosView = () => {
           <FontAwesomeIcon icon={faTruck} />
           Pedidos
         </h1>
-      </div>
+        <div className="flex gap-5">
+          <label className="flex items-center gap-5 text-xl">
+            Filtrar:
+            <EstadosSelect pedido={null} callback={(e) => getPedidos(e.target.value)} />
+          </label>
 
+          <Button
+            type="button"
+            content={'Mostrar todos'}
+            color="negro"
+            textSize="text-xl"
+            callback={() => {
+              getPedidos(null);
+              setEstadoPedidos('');
+            }}
+          />
+        </div>
+      </div>
+      <ToastAlert />
       {pedidos.length != 0 ? (
         <div className=" mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-neutral-800">
           <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -113,30 +125,47 @@ export const PedidosView = () => {
                       >
                         <td className="px-6 py-4">{pedido.id}</td>
                         <td className="px-6 py-4">{pedido.total}</td>
-                        <td
-                          className={`px-6 py-4 font-bold ${
-                            pedido.estado === 'ACTIVO' ? 'text-green-500' : 'text-rose-500'
-                          }`}
-                        >
-                          {pedido.estado}
+                        <td className="px-6 py-4">
+                          {pedido.estado !== PedidoStatus.COMPLETADO ? (
+                            <div className="flex gap-5">
+                              <EstadosSelect
+                                pedido={pedido}
+                                callback={(e) => {
+                                  pedido.estado = e.target.value;
+                                }}
+                              />
+                              <Button
+                                type="button"
+                                color="negro"
+                                content={'Cambiar estado'}
+                                callback={() => setEstadoDePedido(pedido.id, pedido.estado)}
+                              />
+                            </div>
+                          ) : (
+                            <h2 className="flex gap-3 py-2 pr-8 text-xl font-bold">
+                              <FontAwesomeIcon icon={faCheck} size="lg" />
+                              COMPLETADO
+                            </h2>
+                          )}
                         </td>
+
                         <td className="px-6 py-4">{pedido.fechaAlta}</td>
                         <td className="px-6 py-4">{pedido.fechaModificacion}</td>
 
                         <td className="px-6 py-4">
                           <div className="m-0 flex h-full items-center justify-center gap-16 p-0">
-                            {pedido.estado === 'ACTIVO' ? (
+                            {pedido.estado !== 'COMPLETADO' ? (
                               <Button
                                 type="button"
                                 color="verde"
                                 content={
-                                  <h5 className="flex gap-3">
+                                  <p className="flex gap-3">
                                     Confirmar finalizado
                                     <FontAwesomeIcon icon={faXmark} size="lg" />
-                                  </h5>
+                                  </p>
                                 }
                                 callback={() => {
-                                  setPedidoState(pedido.id, 'APROBADO');
+                                  setEstadoDePedido(pedido.id, PedidoStatus.COMPLETADO);
                                 }}
                               />
                             ) : (

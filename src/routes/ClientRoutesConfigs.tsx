@@ -9,6 +9,7 @@ import PlanillaPedido from '../views/websocket/PlanillaPedido';
 import { TeamView } from '../views/TeamView';
 import FakeCartView from '../views/mp/FakeCartView';
 import { MP_PostPagoView } from '../views/MP_PostPagoView';
+import { PostPagoView } from '../views/PostPagoView';
 
 const ClientDinamicRoutes = [
   { path: 'Productos/:categoria', element: '' },
@@ -16,6 +17,7 @@ const ClientDinamicRoutes = [
   { path: '/Carrito', element: <AuthenticationGuard component={CarritoView} /> },
   { path: '/Domicilio', element: <AuthenticationGuard component={CargaDomicilioView} /> },
   { path: '/MP_PostPayment', element: <AuthenticationGuard component={MP_PostPagoView} /> },
+  { path: '/PostPayment', element: <AuthenticationGuard component={PostPagoView} /> },
   { name: 'PEDIDOS', path: '/Pedidos', element: <PlanillaPedido /> },
   { name: 'FAKE CART', path: '/FakeCart', element: <FakeCartView /> },
 ];
