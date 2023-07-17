@@ -1,13 +1,13 @@
 export const PreguntasView = () => {
   return (
-    <div className="bg-zinc-50 py-6 dark:bg-neutral-800 ">
+    <div className="bg-neutral-100 dark:bg-neutral-800 ">
       <div className="mx-auto my-14 max-w-screen-xl px-4 md:px-8">
         {/* text - start */}
         <div className="mb-10 md:mb-16">
-          <h2 className="mb-4 text-center text-2xl font-bold text-neutral-800 dark:text-zinc-100 md:mb-6 lg:text-3xl">
+          <h2 className="mb-4 text-center text-2xl font-bold text-neutral-800 dark:text-neutral-100 md:mb-6 lg:text-3xl">
             Preguntas Frecuentes
           </h2>
-          <p className="mx-auto max-w-screen-md text-center text-neutral-500 dark:text-zinc-300 md:text-lg">
+          <p className="mx-auto max-w-screen-md text-center text-neutral-500 dark:text-neutral-300 md:text-lg">
             Bienvenido/a a nuestra sección de Preguntas Frecuentes. Hemos recopilado las consultas
             más comunes que recibimos de nuestros clientes para brindarte respuestas claras y
             concisas. Esperamos que esta sección te ayude a resolver cualquier duda que puedas
@@ -18,8 +18,8 @@ export const PreguntasView = () => {
         {/* text - end */}
         <div className="grid gap-4 sm:grid-cols-2 md:gap-8">
           {/* question - start */}
-          <div className="rounded-lg bg-neutral-100 p-5 shadow-md dark:bg-neutral-600">
-            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4">
+          <div className="rounded-lg bg-neutral-100 p-5 shadow-md hover:shadow-lg dark:bg-neutral-600 dark:hover:shadow-neutral-700">
+            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4 ">
               <h3 className="font-semibold text-amber-500 sm:text-lg md:text-xl">
                 ¿Cómo puedo realizar un pedido?
               </h3>
@@ -38,7 +38,7 @@ export const PreguntasView = () => {
                 </svg>
               </span>
             </div>
-            <p className="text-neutral-500 dark:text-zinc-300">
+            <p className="text-neutral-500 dark:text-neutral-300">
               Para realizar un pedido, simplemente navega por nuestra tienda en línea, selecciona
               los productos que deseas y agrégalos al carrito de compras. Luego, sigue los pasos
               para completar la información de envío y pago. Una vez que hayas finalizado, recibirás
@@ -47,8 +47,8 @@ export const PreguntasView = () => {
           </div>
           {/* question - end */}
           {/* question - start */}
-          <div className="rounded-lg bg-neutral-100 p-5 shadow-md dark:bg-neutral-600">
-            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4">
+          <div className="rounded-lg bg-neutral-100 p-5 shadow-md hover:shadow-lg dark:bg-neutral-600 dark:hover:shadow-neutral-700">
+            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4 ">
               <h3 className="font-semibold text-amber-500 sm:text-lg md:text-xl">
                 ¿Cuáles son las opciones de pago disponibles?
               </h3>
@@ -67,15 +67,15 @@ export const PreguntasView = () => {
                 </svg>
               </span>
             </div>
-            <p className="text-neutral-500 dark:text-zinc-300">
+            <p className="text-neutral-500 dark:text-neutral-300">
               Actualmente solo aceptamos efectivo y Mercado Pago. Durante el proceso de pago, verás
               las opciones disponibles y podrás elegir la que mejor se adapte a tus necesidades.
             </p>
           </div>
           {/* question - end */}
           {/* question - start */}
-          <div className="rounded-lg bg-neutral-100 p-5 shadow-md dark:bg-neutral-600">
-            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4">
+          <div className="rounded-lg bg-neutral-100 p-5 shadow-md hover:shadow-lg dark:bg-neutral-600 dark:hover:shadow-neutral-700">
+            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4 ">
               <h3 className="font-semibold text-amber-500 sm:text-lg md:text-xl">
                 ¿Cuánto tiempo tardará en llegar mi pedido?
               </h3>
@@ -94,15 +94,15 @@ export const PreguntasView = () => {
                 </svg>
               </span>
             </div>
-            <p className="text-neutral-500 dark:text-zinc-300">
+            <p className="text-neutral-500 dark:text-neutral-300">
               El tiempo de entrega puede variar dependiendo de tu ubicación y el método de envío
               seleccionado. Ten en cuenta que esto dependera si deseas delivery o take away.
             </p>
           </div>
           {/* question - end */}
           {/* question - start */}
-          <div className="rounded-lg bg-neutral-100 p-5 shadow-md dark:bg-neutral-600">
-            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4">
+          <div className="rounded-lg bg-neutral-100 p-5 shadow-md hover:shadow-lg dark:bg-neutral-600 dark:hover:shadow-neutral-700">
+            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4 ">
               <h3 className="font-semibold text-amber-500 sm:text-lg md:text-xl">
                 ¿Puedo realizar cambios en mi pedido después de haberlo realizado?
               </h3>
@@ -121,7 +121,7 @@ export const PreguntasView = () => {
                 </svg>
               </span>
             </div>
-            <p className="text-neutral-500 dark:text-zinc-300">
+            <p className="text-neutral-500 dark:text-neutral-300">
               Si necesitas realizar cambios en tu pedido, como modificar la dirección de envío o
               agregar/quitar productos, te recomendamos que te pongas en contacto con nuestro equipo
               de soporte lo antes posible. Haremos todo lo posible para ayudarte, pero debes tener
@@ -130,8 +130,8 @@ export const PreguntasView = () => {
             </p>
           </div>
           {/* question - end */}
-          <div className="rounded-lg bg-neutral-100 p-5 shadow-md dark:bg-neutral-600">
-            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4">
+          <div className="rounded-lg bg-neutral-100 p-5 shadow-md hover:shadow-lg dark:bg-neutral-600 dark:hover:shadow-neutral-700">
+            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4 ">
               <h3 className="font-semibold text-amber-500 sm:text-lg md:text-xl">
                 ¿Cuál es la política de devoluciones y reembolsos?{' '}
               </h3>
@@ -150,14 +150,14 @@ export const PreguntasView = () => {
                 </svg>
               </span>
             </div>
-            <p className="text-neutral-500 dark:text-zinc-300">
+            <p className="text-neutral-500 dark:text-neutral-300">
               Nos preocupamos por tu satisfacción y ofrecemos una política de valoraciones. Si por
               alguna razón no estás satisfecho/a con tu compra, puedes comunicarte con nuestro
               equipo de soporte dentro de un plazo determinado para comentar tus molestias.
             </p>
           </div>
-          <div className="rounded-lg bg-neutral-100 p-5 shadow-md dark:bg-neutral-600">
-            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4">
+          <div className="rounded-lg bg-neutral-100 p-5 shadow-md hover:shadow-lg dark:bg-neutral-600 dark:hover:shadow-neutral-700">
+            <div className="mb-4 flex items-center justify-between gap-4 border-b pb-4 ">
               <h3 className="font-semibold text-amber-500 sm:text-lg md:text-xl">
                 ¿Dónde nos encontramos?
               </h3>
@@ -176,7 +176,7 @@ export const PreguntasView = () => {
                 </svg>
               </span>
             </div>
-            <p className="text-neutral-500 dark:text-zinc-300">
+            <p className="text-neutral-500 dark:text-neutral-300">
               Nos encontramos en una ubicación privilegiada, en el corazón de Mendoza. Nuestro local
               está convenientemente situada en la siguiente dirección:
             </p>

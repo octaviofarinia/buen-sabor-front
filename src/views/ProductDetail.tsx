@@ -1,36 +1,32 @@
-import {  useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Producto } from '../Interfaces/ABM/Producto';
-import { AxiosError } from 'axios';
 import { ToastAlert, notify } from '../components/Toast/ToastAlert';
 import { getProductoRegister } from '../API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
 import { useNavigate, useParams } from 'react-router-dom';
 import { base_product } from '../Interfaces/ABM/InterfaceDelivery';
 import { Button } from '../components/Botones/Button';
 import { useCart } from '../context/CarritoProvider';
+import { delayedRedirect } from '../Utils/NavigationUtils';
 
 export const ProductDetailView = () => {
   const { id } = useParams();
   const [producto, setProducto] = useState<Producto>(base_product);
-  const carritoContext = useCart()
+  const carritoContext = useCart();
   const navigate = useNavigate();
   const getProducto = async () => {
     try {
       const response = await getProductoRegister(id);
       setProducto(response.data);
-    
     } catch (err) {
-      const AxiosError = err as AxiosError;
-      notify('No se pudo cargar el producto: Volviendo al Inicio', 'error');
-      notify('Status: ' + AxiosError.response?.status, 'error');
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
+      notify('Ocurrio un error. Redirigiendo al inicio', 'error');
+      delayedRedirect(() => navigate('/'), 5000);
     }
   };
 
   useEffect(() => {
-    getProducto();
-    console.log('Producto');
+    return () => {
+      getProducto();
+    };
   }, []);
   return (
     <div className="bg-white pb-6 dark:bg-neutral-800">
@@ -56,17 +52,13 @@ export const ProductDetailView = () => {
                   {producto.tiempoEstimadoCocina} minutos
                 </span>
               </div>
-              <div className="flex border-t border-neutral-200 py-2">
-                <span className="text-neutral-500 dark:text-zinc-200">Precio</span>
+              <div className="flex border-y border-neutral-200 py-2">
+                <span className="text-neutral-500 dark:text-zinc-200">Precio Unitario</span>
                 <span className="ml-auto text-neutral-900 dark:text-zinc-100">
                   ${producto.precioVenta}
                 </span>
               </div>
-              <div className="mb-6 flex border-t border-b border-neutral-200 py-2">
-                <span className="text-neutral-500 dark:text-zinc-200">Cantidad</span>
-                <span className="ml-auto text-neutral-900 dark:text-zinc-100">1</span>
-              </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between pt-2">
                 <h5 className="title-font text-2xl font-medium text-neutral-900 dark:text-zinc-100">
                   ${producto.precioVenta}
                 </h5>
@@ -74,7 +66,10 @@ export const ProductDetailView = () => {
                   content="Agregar al carrito"
                   color="amarillo"
                   type="button"
-                  callback={() => carritoContext.addToCart(producto)}
+                  callback={() => {
+                    carritoContext.addToCart({ idArticuloManufacturado: producto.id, cantidad: 1 }),
+                      notify('Se agrego ' + producto.denominacion + ' al carrito', 'success');
+                  }}
                 />
               </div>
             </div>

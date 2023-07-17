@@ -20,7 +20,7 @@ function App() {
     <>
       <ThemeContextProvider>
         <CartProvider>
-          <div className={`flex h-full flex-col  bg-white dark:bg-neutral-800`}>
+          <div className={`flex h-full flex-col  bg-zinc-100 dark:bg-neutral-800`}>
             <Header />
             {location.pathname != '/' && <Breadcrumb />}
             <Routes>

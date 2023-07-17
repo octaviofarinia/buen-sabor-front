@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const TeamView = () => {
   return (
-    <div className="bg-zinc-50 py-6 dark:bg-neutral-800">
+    <div className="bg-neutral-100 py-6 dark:bg-neutral-800">
       <div className="mx-auto flex max-w-screen-xl flex-col items-center px-4 md:px-8">
         {/* text - start */}
         <div className="mb-10 md:mb-16">
@@ -69,7 +69,7 @@ export const TeamView = () => {
             <div>
               <h2 className="font-bold text-amber-500 md:text-lg">Octavio Fariña</h2>
               <p className="mb-3 text-sm text-neutral-500 dark:text-zinc-300 md:mb-4 md:text-base">
-                Co-Fundador / CFO
+                Co-Fundador / CTO
               </p>
               {/* social - start */}
               <div className="flex">

@@ -29,7 +29,7 @@ import { Producto } from '../Interfaces/ABM/Producto';
 import { Pedido } from '../Interfaces/Pedido';
 
 export const CarritoView = () => {
-  const { cart, removeFromCart, addToCart, reduceAmountFromCart, refresh } = useCart();
+  const { cart, removeFromCart, addToCart, reduceAmountFromCart } = useCart();
   const { user } = useAuth0();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -40,11 +40,10 @@ export const CarritoView = () => {
   const [informacionPedido, setInformacionPedido] = useState<Pedido>(base_pedido);
   const [cartItems, setCartItems] = useState<Producto[]>([]);
 
-  const savePedidoData = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const savePedidoData = () => {
     informacionPedido.auth0Id = user?.sub;
     if (informacionPedido.tipoEnvio === CartConstants.RETIRO_EN_LOCAL) {
-      informacionPedido.idDomicilioEntrega = Number(selectedOption);
+      informacionPedido.idDomicilioEntrega = null;
     }
     informacionPedido.productos = cart;
     informacionPedido.total = calcularSubtotal(cartItems, cart);
@@ -80,12 +79,14 @@ export const CarritoView = () => {
     obtenerProductosDelCarrito();
   }, [user, medioDePago, informacionPedido.tipoEnvio, cart.length]);
 
-  useEffect(() => {}, [cart]);
   return cart.length !== 0 ? (
     <div className="grid grid-cols-3">
       <form
         className="col-span-3 flex w-full flex-wrap bg-zinc-100 px-5 py-5 dark:bg-neutral-800 xl:col-span-2"
-        onSubmit={(e) => savePedidoData(e)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          savePedidoData()
+        }}
       >
         <div className="relative mx-auto flex w-full pt-10 pb-20 sm:items-center md:w-11/12">
           <div className="absolute inset-0 flex h-full w-6 items-center justify-center">
@@ -361,6 +362,7 @@ export const CarritoView = () => {
                       textSize="text-2xl"
                       content="Confirmar pedido y pagar"
                       callback={() => {
+                        savePedidoData();
                         navigate('/PostPayment');
                       }}
                     />

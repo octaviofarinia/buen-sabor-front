@@ -1,8 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DetallePedido } from '../Interfaces/DetallePedido';
+import { notify } from '../components/Toast/ToastAlert';
 
 interface CartContextProps {
   cart: DetallePedido[];
+  resetCart: () => void;
   addToCart: (detalle: DetallePedido) => void;
   removeFromCart: (detalle: DetallePedido) => void;
   reduceAmountFromCart: (detalle: DetallePedido) => void;
@@ -26,23 +28,26 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     }
   }, []);
 
+  const resetCart = () => {
+    setCart([]);
+    localStorage.setItem('buenSaborCart', JSON.stringify(cart));
+  };
   const addToCart = (detalle: DetallePedido) => {
     const existingProduct = cart.find(
       (detallePedido) => detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado
     );
-  
+
     if (existingProduct) {
       existingProduct.cantidad += 1;
     } else {
       const newDetalle = { ...detalle, cantidad: 1 };
       cart.push(newDetalle);
     }
-  
+
     localStorage.setItem('buenSaborCart', JSON.stringify(cart));
     setCart([...cart]); // Crear una nueva referencia del array para que React detecte el cambio
   };
-  
-  
+
   const removeFromCart = (detalle: DetallePedido) => {
     const updatedCart = cart.filter(
       (detallePedido) => detallePedido.idArticuloManufacturado !== detalle.idArticuloManufacturado
@@ -69,7 +74,7 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, reduceAmountFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, reduceAmountFromCart,resetCart }}>
       {children}
     </CartContext.Provider>
   );

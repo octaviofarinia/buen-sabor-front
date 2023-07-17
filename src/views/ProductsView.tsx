@@ -1,41 +1,41 @@
 import { useEffect, useState } from 'react';
 import { Producto } from '../Interfaces/ABM/Producto';
 import { ProductCard } from '../components/ProductCard/ProductCard';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ToastAlert, notify } from '../components/Toast/ToastAlert';
 import { getAllProductos } from '../API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { simpleHandleChange } from '../Utils/FormUtils';
 import { MoonLoader } from 'react-spinners';
+import { useLocation } from 'react-router-dom';
 
 export const ProductsView = () => {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const filtro = queryParams.get('filtro');
+
   const getProductos = async () => {
     setLoading(true);
     try {
       const response = await getAllProductos();
       setProductos(response.data);
-
-      setLoading(false);
     } catch (err) {
       const AxiosError = err as AxiosError;
-      setLoading(false);
-      notify('Ocurrio un error: Volviendo al Inicio', 'error');
       notify('Status: ' + AxiosError.response?.status, 'error');
     }
+    setLoading(false);
   };
+
   useEffect(() => {
-    getProductos();
+    return () => {
+      getProductos();
+    };
   }, []);
 
-  const filteredProducts = productos.filter(
-    (product) =>
-      product.denominacion !== null &&
-      product.denominacion.toLowerCase().includes(inputValue.toLowerCase())
-  );
   return loading ? (
     <div className="flex justify-center p-20">
       <MoonLoader size={120} color="#FBBF24" />
@@ -59,9 +59,11 @@ export const ProductsView = () => {
           </div>
         </div>
         <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3 ">
-          {filteredProducts.map((product) => (
-            <ProductCard producto={product} key={product.id} />
-          ))}
+          {productos
+            .filter((product) => product.denominacion?.toLowerCase().includes(inputValue || ''))
+            .map((product) => (
+              <ProductCard producto={product} key={product.id} />
+            ))}
         </div>
       </div>
       <ToastAlert />

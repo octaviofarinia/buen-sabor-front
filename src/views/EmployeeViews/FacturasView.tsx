@@ -61,7 +61,7 @@ export const FacturasView = () => {
                   <tbody>
                     {facturas.map((pedido) => (
                       <tr
-                        className="border-b border-b-neutral-200 odd:bg-zinc-50 even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-neutral-50 dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
+                        className="border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-neutral-50 dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
                         key={pedido.id}
                       >
                         <td className="px-6 py-4  font-bold">{pedido.id}</td>

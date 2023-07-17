@@ -52,7 +52,7 @@ export const ClientMain = () => {
             <div className="grid gap-6 sm:grid-cols-2">
               {routes.map((route) => (
                 <Link
-                  to={`/Productos/${route.name}`}
+                  to={`/Productos?filtro=${route.name}`}
                   key={route.name}
                   className="group relative flex h-40 items-end overflow-hidden rounded-lg bg-gray-100 dark:bg-neutral-800 p-4 shadow-lg"
                 >
