@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { Ingrediente } from '../../../Interfaces/ABM/Ingrediente'; 
+import { Ingrediente } from '../../../Interfaces/ABM/Ingrediente';
+import { backend_url } from '../../../Utils/ConstUtils';
 interface IngredienteAddOrUpdateProps {
   ingrediente: Ingrediente;
   imagen: File | null;
@@ -7,7 +8,7 @@ interface IngredienteAddOrUpdateProps {
 }
 
 export const getAllIngredientes = async () => {
-  const response = await axios.get('http://localhost:8080/api/v1/articulos-insumo');
+  const response = await axios.get(`${backend_url}/articulos-insumo`);
   try {
     return response.data;
   } catch (e) {
@@ -17,7 +18,7 @@ export const getAllIngredientes = async () => {
 };
 
 export const getIngredienteRegister = async (id: string | undefined) => {
-  const url = `http://localhost:8080/api/v1/articulos-insumo/${id}`;
+  const url = `${backend_url}/articulos-insumo/${id}`;
   try {
     const response = await axios.get(url);
     return response;
@@ -32,7 +33,7 @@ export const createIngredienteRegister = async ({
   imagen,
 }: IngredienteAddOrUpdateProps) => {
   try {
-    const url = 'http://localhost:8080/api/v1/articulos-insumo';
+    const url = `${backend_url}/articulos-insumo`;
     const formData = new FormData();
     formData.append(
       'insumo',
@@ -61,7 +62,7 @@ export const updateIngredienteRegister = async ({
   imagen,
 }: IngredienteAddOrUpdateProps) => {
   try {
-    const url = `http://localhost:8080/api/v1/articulos-insumo/${id}`;
+    const url = `${backend_url}/articulos-insumo/${id}`;
     const formData = new FormData();
     formData.append(
       'insumo',

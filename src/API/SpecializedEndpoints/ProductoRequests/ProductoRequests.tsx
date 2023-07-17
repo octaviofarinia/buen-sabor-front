@@ -2,6 +2,8 @@ import axios from 'axios';
 import { Producto } from '../../../Interfaces/ABM/Producto';
 import { createDetalle, updateDetalle } from './DetalleProductoRequests';
 import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto';
+import { backend_url } from '../../../Utils/ConstUtils';
+
 interface ProductoRequestProps {
   producto: Producto;
   detalles: DetalleProducto[];
@@ -10,7 +12,7 @@ interface ProductoRequestProps {
 }
 
 export const getAllProductos = async () => {
-  const url = `http://localhost:8080/api/v1/articulos-manufacturados`;
+  const url = `${backend_url}/articulos-manufacturados`;
   try {
     const response = await axios.get(url);
     return response;
@@ -20,7 +22,7 @@ export const getAllProductos = async () => {
   }
 };
 export const getProductoRegister = async (id: string | number | undefined) => {
-  const url = `http://localhost:8080/api/v1/articulos-manufacturados/${id}`;
+  const url = `${backend_url}/articulos-manufacturados/${id}`;
   try {
     const response = await axios.get(url);
     return response;
@@ -36,7 +38,7 @@ export const createProducto = async ({
   imagen,
 }: ProductoRequestProps) => {
   try {
-    const url = 'http://localhost:8080/api/v1/articulos-manufacturados';
+    const url = `${backend_url}/articulos-manufacturados`;
     const formData = new FormData();
     formData.append(
       'producto',
@@ -81,7 +83,7 @@ export const updateProducto = async ({
   id,
 }: ProductoRequestProps) => {
   try {
-    const url = `http://localhost:8080/api/v1/articulos-manufacturados/${id}`;
+    const url = `${backend_url}/articulos-manufacturados/${id}`;
     const formData = new FormData();
     formData.append(
       'producto',
