@@ -5,7 +5,6 @@ export interface Pedido {
   total: number;
   mpStatus?: string | null;
   tipoEnvio: string | null;
-  medioDePago: string | null;
   factura?: MPfactura | null;
   idDomicilioEntrega: null | number;
   auth0Id: string | undefined;

@@ -30,6 +30,7 @@ export const CarritoView = () => {
   const { user } = useAuth0();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const[medioDePago,setMedioDePago]=useState<string>(CartConstants.EFECTIVO);
   const [domicilios, setDomicilios] = useState<Domicilio[]>([]);
   const [selectedOption, setSelectedOption] = useState<string>('');
   const [preferenceId, setPreferenceId] = useState<string>('');
@@ -64,7 +65,6 @@ export const CarritoView = () => {
       .then((response) => {
         setPreferenceId(response.data.id);
         console.log(response.data);
-        localStorage.setItem('buenSaborCompra', response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -78,8 +78,8 @@ export const CarritoView = () => {
   useEffect(() => {
     getDomiciliosUsuario();
     obtenerProductosDelCarrito();
-    informacionPedido.medioDePago === CartConstants.MERCADO_PAGO && mercadoPagoPayment();
-  }, [user, informacionPedido.medioDePago, informacionPedido.tipoEnvio]);
+    medioDePago === CartConstants.MERCADO_PAGO && mercadoPagoPayment();
+  }, [user, medioDePago, informacionPedido.tipoEnvio]);
 
   return cart.length !== 0 ? (
     <div className="grid grid-cols-3">
@@ -181,7 +181,7 @@ export const CarritoView = () => {
                     <p>Mercado Pago</p>
                   </label>
                 </div>
-                {informacionPedido.medioDePago === 'MERCADO_PAGO' && (
+                {medioDePago === 'MERCADO_PAGO' && (
                   <div>
                     <img
                       src="https://imgmp.mlstatic.com/org-img/banners/ar/medios/785X40.jpg"
@@ -318,7 +318,7 @@ export const CarritoView = () => {
                   </span>
                 </div>
                 <div className="flex flex-col border-t border-neutral-200 py-2 transition-all duration-300 ease-in-out ">
-                  {informacionPedido.medioDePago !== CartConstants.MERCADO_PAGO ? (
+                  {medioDePago !== CartConstants.MERCADO_PAGO ? (
                     <Button
                       color="rojo"
                       fullsize={true}
