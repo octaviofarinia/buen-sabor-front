@@ -18,9 +18,11 @@ import { useTheme } from '../../context/ThemeProvider';
 import { useAuth0 } from '@auth0/auth0-react';
 import styles from './Header.module.css';
 import { frontend_url } from '../../Utils/ConstUtils';
+import { useCart } from '../../context/CarritoProvider';
 
 export const Header = () => {
   const { userRoles } = useUser();
+  const { cart } = useCart();
   const { isDarkMode, toggleTheme } = useTheme();
   const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
@@ -68,9 +70,10 @@ export const Header = () => {
               <div className="absolute inset-y-0 right-0 flex items-center gap-3 pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
                 <Link
                   to={'/Carrito'}
-                  className="rounded-full bg-neutral-800 p-1 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800"
+                  className="relative rounded-full bg-neutral-800 p-1 group text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800"
                 >
                   <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
+                  {<span className="absolute  -top-4 -right-1 bg-neutral-700 text-neutral-400 p-1 px-1.5 rounded-md group-hover:text-amber-500">{cart.length}</span>}
                 </Link>{' '}
                 <button
                   onClick={toggleTheme}
