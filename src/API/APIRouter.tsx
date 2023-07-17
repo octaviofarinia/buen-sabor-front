@@ -1,18 +1,17 @@
-
 export const APIRouter = (requestedCrud: string | undefined): string => {
   let endpointUrl = '';
   switch (requestedCrud) {
     case 'Productos':
-      endpointUrl = 'api/v1/articulos-manufacturados';
+      endpointUrl = 'articulos-manufacturados';
       return endpointUrl;
     case 'Categorias':
-      endpointUrl = 'api/v1/rubros-articulos';
+      endpointUrl = 'rubros-articulos';
       return endpointUrl;
     case 'UnidadDeMedida':
-      endpointUrl = 'api/v1/unidades-medida';
+      endpointUrl = 'unidades-medida';
       return endpointUrl;
     case 'Ingredientes':
-      endpointUrl = 'api/v1/articulos-insumo';
+      endpointUrl = 'articulos-insumo';
       return endpointUrl;
     default:
       return '';

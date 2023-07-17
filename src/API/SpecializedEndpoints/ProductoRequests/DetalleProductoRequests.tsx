@@ -1,12 +1,13 @@
 import axios from 'axios';
-import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto'; 
+import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto';
+import { backend_url } from '../../../Utils/ConstUtils';
 
 interface DetalleProductoRequestProps {
   detalle?: DetalleProducto;
   id?: string | number | null;
 }
 export const getDetalles = async ({ id }: DetalleProductoRequestProps) => {
-  const url = `http://localhost:8080/api/v1/articulos-manufacturados/${id}/detalles`;
+  const url = `${backend_url}/articulos-manufacturados/${id}/detalles`;
   try {
     const response = await axios.get(url);
 
@@ -19,7 +20,7 @@ export const getDetalles = async ({ id }: DetalleProductoRequestProps) => {
 
 export const createDetalle = async ({ detalle }: DetalleProductoRequestProps) => {
   try {
-    const url = 'http://localhost:8080/api/v1/detalles-articulos-manufacturados';
+    const url = `${backend_url}/detalles-articulos-manufacturados`;
     const response = await axios.post(url, detalle);
     return response;
   } catch (err) {
@@ -30,7 +31,7 @@ export const createDetalle = async ({ detalle }: DetalleProductoRequestProps) =>
 
 export const updateDetalle = async ({ detalle }: DetalleProductoRequestProps) => {
   try {
-    const url = 'http://localhost:8080/api/v1/detalles-articulos-manufacturados/' + detalle?.id;
+    const url = `${backend_url}/detalles-articulos-manufacturados/` + detalle?.id;
     const response = await axios.put(url, detalle);
     return response;
   } catch (err) {
@@ -40,8 +41,6 @@ export const updateDetalle = async ({ detalle }: DetalleProductoRequestProps) =>
 };
 
 export const deleteDetalle = async ({ id }: DetalleProductoRequestProps) => {
-  const response = await axios.delete(
-    `http://localhost:8080/api/v1/detalles-articulos-manufacturados/${id}`
-  );
+  const response = await axios.delete(`${backend_url}/detalles-articulos-manufacturados/${id}`);
   return response;
 };
