@@ -1,48 +1,72 @@
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Banner } from '../components/Banner/Banner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { useEffect } from 'react';
+import { faCheck, faWarning } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { backend_url } from '../Utils/ConstUtils';
-import { Pedido } from '../Interfaces/Pedido';
+import { Factura, Pedido } from '../Interfaces/Pedido';
+import CartConstants from '../Utils/Constants/CartConstants';
+import { useCart } from '../context/CarritoProvider';
+import { ToastAlert, notify } from '../components/Toast/ToastAlert';
+import { delayedRedirect } from '../Utils/NavigationUtils';
 export const PostPagoView = () => {
   const navigate = useNavigate();
-
+  const { resetCart } = useCart();
+  const [status, setStatus] = useState<boolean>(true);
+  const [timer, setTimer] = useState<number>(15);
   const generarPedido = async () => {
     let informacionPedidoString = localStorage.getItem('informacionPedido');
 
+    let factura: Factura = {
+      mpPaymentId: null,
+      mpMerchantOrderId: null,
+      mpPreferenceId: null,
+      mpPaymentType: null,
+      formaPago: CartConstants.EFECTIVO,
+    };
     if (informacionPedidoString !== null) {
       let pedido: Pedido = JSON.parse(informacionPedidoString);
-      pedido.factura = null;
-      
+      pedido.factura = factura;
+      console.log(pedido);
       await axios
         .post(`${backend_url}/pedidos`, pedido)
-        .then((res) => {
-          console.log(res.status);
+        .then(() => {
           localStorage.removeItem('informacionPedido');
-          localStorage.removeItem('buenSaborCart');
+          resetCart();
+          setStatus(true);
         })
         .catch((err) => {
-          console.error(err);
+          notify('Ocurrio un error: ' + err.message, 'error');
+          setStatus(false);
         });
+      delayedRedirect(() => navigate('/'), 15000);
     }
   };
 
   useEffect(() => {
     generarPedido();
+    const interval = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
   return (
     <div>
       {' '}
       <Banner
-        color="green"
-        icon={<FontAwesomeIcon icon={faCheck} size="lg" />}
-        text={`Listo. Generando el pedido, puedes volver al inicio. Recuerda abonar el pedido al recibirlo. Seras redirigido en 15 segundos`}
+        color={status ? 'green' : 'rose'}
+        icon={<FontAwesomeIcon icon={status ? faCheck : faWarning} size="lg" />}
+        text={
+          (status
+            ? `Listo. Generando el pedido, puedes volver al inicio. Recuerda abonar el pedido al recibirlo.`
+            : 'Ups. Ocurrio un error. ') + `Seras redirigido en ${timer} segundos`
+        }
         callback={() => {
           navigate('/');
         }}
       />
+      <ToastAlert />
     </div>
   );
 };

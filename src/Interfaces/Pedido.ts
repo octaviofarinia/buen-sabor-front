@@ -5,14 +5,14 @@ export interface Pedido {
   total: number;
   mpStatus?: string | null;
   tipoEnvio: string | null;
-  factura?: MPfactura | null;
+  factura?: Factura | null;
   idDomicilioEntrega: null | number;
   auth0Id: string | undefined;
   tiempoEstimadoFinalizacion: number;
   productos: DetallePedido[] | null;
 }
 
-export interface MPfactura {
+export interface Factura {
   mpPaymentId: number | null;
   mpMerchantOrderId: number | null;
   mpPreferenceId: string | null;

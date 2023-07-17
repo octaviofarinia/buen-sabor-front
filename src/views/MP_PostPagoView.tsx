@@ -2,25 +2,30 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Banner } from '../components/Banner/Banner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faClock, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { useEffect } from 'react';
+import { useEffect ,useState} from 'react';
 import axios from 'axios';
 import { backend_url } from '../Utils/ConstUtils';
-import { MPfactura, Pedido } from '../Interfaces/Pedido';
+import { Factura, Pedido } from '../Interfaces/Pedido';
 import CartConstants from '../Utils/Constants/CartConstants';
+import { useCart } from '../context/CarritoProvider';
+import { delayedRedirect } from '../Utils/NavigationUtils';
 export const MP_PostPagoView = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const status = queryParams.get('status');
+  const mpstatus = queryParams.get('status');
+  const { resetCart } = useCart();
+  const [status, setStatus] = useState<boolean>(true);
+  const [timer, setTimer] = useState<number>(15);
 
   const getBanner = () => {
-    switch (status) {
+    switch (mpstatus) {
       case 'approved':
         return (
           <Banner
             color="green"
             icon={<FontAwesomeIcon icon={faCheck} size="lg" />}
-            text={`El pago fue aprobado, generando el pedido, puedes volver al inicio. Seras redirigido en 15 segundos`}
+            text={`El pago fue aprobado, generando el pedido, puedes volver al inicio. Seras redirigido en ${timer} segundos`}
             callback={() => {
               navigate('/');
             }}
@@ -31,7 +36,7 @@ export const MP_PostPagoView = () => {
           <Banner
             color="amber"
             icon={<FontAwesomeIcon icon={faClock} size="lg" />}
-            text={`El pago no ha sido aprobado aun, cuando se confirme se generará pedido, puedes volver al inicio. Seras redirigido en 15 segundos`}
+            text={`El pago no ha sido aprobado aun, cuando se confirme se generará pedido, puedes volver al inicio. Seras redirigido en ${timer} segundos`}
             callback={() => {
               navigate('/');
             }}
@@ -42,7 +47,7 @@ export const MP_PostPagoView = () => {
           <Banner
             color="rose"
             icon={<FontAwesomeIcon icon={faXmark} size="lg" />}
-            text={`El pago no fue aprobado, no se generó el pedido, puedes volver al inicio. Seras redirigido en 15 segundos`}
+            text={`El pago no fue aprobado, no se generó el pedido, puedes volver al inicio. Seras redirigido en ${timer} segundos`}
             callback={() => {
               navigate('/');
             }}
@@ -54,7 +59,7 @@ export const MP_PostPagoView = () => {
   const generarPedido = async () => {
     let informacionPedidoString = localStorage.getItem('informacionPedido');
 
-    let mpStatus: MPfactura = {
+    let factura: Factura = {
       mpPaymentId: Number(queryParams.get('collection_id')),
       mpMerchantOrderId: Number(queryParams.get('merchant_order_id')),
       mpPreferenceId: queryParams.get('preference_id'),
@@ -63,14 +68,15 @@ export const MP_PostPagoView = () => {
     };
     if (informacionPedidoString !== null) {
       let pedido: Pedido = JSON.parse(informacionPedidoString);
-      pedido.factura = mpStatus;
-      if (status === 'approved') {
+      pedido.factura = factura;
+      if (mpstatus === 'approved') {
         await axios
           .post(`${backend_url}/pedidos`, pedido)
-          .then((res) => {
-            console.log(res.status);
+          .then(() => {
             localStorage.removeItem('informacionPedido');
-            localStorage.removeItem('buenSaborCart');
+            resetCart();
+            delayedRedirect(() => navigate('/'), 15000);
+
           })
           .catch((err) => {
             console.error(err);
@@ -81,6 +87,10 @@ export const MP_PostPagoView = () => {
 
   useEffect(() => {
     generarPedido();
+    const interval = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
   return <div>{getBanner()}</div>;
 };
