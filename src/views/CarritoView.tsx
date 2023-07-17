@@ -163,7 +163,7 @@ export const CarritoView = () => {
                       name="medioDePago"
                       required
                       defaultChecked={true}
-                      onChange={(e) => handleChange(e, informacionPedido, setInformacionPedido)}
+                      onChange={(e) => setMedioDePago(CartConstants.EFECTIVO)}
                       className="h-4 w-4 border-neutral-300 bg-neutral-100 text-amber-400 focus:rounded-full focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-amber-400"
                     />
                     <p>Efectivo</p>
@@ -176,7 +176,7 @@ export const CarritoView = () => {
                       required
                       name="medioDePago"
                       className="h-4 w-4 border-neutral-300 bg-neutral-100 text-amber-400 focus:rounded-full focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-amber-400"
-                      onChange={(e) => handleChange(e, informacionPedido, setInformacionPedido)}
+                      onChange={(e) => setMedioDePago(CartConstants.MERCADO_PAGO)}
                     />
                     <p>Mercado Pago</p>
                   </label>
