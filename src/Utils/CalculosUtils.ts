@@ -6,7 +6,7 @@ export const calcularSubtotal = (productosPedido: Producto[], detalles: DetalleP
 
   for (let producto of productosPedido) {
     if (producto.precioVenta !== null)
-      subtotal += producto.precioVenta * detalles[productosPedido.indexOf(producto)].cantidad;
+      subtotal += producto.precioVenta * detalles[productosPedido.indexOf(producto)]?.cantidad;
   }
   return subtotal;
 };

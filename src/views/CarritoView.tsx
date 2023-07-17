@@ -1,8 +1,11 @@
 import {
   faCheckCircle,
   faCreditCard,
+  faMinus,
   faMotorcycle,
+  faPlus,
   faShoppingCart,
+  faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState, useContext } from 'react';
@@ -26,11 +29,11 @@ import { Producto } from '../Interfaces/ABM/Producto';
 import { Pedido } from '../Interfaces/Pedido';
 
 export const CarritoView = () => {
-  const { cart } = useCart();
+  const { cart, removeFromCart, addToCart, reduceAmountFromCart, refresh } = useCart();
   const { user } = useAuth0();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const[medioDePago,setMedioDePago]=useState<string>(CartConstants.EFECTIVO);
+  const [medioDePago, setMedioDePago] = useState<string>(CartConstants.EFECTIVO);
   const [domicilios, setDomicilios] = useState<Domicilio[]>([]);
   const [selectedOption, setSelectedOption] = useState<string>('');
   const [preferenceId, setPreferenceId] = useState<string>('');
@@ -47,13 +50,11 @@ export const CarritoView = () => {
     informacionPedido.total = calcularSubtotal(cartItems, cart);
     informacionPedido.tiempoEstimadoFinalizacion = calcularTiempoEspera(cartItems);
     localStorage.setItem('informacionPedido', JSON.stringify(informacionPedido));
-    navigate('/PostPayment');
   };
   const getDomiciliosUsuario = async () => {
     const response = await getDomicilios(user?.sub != undefined ? user?.sub : '');
     setDomicilios(response.data);
     informacionPedido.idDomicilioEntrega = response.data[0].id;
-    console.log(response.data[0].id);
   };
   const mercadoPagoPayment = () => {
     axios
@@ -64,7 +65,6 @@ export const CarritoView = () => {
       })
       .then((response) => {
         setPreferenceId(response.data.id);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -78,9 +78,9 @@ export const CarritoView = () => {
   useEffect(() => {
     getDomiciliosUsuario();
     obtenerProductosDelCarrito();
-    medioDePago === CartConstants.MERCADO_PAGO && mercadoPagoPayment();
-  }, [user, medioDePago, informacionPedido.tipoEnvio]);
+  }, [user, medioDePago, informacionPedido.tipoEnvio, cart.length]);
 
+  useEffect(() => {}, [cart]);
   return cart.length !== 0 ? (
     <div className="grid grid-cols-3">
       <form
@@ -104,8 +104,11 @@ export const CarritoView = () => {
               </h2>
 
               {cartItems.map((item, index) => (
-                <div className="mb-1 " key={item.id}>
-                  <div className="flex h-full flex-col items-center justify-center border-b-2 border-neutral-200 p-3 text-center sm:flex-row sm:justify-start sm:text-left ">
+                <div
+                  className="mb-1 grid grid-cols-4 border-b-2 border-neutral-200"
+                  key={(item?.id + (item.denominacion ?? '')).toString()}
+                >
+                  <div className="col-span-3 flex h-full flex-col items-center justify-center  p-3 text-center sm:flex-row sm:justify-start sm:text-left ">
                     <img
                       alt={item.denominacion != null ? item.denominacion.toString() : ''}
                       className="mb-4 h-48 w-48 flex-shrink-0 rounded-lg object-cover object-center sm:mb-0"
@@ -122,16 +125,46 @@ export const CarritoView = () => {
                           </h3>
                           <p className="mb-4 dark:text-zinc-100">{item.descripcion}</p>
                         </div>
-                        <div className=" mt-auto">
+                        <div className=" mt-auto ">
+                          <div className="flex items-center gap-5 pb-5">
+                            <Button
+                              content={<FontAwesomeIcon icon={faMinus} size="lg" />}
+                              type="button"
+                              color="negro"
+                              callback={() => {
+                                reduceAmountFromCart(cart[index]);
+                              }}
+                            />
+                            <h5 className="text-2xl font-bold dark:text-zinc-100">
+                              Cantidad:{' '}
+                              <span className="text-amber-500">{cart[index]?.cantidad}</span>
+                            </h5>
+                            <Button
+                              content={<FontAwesomeIcon icon={faPlus} size="lg" />}
+                              type="button"
+                              color="negro"
+                              callback={() => {
+                                addToCart(cart[index]);
+                              }}
+                            />
+                          </div>
                           <h5 className="mb-4 text-2xl font-bold dark:text-zinc-100">
-                            Cantidad: <span className="text-amber-500">{cart[index].cantidad}</span>
-                          </h5>
-                          <h5 className="mb-4 text-2xl font-bold dark:text-zinc-100">
-                            ${item.precioVenta}
+                            Precio unitario:{' '}
+                            <span className="text-green-500">${item.precioVenta}</span>
                           </h5>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div className="col-span-1 flex items-center justify-end p-4">
+                    <Button
+                      content={<FontAwesomeIcon icon={faTrashCan} size="lg" />}
+                      type="button"
+                      color="rojo"
+                      callback={() => {
+                        removeFromCart(cart[index]);
+                      }}
+                    />
                   </div>
                 </div>
               ))}
@@ -176,7 +209,9 @@ export const CarritoView = () => {
                       required
                       name="medioDePago"
                       className="h-4 w-4 border-neutral-300 bg-neutral-100 text-amber-400 focus:rounded-full focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-amber-400"
-                      onChange={(e) => setMedioDePago(CartConstants.MERCADO_PAGO)}
+                      onChange={(e) => {
+                        setMedioDePago(CartConstants.MERCADO_PAGO), mercadoPagoPayment();
+                      }}
                     />
                     <p>Mercado Pago</p>
                   </label>
@@ -325,6 +360,9 @@ export const CarritoView = () => {
                       type="submit"
                       textSize="text-2xl"
                       content="Confirmar pedido y pagar"
+                      callback={() => {
+                        navigate('/PostPayment');
+                      }}
                     />
                   ) : (
                     <Wallet

@@ -69,6 +69,8 @@ export const MP_PostPagoView = () => {
           .post(`${backend_url}/pedidos`, pedido)
           .then((res) => {
             console.log(res.status);
+            localStorage.removeItem('informacionPedido');
+            localStorage.removeItem('buenSaborCart');
           })
           .catch((err) => {
             console.error(err);

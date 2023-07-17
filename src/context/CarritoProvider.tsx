@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DetallePedido } from '../Interfaces/DetallePedido';
 
-
 interface CartContextProps {
   cart: DetallePedido[];
   addToCart: (detalle: DetallePedido) => void;
@@ -27,52 +26,50 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const addToCart = async (detalle: DetallePedido) => {
-    let addProduct = false;
-    for (const detallePedido of cart) {
-      if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
-        detalle.cantidad = detallePedido.cantidad++;
-        const newCart = [...cart];
-        setCart([...cart]);
-        localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
-        addProduct = true;
-        break;
-      }
+  const addToCart = (detalle: DetallePedido) => {
+    const existingProduct = cart.find(
+      (detallePedido) => detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado
+    );
+  
+    if (existingProduct) {
+      existingProduct.cantidad += 1;
+    } else {
+      const newDetalle = { ...detalle, cantidad: 1 };
+      cart.push(newDetalle);
     }
-
-    if (addProduct === false) {
-      const newCart = [...cart, detalle];
-      setCart([...cart, detalle]);
-      localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
-    }
+  
+    localStorage.setItem('buenSaborCart', JSON.stringify(cart));
+    setCart([...cart]); // Crear una nueva referencia del array para que React detecte el cambio
   };
-
+  
+  
   const removeFromCart = (detalle: DetallePedido) => {
-    for (const detallePedido of cart) {
-      if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
-        cart.splice(cart.indexOf(detallePedido), 1);
-        const newCart = [...cart];
-        localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
-        setCart([...cart]);
-        break;
-      }
-    }
+    const updatedCart = cart.filter(
+      (detallePedido) => detallePedido.idArticuloManufacturado !== detalle.idArticuloManufacturado
+    );
+
+    localStorage.setItem('buenSaborCart', JSON.stringify(updatedCart));
+    setCart(updatedCart);
   };
+
   const reduceAmountFromCart = (detalle: DetallePedido) => {
     for (const detallePedido of cart) {
       if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
-        detalle.cantidad = detalle.cantidad--;
-        const newCart = [...cart];
-        localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
-        setCart([...cart]);
+        if (detalle.cantidad === 1) {
+          removeFromCart(detalle);
+        } else {
+          detalle.cantidad--;
+          const newCart = [...cart];
+          localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
+          setCart(newCart);
+        }
         break;
       }
     }
   };
+
   return (
-    <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, reduceAmountFromCart }}
-    >
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, reduceAmountFromCart }}>
       {children}
     </CartContext.Provider>
   );
