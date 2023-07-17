@@ -16,6 +16,7 @@ import { over } from 'stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
 import axios from 'axios';
 import { EstadosSelect, PedidoStatus, setEstadoDePedido } from '../../Utils/PlanillaUtils';
+import { backend_url } from '../../Utils/ConstUtils';
 
 export const PedidosView = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +27,7 @@ export const PedidosView = () => {
 
   const getPedidos = (estado: string | null) => {
     axios
-      .get(`http://localhost:8080/api/v1/pedidos/listar`, {
+      .get(`${backend_url}/pedidos/listar`, {
         params: {
           estado: estado,
         },
@@ -47,7 +48,7 @@ export const PedidosView = () => {
 
   //WEB SOCKET
   const createSocket = () => {
-    let Sock = new SockJS('http://localhost:8080/ws');
+    let Sock = new SockJS(`${backend_url}/ws`);
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
   };
