@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Banner } from '../components/Banner/Banner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faClock, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { useEffect ,useState} from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { backend_url } from '../Utils/ConstUtils';
 import { Factura, Pedido } from '../Interfaces/Pedido';
@@ -15,7 +15,6 @@ export const MP_PostPagoView = () => {
   const queryParams = new URLSearchParams(location.search);
   const mpstatus = queryParams.get('status');
   const { resetCart } = useCart();
-  const [status, setStatus] = useState<boolean>(true);
   const [timer, setTimer] = useState<number>(15);
 
   const getBanner = () => {
@@ -29,6 +28,7 @@ export const MP_PostPagoView = () => {
             callback={() => {
               navigate('/');
             }}
+            homeButton={true}
           />
         );
       case 'pending':
@@ -40,6 +40,7 @@ export const MP_PostPagoView = () => {
             callback={() => {
               navigate('/');
             }}
+            homeButton={true}
           />
         );
       case 'rejected':
@@ -51,6 +52,7 @@ export const MP_PostPagoView = () => {
             callback={() => {
               navigate('/');
             }}
+            homeButton={true}
           />
         );
     }
@@ -58,7 +60,6 @@ export const MP_PostPagoView = () => {
 
   const generarPedido = async () => {
     let informacionPedidoString = localStorage.getItem('informacionPedido');
-
     let factura: Factura = {
       mpPaymentId: Number(queryParams.get('collection_id')),
       mpMerchantOrderId: Number(queryParams.get('merchant_order_id')),
@@ -66,23 +67,26 @@ export const MP_PostPagoView = () => {
       mpPaymentType: queryParams.get('payment_type'),
       formaPago: CartConstants.MERCADO_PAGO,
     };
+    const cancelToken = axios.CancelToken.source();
+
     if (informacionPedidoString !== null) {
       let pedido: Pedido = JSON.parse(informacionPedidoString);
       pedido.factura = factura;
       if (mpstatus === 'approved') {
         await axios
-          .post(`${backend_url}/pedidos`, pedido)
+          .post(`${backend_url}/pedidos`, pedido, {
+            cancelToken: cancelToken.token,
+          })
           .then(() => {
             localStorage.removeItem('informacionPedido');
             resetCart();
-            delayedRedirect(() => navigate('/'), 15000);
-
           })
           .catch((err) => {
             console.error(err);
           });
       }
     }
+    return () => cancelToken.cancel();
   };
 
   useEffect(() => {
@@ -90,7 +94,12 @@ export const MP_PostPagoView = () => {
     const interval = setInterval(() => {
       setTimer((prev) => prev - 1);
     }, 1000);
-    return () => clearInterval(interval);
+    const timeout = delayedRedirect(() => navigate('/'), 15000);
+    return () => {
+      generarPedido();
+      clearInterval(interval);
+      clearInterval(timeout);
+    };
   }, []);
   return <div>{getBanner()}</div>;
 };

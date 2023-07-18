@@ -15,9 +15,9 @@ export const PostPagoView = () => {
   const { resetCart } = useCart();
   const [status, setStatus] = useState<boolean>(true);
   const [timer, setTimer] = useState<number>(15);
+
   const generarPedido = async () => {
     let informacionPedidoString = localStorage.getItem('informacionPedido');
-
     let factura: Factura = {
       mpPaymentId: null,
       mpMerchantOrderId: null,
@@ -25,31 +25,40 @@ export const PostPagoView = () => {
       mpPaymentType: null,
       formaPago: CartConstants.EFECTIVO,
     };
+    const cancelToken = axios.CancelToken.source();
     if (informacionPedidoString !== null) {
       let pedido: Pedido = JSON.parse(informacionPedidoString);
       pedido.factura = factura;
       console.log(pedido);
       await axios
-        .post(`${backend_url}/pedidos`, pedido)
+        .post(`${backend_url}/pedidos`, pedido, {
+          cancelToken: cancelToken.token,
+        })
         .then(() => {
           localStorage.removeItem('informacionPedido');
           resetCart();
           setStatus(true);
         })
         .catch((err) => {
-          notify('Ocurrio un error: ' + err.message, 'error');
-          setStatus(false);
+          if (axios.isCancel(err)) {
+            notify('Ocurrio un error: ' + err.message, 'error');
+            setStatus(false);
+          }
         });
-      delayedRedirect(() => navigate('/'), 15000);
     }
+    return () => cancelToken.cancel();
   };
 
   useEffect(() => {
-    generarPedido();
     const interval = setInterval(() => {
       setTimer((prev) => prev - 1);
     }, 1000);
-    return () => clearInterval(interval);
+    const timeout = delayedRedirect(() => navigate('/'), 15000);
+    return () => {
+      generarPedido();
+      clearInterval(interval);
+      clearInterval(timeout);
+    };
   }, []);
   return (
     <div>
@@ -65,6 +74,7 @@ export const PostPagoView = () => {
         callback={() => {
           navigate('/');
         }}
+        homeButton={true}
       />
       <ToastAlert />
     </div>

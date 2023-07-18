@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState, useContext } from 'react';
 import { Button } from '../components/Botones/Button';
 import { handleChange, handleSelectChange } from '../Utils/FormUtils';
-import { ToastAlert } from '../components/Toast/ToastAlert';
+import { ToastAlert, notify } from '../components/Toast/ToastAlert';
 import { Domicilio } from '../Interfaces/Domicilio';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getDomicilios } from '../API/SpecializedEndpoints/DomicilioRequests/DomicilioRequests';
@@ -27,10 +27,12 @@ import { base_pedido } from '../Interfaces/ABM/InterfaceDelivery';
 import { getProductosDelCarrito } from '../API/SpecializedEndpoints/PedidoRequests/CarritoRequest';
 import { Producto } from '../Interfaces/ABM/Producto';
 import { Pedido } from '../Interfaces/Pedido';
+import { useTheme } from '../context/ThemeProvider';
 
 export const CarritoView = () => {
   const { cart, removeFromCart, addToCart, reduceAmountFromCart } = useCart();
   const { user } = useAuth0();
+  const { isDarkMode } = useTheme();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [medioDePago, setMedioDePago] = useState<string>(CartConstants.EFECTIVO);
@@ -56,6 +58,7 @@ export const CarritoView = () => {
     informacionPedido.idDomicilioEntrega = response.data[0].id;
   };
   const mercadoPagoPayment = () => {
+    const cancelToken = axios.CancelToken.source();
     axios
       .post(backend_url + '/mercado-pago/create-preference', cart, {
         headers: {
@@ -66,8 +69,11 @@ export const CarritoView = () => {
         setPreferenceId(response.data.id);
       })
       .catch((error) => {
-        console.error(error);
+        if (axios.isCancel(error)) {
+          console.error(error);
+        }
       });
+    return () => cancelToken.cancel();
   };
   const obtenerProductosDelCarrito = async () => {
     const productos = await getProductosDelCarrito();
@@ -75,24 +81,26 @@ export const CarritoView = () => {
   };
 
   useEffect(() => {
-    getDomiciliosUsuario();
-    obtenerProductosDelCarrito();
-  }, [user, medioDePago, informacionPedido.tipoEnvio, cart.length]);
+    return () => {
+      getDomiciliosUsuario();
+      obtenerProductosDelCarrito();
+    };
+  }, [user, medioDePago, cart.length]);
 
   return cart.length !== 0 ? (
     <div className="grid grid-cols-3">
       <form
-        className="col-span-3 flex w-full flex-wrap bg-zinc-100 px-5 py-5 dark:bg-neutral-800 xl:col-span-2"
+        className="col-span-3 flex w-full flex-wrap bg-neutral-100 px-5 py-5 dark:bg-neutral-800 xl:col-span-2"
         onSubmit={(e) => {
           e.preventDefault();
-          savePedidoData()
+          savePedidoData();
         }}
       >
         <div className="relative mx-auto flex w-full pt-10 pb-20 sm:items-center md:w-11/12">
           <div className="absolute inset-0 flex h-full w-6 items-center justify-center">
-            <div className="pointer-events-none h-full w-1 bg-neutral-200" />
+            <div className="pointer-events-none h-full w-1 bg-neutral-200 dark:bg-neutral-400"  />
           </div>
-          <div className="title-font relative z-10 mt-10 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-sm font-medium text-zinc-100 sm:mt-0">
+          <div className="title-font relative z-10 mt-10 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-sm font-medium text-neutral-300 sm:mt-0">
             1
           </div>
           <div className="flex flex-grow flex-col items-start pl-6 sm:flex-row sm:items-center md:pl-8">
@@ -100,13 +108,13 @@ export const CarritoView = () => {
               <FontAwesomeIcon icon={faShoppingCart} size="2xl" />
             </div>
             <div className="mt-6 w-full flex-grow sm:mt-0 sm:pl-6">
-              <h2 className="title-font mb-1 border-b-4 border-amber-400 text-3xl font-medium text-neutral-900 dark:text-zinc-100 ">
+              <h2 className="title-font mb-1 border-b-4 border-amber-400 text-3xl font-medium text-neutral-900 dark:text-neutral-300 ">
                 Tus productos
               </h2>
 
               {cartItems.map((item, index) => (
                 <div
-                  className="mb-1 grid grid-cols-4 border-b-2 border-neutral-200"
+                  className="mb-1 grid grid-cols-4 border-b-2 border-neutral-200 dark:border-neutral-500"
                   key={(item?.id + (item.denominacion ?? '')).toString()}
                 >
                   <div className="col-span-3 flex h-full flex-col items-center justify-center  p-3 text-center sm:flex-row sm:justify-start sm:text-left ">
@@ -118,13 +126,13 @@ export const CarritoView = () => {
                     <div className=" flex-grow sm:pl-8">
                       <div className="flex h-full flex-col ">
                         <div>
-                          <h2 className="title-font text-3xl font-medium text-neutral-900 dark:text-zinc-100">
+                          <h2 className="title-font text-3xl font-medium text-neutral-900 dark:text-neutral-300">
                             {item.denominacion}
                           </h2>
-                          <h3 className="mb-3 text-xl text-amber-500 dark:text-zinc-100">
+                          <h3 className="mb-3 text-xl text-amber-500 dark:text-neutral-300">
                             buen sabor
                           </h3>
-                          <p className="mb-4 dark:text-zinc-100">{item.descripcion}</p>
+                          <p className="mb-4 dark:text-neutral-300">{item.descripcion}</p>
                         </div>
                         <div className=" mt-auto ">
                           <div className="flex items-center gap-5 pb-5">
@@ -136,7 +144,7 @@ export const CarritoView = () => {
                                 reduceAmountFromCart(cart[index]);
                               }}
                             />
-                            <h5 className="text-2xl font-bold dark:text-zinc-100">
+                            <h5 className="text-2xl font-bold dark:text-neutral-300">
                               Cantidad:{' '}
                               <span className="text-amber-500">{cart[index]?.cantidad}</span>
                             </h5>
@@ -149,7 +157,7 @@ export const CarritoView = () => {
                               }}
                             />
                           </div>
-                          <h5 className="mb-4 text-2xl font-bold dark:text-zinc-100">
+                          <h5 className="mb-4 text-2xl font-bold dark:text-neutral-300">
                             Precio unitario:{' '}
                             <span className="text-green-500">${item.precioVenta}</span>
                           </h5>
@@ -174,9 +182,9 @@ export const CarritoView = () => {
         </div>
         <div className="relative mx-auto flex w-full pb-20 sm:items-center md:w-11/12">
           <div className="absolute inset-0 flex h-full w-6 items-center justify-center">
-            <div className="pointer-events-none h-full w-1 bg-neutral-200" />
+            <div className="pointer-events-none h-full w-1 bg-neutral-200 dark:bg-neutral-400" />
           </div>
-          <div className="title-font relative z-10 mt-10 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-sm font-medium text-zinc-100 sm:mt-0">
+          <div className="title-font relative z-10 mt-10 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-sm font-medium text-neutral-300 sm:mt-0">
             2
           </div>
           <div className="flex flex-grow flex-col items-start pl-6 sm:flex-row sm:items-center ">
@@ -184,13 +192,13 @@ export const CarritoView = () => {
               <FontAwesomeIcon icon={faCreditCard} size="2xl" />
             </div>
             <div className="mt-6 w-full flex-grow sm:mt-0 sm:pl-6">
-              <h2 className="title-font mb-1 border-b-4 border-amber-400 text-3xl font-medium text-neutral-900 dark:text-zinc-100 ">
+              <h2 className="title-font mb-1 border-b-4 border-amber-400 text-3xl font-medium text-neutral-900 dark:text-neutral-300 ">
                 Medios de pago
               </h2>
 
               <div className="flex flex-col items-start justify-center gap-6 p-4 text-2xl ">
                 <div className="flex flex-col  gap-2 rounded-full border-4 border-amber-300 py-2 px-4 sm:flex-row md:gap-3">
-                  <label className="flex items-center gap-3 dark:text-zinc-100">
+                  <label className="flex items-center gap-3 dark:text-neutral-300">
                     <input
                       type="radio"
                       value={CartConstants.EFECTIVO}
@@ -203,7 +211,7 @@ export const CarritoView = () => {
                     <p>Efectivo</p>
                   </label>
 
-                  <label className="flex items-center gap-3 dark:text-zinc-100">
+                  <label className="flex items-center gap-3 dark:text-neutral-300">
                     <input
                       type="radio"
                       value={CartConstants.MERCADO_PAGO}
@@ -243,9 +251,9 @@ export const CarritoView = () => {
         </div>
         <div className="relative mx-auto flex w-full pb-20 sm:items-center md:w-11/12">
           <div className="absolute inset-0 flex h-full w-6 items-center justify-center">
-            <div className="pointer-events-none h-full w-1 bg-neutral-200" />
+            <div className="pointer-events-none h-full w-1 bg-neutral-200 dark:bg-neutral-400" />
           </div>
-          <div className="title-font relative z-10 mt-10 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-sm font-medium text-zinc-100 sm:mt-0">
+          <div className="title-font relative z-10 mt-10 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-sm font-medium text-neutral-300 sm:mt-0">
             3
           </div>
           <div className="flex flex-grow flex-col items-start pl-6 sm:flex-row sm:items-center md:pl-8">
@@ -253,12 +261,12 @@ export const CarritoView = () => {
               <FontAwesomeIcon icon={faMotorcycle} size="2xl" />
             </div>
             <div className="mt-6 w-full flex-grow sm:mt-0 sm:pl-6">
-              <h2 className="title-font mb-1 border-b-4 border-amber-400 text-3xl font-medium text-neutral-900 dark:text-zinc-100 ">
+              <h2 className="title-font mb-1 border-b-4 border-amber-400 text-3xl font-medium text-neutral-900 dark:text-neutral-300 ">
                 Método de Envio
               </h2>
               <div className="flex flex-col items-start justify-center gap-6 p-4 text-2xl ">
                 <div className="flex flex-col  gap-2 rounded-full border-4 border-amber-300 py-2 px-4 sm:flex-row md:gap-3">
-                  <label className="flex items-center gap-3 dark:text-zinc-100">
+                  <label className="flex items-center gap-3 dark:text-neutral-300">
                     <input
                       type="radio"
                       value={CartConstants.RETIRO_EN_LOCAL}
@@ -271,7 +279,7 @@ export const CarritoView = () => {
                     <p>Retiro</p>
                   </label>
 
-                  <label className="flex items-center gap-3 dark:text-zinc-100">
+                  <label className="flex items-center gap-3 dark:text-neutral-300">
                     <input
                       type="radio"
                       value={CartConstants.DELIVERY}
@@ -290,7 +298,7 @@ export const CarritoView = () => {
                 </div>
                 {informacionPedido.tipoEnvio === CartConstants.DELIVERY && (
                   <div className="flex flex-col px-4 md:gap-3">
-                    <h2 className="text-xl text-neutral-800 dark:text-zinc-100">
+                    <h2 className="text-xl text-neutral-800 dark:text-neutral-300">
                       Selecciona tu domicilio
                     </h2>
                     <select
@@ -305,7 +313,7 @@ export const CarritoView = () => {
                         </option>
                       ))}
                     </select>
-                    <h2 className="text-xl text-neutral-800 dark:text-zinc-100">
+                    <h2 className="text-xl text-neutral-800 dark:text-neutral-300">
                       O agrega uno nuevo
                     </h2>
                     <Button
@@ -322,9 +330,9 @@ export const CarritoView = () => {
         </div>
         <div className="relative mx-auto flex w-full pb-10 sm:items-center md:w-11/12">
           <div className="absolute inset-0 flex h-full w-6 items-center justify-center">
-            <div className="pointer-events-none h-full w-1 bg-neutral-200" />
+            <div className="pointer-events-none h-full w-1 bg-neutral-200 dark:bg-neutral-400" />
           </div>
-          <div className="title-font relative z-10 mt-10 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-sm font-medium text-zinc-100 sm:mt-0">
+          <div className="title-font relative z-10 mt-10 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-sm font-medium text-neutral-300 sm:mt-0">
             4
           </div>
           <div className="flex flex-grow flex-col items-start pl-6 sm:flex-row sm:items-center md:pl-8">
@@ -332,24 +340,24 @@ export const CarritoView = () => {
               <FontAwesomeIcon icon={faCheckCircle} size="2xl" />
             </div>
             <div className="mt-6 w-full flex-grow sm:mt-0 sm:pl-6">
-              <h2 className="title-font mb-1 border-b-4 border-amber-400 text-3xl font-medium text-neutral-900 dark:text-zinc-100 ">
+              <h2 className="title-font mb-1 border-b-4 border-amber-400 text-3xl font-medium text-neutral-900 dark:text-neutral-300 ">
                 Confirmación de Pedido
               </h2>
               <div className="w-full ">
-                <h3 className="title-font my-3 text-xl font-medium text-neutral-900 dark:text-zinc-100">
+                <h3 className="title-font my-3 text-xl font-medium text-neutral-900 dark:text-neutral-300">
                   Información del pedido
                 </h3>
                 <div className="flex border-t border-neutral-200 py-2">
-                  <span className="text-neutral-500 dark:text-zinc-200">
+                  <span className="text-neutral-500 dark:text-neutral-200">
                     Tiempo estimado de entrega
                   </span>
-                  <span className="ml-auto text-neutral-900 dark:text-zinc-100">
+                  <span className="ml-auto text-neutral-900 dark:text-neutral-300">
                     {calcularTiempoEspera(cartItems)} minutos
                   </span>
                 </div>
                 <div className="flex border-t border-neutral-200 py-2">
-                  <span className="text-neutral-500 dark:text-zinc-200">Subtotal</span>
-                  <span className="ml-auto text-neutral-900 dark:text-zinc-100">
+                  <span className="text-neutral-500 dark:text-neutral-200">Subtotal</span>
+                  <span className="ml-auto text-neutral-900 dark:text-neutral-300">
                     ${calcularSubtotal(cartItems, cart)}
                   </span>
                 </div>
@@ -379,10 +387,15 @@ export const CarritoView = () => {
         </div>
         <ToastAlert />
       </form>
-      <div className="col-span-1 hidden h-full  bg-zinc-100  px-5 py-5 text-neutral-500 dark:bg-neutral-800 xl:block ">
+      <div className="col-span-1 hidden h-full  bg-neutral-100  px-5 py-5 text-neutral-500 dark:bg-neutral-800 xl:block ">
         <div className="flex w-full flex-col items-center justify-center">
-          <img src={'/logoBlack.png'} alt="logo" />
-          <h2 className="text-center text-4xl text-neutral-900 dark:text-zinc-100">
+          {isDarkMode ? (
+            <img src={'/logoWhite.png'} alt="logo" />
+          ) : (
+            <img src={'/logoBlack.png'} alt="logo" />
+          )}
+
+          <h2 className="text-center text-4xl text-neutral-900 dark:text-neutral-300">
             ¡Gracias por elegirnos!
           </h2>
         </div>
@@ -391,7 +404,7 @@ export const CarritoView = () => {
   ) : (
     <div className="flex justify-center gap-4 py-5 px-5">
       <ToastAlert />
-      <h2 className="flex-auto rounded-md bg-rose-500 p-8 text-center text-4xl text-zinc-100">
+      <h2 className="flex-auto rounded-md bg-rose-500 p-8 text-center text-4xl text-neutral-300">
         Ups! Aun no has agregado nada
       </h2>
       <Button

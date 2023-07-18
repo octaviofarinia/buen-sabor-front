@@ -51,7 +51,7 @@ export const Header = () => {
                   className="inline-flex items-center gap-2.5 text-lg font-bold uppercase text-amber-400 md:text-3xl"
                   aria-label="logo"
                 >
-                  <img src={'/logo5.png'} alt="logo" className="max-w-100 object-contain " />
+                  <img src={'/logoWhite.png'} alt="logo" className="max-w-100 object-contain " />
                 </Link>
                 <div className="hidden md:ml-6 md:flex md:items-center">
                   <div className="flex items-center gap-2.5">
