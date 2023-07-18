@@ -4,13 +4,12 @@ import { Link } from 'react-router-dom';
 import { faGithubSquare } from '@fortawesome/fontawesome-free-brands';
 import { Banner } from '../Banner/Banner';
 
-export const Footer: React.FC<{}> = () => {
-
+export const Footer = () => {
   return (
-    <footer className="body-font bg-neutral-900 text-slate-900 -z-10 ">
+    <footer className="body-font bg-neutral-900 text-slate-900 ">
       <div className="text sm container mx-auto p-3 px-5 lg:text-lg">
         <div className="order-first flex  flex-wrap text-center sm:text-left ">
-          <div className="flex h-72  w-full flex-col  gap-3 overflow-hidden px-4 pt-8 text-zinc-100 sm:w-1/2 lg:w-1/3">
+          <div className="flex h-72  w-full flex-col  gap-3 overflow-hidden px-4 pt-8 text-neutral-100 sm:w-1/2 lg:w-1/3">
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">el buen sabor</h2>
             <Link
               to="/"
@@ -41,23 +40,18 @@ export const Footer: React.FC<{}> = () => {
               <p>Nuestro Equipo</p>
             </Link>
           </div>
-          <div className="flex w-full flex-col gap-3 px-4 pt-8  text-zinc-100 sm:w-1/2  lg:w-1/3">
+          <div className="flex w-full flex-col gap-3 px-4 pt-8  text-neutral-100 sm:w-1/2  lg:w-1/3">
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">Formas de Retiro</h2>
             <div className="flex items-center justify-center gap-5 sm:items-start sm:justify-start">
               <img src="/Take Away Cartel.png" alt="" className="w-24" />
               <img src="/Delivery Cartel.png" alt="" className="w-24" />
             </div>
           </div>
-          <div className="flex flex-col w-full overflow-hidden  lg:w-1/3">
-           
-              
-                <Banner
-                  color="amber"
-                  icon={<FontAwesomeIcon icon={faFaceKissBeam} size="xl" />}
-                  text="Nos encanta que nos visites"
-                />
-             
-           
+          <div className="flex w-full flex-col justify-center overflow-hidden   lg:w-1/3">
+            <div className="flex gap-5 bg-amber-500 p-5 md:p-12 text-neutral-100 rounded-lg mx-auto">
+              <h5 className="text-lg md:text-2xl">Nos encanta que nos visites</h5>
+              <FontAwesomeIcon icon={faFaceKissBeam} size="xl" />
+            </div>
           </div>
         </div>
       </div>
@@ -78,7 +72,7 @@ export const Footer: React.FC<{}> = () => {
             <a
               href="https://github.com/FrancoMinati"
               rel="noopener noreferrer"
-              className="ml-1 flex  gap-2  text-zinc-400 hover:text-zinc-200"
+              className="ml-1 flex  gap-2  text-neutral-400 hover:text-neutral-200"
               target="_blank"
             >
               <FontAwesomeIcon icon={faGithubSquare} size="xl" />
@@ -87,7 +81,7 @@ export const Footer: React.FC<{}> = () => {
             <a
               href="https://github.com/octaviofarinia"
               rel="noopener noreferrer"
-              className="ml-1 flex gap-2 text-sm text-base  text-zinc-400 hover:text-zinc-200 sm:text-base"
+              className="ml-1 flex gap-2 text-sm text-base  text-neutral-400 hover:text-neutral-200 sm:text-base"
               target="_blank"
             >
               <FontAwesomeIcon icon={faGithubSquare} size="xl" />

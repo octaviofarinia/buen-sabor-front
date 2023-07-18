@@ -59,7 +59,7 @@ export const Header = () => {
                       <Link
                         key={item.path}
                         to={item.path}
-                        className="flex items-center rounded-md p-1 text-sm text-amber-400 hover:bg-neutral-800 hover:text-amber-500 active:text-amber-500 lg:text-lg xl:px-3 xl:py-2"
+                        className="flex items-center rounded-md p-1 text-sm text-amber-400  hover:border-b-amber-400 hover:bg-neutral-800 hover:text-amber-500 hover:duration-300 hover:ease-in-out active:text-amber-500 lg:text-lg xl:px-3 xl:py-2 hover:border-b-4"
                       >
                         {item.name}
                       </Link>
