@@ -5,11 +5,10 @@ import { ClientMain } from '../views/ClientMain';
 import { PreguntasView } from '../views/staticViews/PreguntasView';
 import { ProductDetailView } from '../views/ProductDetail';
 import { ProductsView } from '../views/ProductsView';
-import PlanillaPedido from '../views/websocket/PlanillaPedido';
 import { TeamView } from '../views/staticViews/TeamView';
-import FakeCartView from '../views/mp/FakeCartView';
 import { MP_PostPagoView } from '../views/MP_PostPagoView';
 import { PostPagoView } from '../views/PostPagoView';
+import { PerfilView } from '../views/PerfilView';
 
 const ClientDinamicRoutes = [
   { path: 'Productos/:categoria', element: '' },
@@ -18,8 +17,7 @@ const ClientDinamicRoutes = [
   { path: '/Domicilio', element: <AuthenticationGuard component={CargaDomicilioView} /> },
   { path: '/MP_PostPayment', element: <AuthenticationGuard component={MP_PostPagoView} /> },
   { path: '/PostPayment', element: <AuthenticationGuard component={PostPagoView} /> },
-  { name: 'PEDIDOS', path: '/Pedidos', element: <PlanillaPedido /> },
-  { name: 'FAKE CART', path: '/FakeCart', element: <FakeCartView /> },
+  { name: '/Perfil', path: '/perfil', element: <AuthenticationGuard component={PerfilView} /> },
 ];
 
 export const ClientStaticRoutes = [
