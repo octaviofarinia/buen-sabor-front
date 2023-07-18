@@ -87,8 +87,9 @@ export const CarritoView = () => {
     return () => {
       getDomiciliosUsuario();
       obtenerProductosDelCarrito();
+      mercadoPagoPayment();
     };
-  }, [user, medioDePago, cart.length]);
+  }, [user, cart.length]);
 
   return cart.length !== 0 ? (
     <>
@@ -383,7 +384,7 @@ export const CarritoView = () => {
   ) : (
     <div className="flex justify-center gap-4 py-5 px-5">
       <ToastAlert />
-      <h2 className="flex-auto rounded-md bg-rose-500 p-8 text-center text-4xl text-neutral-300">
+      <h2 className="flex-auto rounded-md bg-rose-500 p-8 text-center text-4xl text-neutral-100">
         Ups! Aun no has agregado nada
       </h2>
       <Button
