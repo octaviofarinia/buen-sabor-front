@@ -5,10 +5,13 @@ import axios, { AxiosError } from 'axios';
 import { ToastAlert, notify } from '../components/Toast/ToastAlert';
 import { getAllProductos } from '../API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faFaceSadTear, faHand, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { simpleHandleChange } from '../Utils/FormUtils';
 import { MoonLoader } from 'react-spinners';
 import { useLocation } from 'react-router-dom';
+import { backend_url } from '../Utils/ConstUtils';
+import { Banner } from '../components/Banner/Banner';
+import { Button } from '../components/Botones/Button';
 
 export const ProductsView = () => {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -18,21 +21,32 @@ export const ProductsView = () => {
   const queryParams = new URLSearchParams(location.search);
   const filtro = queryParams.get('filtro');
 
-  const getProductos = async () => {
+  const getProductos = async (filtro: string | null) => {
     setLoading(true);
-    try {
-      const response = await getAllProductos();
-      setProductos(response.data);
-    } catch (err) {
-      const AxiosError = err as AxiosError;
-      notify('Status: ' + AxiosError.response?.status, 'error');
-    }
+    const cancelToken = axios.CancelToken.source();
+
+    axios
+      .get(backend_url + '/articulos-manufacturados/listar', {
+        params: { filtro: filtro },
+        cancelToken: cancelToken.token,
+      })
+      .then((res) => {
+        setProductos(res.data);
+      })
+      .catch((err) => {
+        if (axios.isCancel(err)) {
+          notify('Se cancelo la request', 'success');
+        } else {
+          notify('Ocurrio un error', 'error');
+        }
+      });
     setLoading(false);
+    return () => cancelToken.cancel();
   };
 
   useEffect(() => {
     return () => {
-      getProductos();
+      getProductos(filtro);
     };
   }, []);
 
@@ -41,32 +55,69 @@ export const ProductsView = () => {
       <MoonLoader size={120} color="#FBBF24" />
     </div>
   ) : (
-    <div className="bg-white pb-6 dark:bg-neutral-800">
-      <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
-        <div className="mb-6 flex items-end justify-between gap-4">
-          <h2 className="pt-4 text-4xl font-bold text-gray-800 dark:text-gray-100">
-            Nuestra selección
-          </h2>
-          <div className="relative">
-            <input
-              type="text"
-              className="rounded border bg-gray-50 px-3 py-2 pl-8 text-gray-800
-            outline-none ring-amber-400 transition duration-100 focus:ring focus:ring-amber-400 dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
-              placeholder="Filtrar..."
-              onChange={(e) => simpleHandleChange(e, inputValue, setInputValue)}
-            />
-            <FontAwesomeIcon icon={faSearch} className="absolute  top-3 left-2 text-neutral-400" />
-          </div>
-        </div>
-        <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3 ">
-          {productos
-            .filter((product) => product.denominacion?.toLowerCase().includes(inputValue || ''))
-            .map((product) => (
-              <ProductCard producto={product} key={product.id} />
-            ))}
+    <div className="bg-neutral-100 pb-6 dark:bg-neutral-800">
+      <div className="mx-auto max-w-screen-2xl overflow-hidden md:px-8">
+        <div className="mb-6 flex w-full items-end justify-center gap-4">
+          {productos.length === 0 ? (
+            <div className="bg-normal-50 w-full pt-6 sm:pt-8 lg:pt-12">
+              <div className="mx-auto max-w-screen-2xl p-4 md:px-8">
+                <div
+                  className={`relative flex flex-col flex-wrap rounded-lg bg-rose-500 p-8 shadow-lg sm:flex-nowrap sm:items-center sm:justify-center sm:gap-3 sm:pr-8 md:gap-6 md:px-8`}
+                >
+                  <h2 className="text-xl text-neutral-100 md:text-2xl">
+                    Lo sentimos! No tenemos el producto que buscas!{' '}
+                    <FontAwesomeIcon icon={faFaceSadTear} size="lg" />
+                  </h2>
+                  <Button
+                    content={
+                      <p>
+                        Mostrar todos los productos <FontAwesomeIcon icon={faHand} size="xl" />
+                      </p>
+                    }
+                    type="button"
+                    color="negro"
+                    textSize="text-lg"
+                    callback={() => getProductos(null)}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col w-full p-3">
+              <div className="flex flex-col sm:flex-row justify-between gap-3">
+                <h2 className="pt-4 text-4xl font-bold text-neutral-800 dark:text-neutral-100">
+                  Nuestra selección
+                </h2>
+                <div className="relative">
+                  <input
+                    type="text"
+                    className="rounded border w-full sm:w-auto bg-neutral-50 px-3 py-2 pl-8 text-neutral-800
+              outline-none ring-amber-400 transition duration-100 focus:ring focus:ring-amber-400 dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+                    placeholder="Filtrar..."
+                    onChange={(e) => simpleHandleChange(e, inputValue, setInputValue)}
+                  />
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    className="absolute top-3 left-2 text-neutral-400"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-5 grid gap-4 grid-cols-1 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3">
+                {productos
+                  .filter((product) =>
+                    product.denominacion?.toLowerCase().includes(inputValue || '')
+                  )
+                  .map((product) => (
+                    <ProductCard producto={product} key={product.id} />
+                  ))}
+              </div>
+
+              <ToastAlert />
+            </div>
+          )}
         </div>
       </div>
-      <ToastAlert />
     </div>
   );
 };
