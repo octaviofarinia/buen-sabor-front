@@ -332,11 +332,11 @@ export const CarritoView = () => {
                 <FontAwesomeIcon icon={faListCheck} />
               </div>
               <div className="flex-grow pl-4 ">
-                <h2 className="title-font mb-1 text-xl font-bold tracking-wider text-neutral-900">
+              <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 lg:text-3xl ">
                   Resumen
                 </h2>
                 <div className="w-full ">
-                  <h3 className="title-font my-3 text-lg font-medium text-neutral-600 dark:text-neutral-300 ">
+                  <h3 className="title-font my-3 text-lg md:text-xl lg:text-2xl font-medium text-neutral-600 dark:text-neutral-300 ">
                     Información del pedido
                   </h3>
                   <div className="flex w-full border-t border-neutral-200 py-2 ">
