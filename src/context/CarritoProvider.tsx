@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DetallePedido } from '../Interfaces/DetallePedido';
 import { notify } from '../components/Toast/ToastAlert';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface CartContextProps {
   cart: DetallePedido[];
@@ -18,63 +19,112 @@ const CartContext = createContext<CartContextProps>({} as CartContextProps);
 
 const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<DetallePedido[]>([]);
-
+  const { user, loginWithRedirect } = useAuth0();
   useEffect(() => {
-    const storedCart = localStorage.getItem('buenSaborCart');
-    if (storedCart === null) {
-      localStorage.setItem('buenSaborCart', JSON.stringify(cart));
-    } else {
-      setCart(JSON.parse(storedCart));
+    if (user?.sub !== undefined) {
+      const storedCart = localStorage.getItem('buenSaborCart' + user?.sub);
+      if (storedCart === null) {
+        localStorage.setItem('buenSaborCart' + user.sub, JSON.stringify(cart));
+      } else {
+        setCart(JSON.parse(storedCart));
+      }
     }
-  }, []);
+
+    return () => {};
+  }, [user?.sub]);
 
   const resetCart = () => {
     setCart([]);
-    localStorage.setItem('buenSaborCart', JSON.stringify(cart));
+    localStorage.setItem('buenSaborCart' + user?.sub, JSON.stringify(cart));
   };
-  const addToCart = (detalle: DetallePedido) => {
-    const existingProduct = cart.find(
-      (detallePedido) => detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado
-    );
-
-    if (existingProduct) {
-      existingProduct.cantidad += 1;
-    } else {
-      const newDetalle = { ...detalle, cantidad: 1 };
-      cart.push(newDetalle);
+  const addToCart = async (detalle: DetallePedido) => {
+    if (user?.sub === undefined) {
+      await loginWithRedirect({
+        appState: {
+          returnTo: `/Productos`,
+        },
+        authorizationParams: {
+          screen_hint: 'signup',
+        },
+      });
     }
+    if (user?.sub !== undefined) {
+      const existingProduct = cart.find(
+        (detallePedido) => detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado
+      );
 
-    localStorage.setItem('buenSaborCart', JSON.stringify(cart));
-    setCart([...cart]); // Crear una nueva referencia del array para que React detecte el cambio
+      if (existingProduct) {
+        existingProduct.cantidad += 1;
+      } else {
+        const newDetalle = { ...detalle, cantidad: 1 };
+        cart.push(newDetalle);
+      }
+      localStorage.setItem('buenSaborCart' + user?.sub, JSON.stringify(cart));
+
+      setCart([...cart]);
+    }
   };
 
-  const removeFromCart = (detalle: DetallePedido) => {
-    const updatedCart = cart.filter(
-      (detallePedido) => detallePedido.idArticuloManufacturado !== detalle.idArticuloManufacturado
-    );
-
-    localStorage.setItem('buenSaborCart', JSON.stringify(updatedCart));
-    setCart(updatedCart);
+  const removeFromCart = async (detalle: DetallePedido) => {
+    if (user?.sub === undefined) {
+      await loginWithRedirect({
+        appState: {
+          returnTo: `/Productos`,
+        },
+        authorizationParams: {
+          screen_hint: 'signup',
+        },
+      });
+    }
+    if (user?.sub !== undefined) {
+      const updatedCart = cart.filter(
+        (detallePedido) => detallePedido.idArticuloManufacturado !== detalle.idArticuloManufacturado
+      );
+  
+      localStorage.setItem('buenSaborCart' + user?.sub, JSON.stringify(updatedCart));
+  
+      // Actualizar el estado del carrito con la versión filtrada y actualizada
+      setCart(updatedCart);
+    }
   };
-
-  const reduceAmountFromCart = (detalle: DetallePedido) => {
-    for (const detallePedido of cart) {
-      if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
-        if (detalle.cantidad === 1) {
-          removeFromCart(detalle);
-        } else {
-          detalle.cantidad--;
-          const newCart = [...cart];
-          localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
-          setCart(newCart);
+  
+  const reduceAmountFromCart = async (detalle: DetallePedido) => {
+    if (user?.sub === undefined) {
+      await loginWithRedirect({
+        appState: {
+          returnTo: `/Carrito`,
+        },
+        authorizationParams: {
+          screen_hint: 'signup',
+        },
+      });
+    }
+    if (user?.sub !== undefined) {
+      for (const detallePedido of cart) {
+        if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
+          if (detalle.cantidad === 1) {
+            // Si la cantidad es 1, eliminar el artículo del carrito
+            removeFromCart(detalle);
+          } else {
+            // Reducir la cantidad en 1
+            detallePedido.cantidad--;
+            // Actualizar el carrito con la nueva cantidad
+            const newCart = [...cart];
+            // Guardar el carrito actualizado en el almacenamiento local
+            localStorage.setItem('buenSaborCart' + user.sub, JSON.stringify(newCart));
+            // Actualizar el estado del carrito en el componente
+            setCart(newCart);
+          }
+          break;
         }
-        break;
       }
     }
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, reduceAmountFromCart,resetCart }}>
+    <CartContext.Provider
+      value={{ cart, addToCart, removeFromCart, reduceAmountFromCart, resetCart }}
+    >
       {children}
     </CartContext.Provider>
   );

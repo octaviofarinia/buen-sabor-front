@@ -4,13 +4,19 @@ import { Button } from '../Botones/Button';
 import { CartContext } from '../../context/CarritoProvider';
 import { useContext } from 'react';
 import { ToastAlert, notify } from '../Toast/ToastAlert';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useEffect } from 'react';
 interface ProductCardProps {
   producto: Producto;
 }
 
 export const ProductCard = ({ producto }: ProductCardProps) => {
   const carritoContext = useContext(CartContext);
+  const { user } = useAuth0();
 
+  useEffect(() => {
+    return () => {};
+  }, [user]);
   return (
     <div className="">
       <Link
@@ -34,9 +40,9 @@ export const ProductCard = ({ producto }: ProductCardProps) => {
             color="amarillo"
             type="button"
             content="Agregar al carrito"
-            callback={() => {
-              carritoContext.addToCart({ idArticuloManufacturado: producto.id, cantidad: 1 });
-              notify('Se agrego ' + producto.denominacion + ' al carrito', 'success');
+            callback={ () => {
+             carritoContext.addToCart({ idArticuloManufacturado: producto.id, cantidad: 1 });
+              user?.sub !==undefined && notify('Se agrego ' + producto.denominacion + ' al carrito', 'success');
             }}
             textSize="text-lg"
           />

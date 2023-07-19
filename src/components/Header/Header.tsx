@@ -51,7 +51,11 @@ export const Header = () => {
                   className="inline-flex items-center gap-2.5 text-lg font-bold uppercase text-amber-400 md:text-3xl"
                   aria-label="logo"
                 >
-                  <img src={'/logoWhite.png'} alt="logo" className="hidden sm:block w-12  sm:max-w-100 object-contain " />
+                  <img
+                    src={'/logoWhite.png'}
+                    alt="logo"
+                    className="hidden w-12 object-contain  sm:block sm:max-w-100 "
+                  />
                 </Link>
                 <div className="hidden md:ml-6 md:flex md:items-center">
                   <div className="flex items-center gap-2.5">
@@ -59,7 +63,7 @@ export const Header = () => {
                       <Link
                         key={item.path}
                         to={item.path}
-                        className="flex items-center rounded-md p-1 text-sm text-amber-400  hover:border-b-neutral-700 hover:bg-neutral-800 hover:text-amber-500 hover:duration-300 hover:ease-in-out active:text-amber-500 lg:text-lg xl:px-3 xl:py-2 hover:border-b-4"
+                        className="flex items-center rounded-md p-1 text-sm text-amber-400  hover:border-b-4 hover:border-b-neutral-700 hover:bg-neutral-800 hover:text-amber-500 hover:duration-300 hover:ease-in-out active:text-amber-500 lg:text-lg xl:px-3 xl:py-2"
                       >
                         {item.name}
                       </Link>

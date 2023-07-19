@@ -17,7 +17,6 @@ import { ToastAlert, notify } from '../components/Toast/ToastAlert';
 import { Domicilio } from '../Interfaces/Domicilio';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getDomicilios } from '../API/SpecializedEndpoints/DomicilioRequests/DomicilioRequests';
-import { ClipLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import { calcularSubtotal, calcularTiempoEspera } from '../Utils/CalculosUtils';
 import { useCart } from '../context/CarritoProvider';
@@ -56,9 +55,11 @@ export const CarritoView = () => {
     localStorage.setItem('informacionPedido', JSON.stringify(informacionPedido));
   };
   const getDomiciliosUsuario = async () => {
-    const response = await getDomicilios(user?.sub != undefined ? user?.sub : '');
-    setDomicilios(response.data);
-    informacionPedido.idDomicilioEntrega = response.data[0].id;
+    if (user?.sub !== undefined) {
+      const response = await getDomicilios(user?.sub);
+      setDomicilios(response.data);
+      informacionPedido.idDomicilioEntrega = response.data[0].id;
+    }
   };
   const mercadoPagoPayment = () => {
     const cancelToken = axios.CancelToken.source();
@@ -79,16 +80,16 @@ export const CarritoView = () => {
     return () => cancelToken.cancel();
   };
   const obtenerProductosDelCarrito = async () => {
-    const productos = await getProductosDelCarrito();
-    setCartItems(productos);
+    if (user?.sub !== undefined && user.sub) {
+      const productos = await getProductosDelCarrito(user?.sub);
+      setCartItems(productos);
+    }
   };
 
   useEffect(() => {
-    return () => {
-      getDomiciliosUsuario();
-      obtenerProductosDelCarrito();
-      mercadoPagoPayment();
-    };
+    getDomiciliosUsuario();
+    obtenerProductosDelCarrito();
+    return () => {};
   }, [user, cart.length]);
 
   return cart.length !== 0 ? (
@@ -178,7 +179,7 @@ export const CarritoView = () => {
                       </div>
                     ))}
                   </div>
-                  <div className="col-span-2 hidden h-full  bg-neutral-100  px-5 py-5 text-neutral-500 dark:bg-neutral-800 xl:block ">
+                  <div className="col-span-2 hidden h-auto max-h-28  bg-neutral-100  px-5 py-5 text-neutral-500 dark:bg-neutral-800 xl:block ">
                     <div className="flex w-full flex-col items-center justify-center">
                       {isDarkMode ? (
                         <img src={'/logoWhite.png'} alt="logo" />
@@ -332,11 +333,11 @@ export const CarritoView = () => {
                 <FontAwesomeIcon icon={faListCheck} />
               </div>
               <div className="flex-grow pl-4 ">
-              <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 lg:text-3xl ">
+                <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 lg:text-3xl ">
                   Resumen
                 </h2>
                 <div className="w-full ">
-                  <h3 className="title-font my-3 text-lg md:text-xl lg:text-2xl font-medium text-neutral-600 dark:text-neutral-300 ">
+                  <h3 className="title-font my-3 text-lg font-medium text-neutral-600 dark:text-neutral-300 md:text-xl lg:text-2xl ">
                     Información del pedido
                   </h3>
                   <div className="flex w-full border-t border-neutral-200 py-2 ">
@@ -371,10 +372,12 @@ export const CarritoView = () => {
                   }}
                 />
               ) : (
-                <Wallet
-                  initialization={{ preferenceId: preferenceId }}
-                  customization={{ texts: { action: 'pay' } }}
-                />
+                preferenceId != null && (
+                  <Wallet
+                    initialization={{ preferenceId: preferenceId }}
+                    customization={{ texts: { action: 'pay' } }}
+                  />
+                )
               )}
             </div>
           </div>
