@@ -2,6 +2,7 @@ import {
   faCheck,
   faCheckCircle,
   faCreditCard,
+  faFaceSadCry,
   faListCheck,
   faMinus,
   faMotorcycle,
@@ -25,11 +26,16 @@ import { backend_url } from '../Utils/ConstUtils';
 import { Wallet } from '@mercadopago/sdk-react';
 import CartConstants from '../Utils/Constants/CartConstants';
 import { base_pedido } from '../Interfaces/ABM/InterfaceDelivery';
-import { getProductosDelCarrito } from '../API/SpecializedEndpoints/PedidoRequests/CarritoRequest';
+import {
+  cancelPreviousRequest,
+  getProductosDelCarrito,
+  getValidacionDeStock,
+} from '../API/SpecializedEndpoints/PedidoRequests/CarritoRequest';
 import { Producto } from '../Interfaces/ABM/Producto';
 import { Pedido } from '../Interfaces/Pedido';
 import { useTheme } from '../context/ThemeProvider';
 import { faFaceSmileWink } from '@fortawesome/free-regular-svg-icons';
+import { Banner } from '../components/Banner/Banner';
 
 export const CarritoView = () => {
   const { cart, removeFromCart, addToCart, reduceAmountFromCart } = useCart();
@@ -86,15 +92,32 @@ export const CarritoView = () => {
     }
   };
 
+  const validateStock = async () => {
+    if (user?.sub !== undefined) {
+      const isValidStock = await getValidacionDeStock(cart);
+      if (isValidStock) {
+        informacionPedido.validated = true;
+        notify('Stock suficiente para el pedido', 'success');
+      } else {
+        notify('Stock insuficiente para el pedido', 'error');
+      }
+    }
+  };
+
   useEffect(() => {
     getDomiciliosUsuario();
     obtenerProductosDelCarrito();
-    return () => {};
+    validateStock();
+
+    return () => {
+      cancelPreviousRequest();
+    };
   }, [user, cart.length]);
 
   return cart.length !== 0 ? (
     <>
       <section className="body-font bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-100">
+        <ToastAlert />
         <div className="container mx-auto flex flex-wrap px-5 py-10">
           <div className="flex w-full flex-col flex-wrap">
             <div className=" md:py-6 md:pr-10">
@@ -141,6 +164,7 @@ export const CarritoView = () => {
                                   color="negro"
                                   callback={() => {
                                     reduceAmountFromCart(cart[index]);
+                                    validateStock();
                                   }}
                                   textSize="text-sm md:text-lg"
                                 />
@@ -153,6 +177,7 @@ export const CarritoView = () => {
                                   color="negro"
                                   callback={() => {
                                     addToCart(cart[index]);
+                                    validateStock();
                                   }}
                                   textSize="text-sm md:text-lg"
                                 />
@@ -171,6 +196,7 @@ export const CarritoView = () => {
                             color="rojo"
                             callback={() => {
                               removeFromCart(cart[index]);
+                              validateStock();
                             }}
                             fullsize={true}
                             fullheight={true}
@@ -357,29 +383,38 @@ export const CarritoView = () => {
                 </div>
               </div>
             </div>
-
-            <div className="flex w-full flex-col py-2  transition-all duration-300 ease-in-out ">
-              {medioDePago !== CartConstants.MERCADO_PAGO ? (
-                <Button
-                  color="rojo"
-                  fullsize={true}
-                  type="submit"
-                  textSize="text-2xl"
-                  content="Confirmar pedido y pagar"
-                  callback={() => {
-                    savePedidoData();
-                    navigate('/PostPayment');
-                  }}
-                />
-              ) : (
-                preferenceId != null && (
-                  <Wallet
-                    initialization={{ preferenceId: preferenceId }}
-                    customization={{ texts: { action: 'pay' } }}
+            {informacionPedido.validated ? (
+              <div className="flex w-full flex-col py-2  transition-all duration-300 ease-in-out ">
+                {medioDePago !== CartConstants.MERCADO_PAGO ? (
+                  <Button
+                    color="rojo"
+                    fullsize={true}
+                    type="submit"
+                    textSize="text-2xl"
+                    content="Confirmar pedido y pagar"
+                    callback={() => {
+                      savePedidoData();
+                      navigate('/PostPayment');
+                    }}
                   />
-                )
-              )}
-            </div>
+                ) : (
+                  preferenceId != null && (
+                    <Wallet
+                      initialization={{ preferenceId: preferenceId }}
+                      customization={{ texts: { action: 'pay' } }}
+                    />
+                  )
+                )}
+              </div>
+            ) : (
+              <div>
+                <Banner
+                  color="rose"
+                  text="Lo sentimos, pero no tenemos stock para generar tu pedido"
+                  icon={<FontAwesomeIcon icon={faFaceSadCry} />}
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>

@@ -10,6 +10,7 @@ export interface Pedido {
   auth0Id: string | undefined;
   tiempoEstimadoFinalizacion: number;
   productos: DetallePedido[] | null;
+  validated?: boolean;
 }
 
 export interface Factura {
