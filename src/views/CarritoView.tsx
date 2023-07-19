@@ -26,16 +26,13 @@ import { backend_url } from '../Utils/ConstUtils';
 import { Wallet } from '@mercadopago/sdk-react';
 import CartConstants from '../Utils/Constants/CartConstants';
 import { base_pedido } from '../Interfaces/ABM/InterfaceDelivery';
-import {
-  cancelPreviousRequest,
-  getProductosDelCarrito,
-  getValidacionDeStock,
-} from '../API/SpecializedEndpoints/PedidoRequests/CarritoRequest';
+import { getProductosDelCarrito } from '../API/SpecializedEndpoints/PedidoRequests/CarritoRequest';
 import { Producto } from '../Interfaces/ABM/Producto';
 import { Pedido } from '../Interfaces/Pedido';
 import { useTheme } from '../context/ThemeProvider';
 import { faFaceSmileWink } from '@fortawesome/free-regular-svg-icons';
 import { Banner } from '../components/Banner/Banner';
+import { Loader } from '../components/Loader/Loader';
 
 export const CarritoView = () => {
   const { cart, removeFromCart, addToCart, reduceAmountFromCart } = useCart();
@@ -93,13 +90,33 @@ export const CarritoView = () => {
   };
 
   const validateStock = async () => {
+    console.log("validate stock");
     if (user?.sub !== undefined) {
-      const isValidStock = await getValidacionDeStock(cart);
-      if (isValidStock) {
-        informacionPedido.validated = true;
-        notify('Stock suficiente para el pedido', 'success');
-      } else {
-        notify('Stock insuficiente para el pedido', 'error');
+      const cancelTokenSource = axios.CancelToken.source();
+      if (cart.length > 0) {
+        const requestUrl = `${backend_url}/pedidos/validar-stock`;
+        try {
+          axios
+            .put(requestUrl, cart, { cancelToken: cancelTokenSource.token })
+            .then((response) => {
+              if (response.data) {
+                setInformacionPedido((prevInformacionPedido) => ({
+                  ...prevInformacionPedido,
+                  validated: true,
+                }));
+                notify('Stock suficiente para el pedido', 'success');
+              }
+            })
+            .catch((error) => {
+              if (axios.isCancel(error)) {
+                console.log('Request canceled:', error.message);
+              } else {
+                console.log('Error en la solicitud:', error);
+              }
+            });
+        } catch (err) {
+          console.log(err);
+        }
       }
     }
   };
@@ -109,15 +126,14 @@ export const CarritoView = () => {
     obtenerProductosDelCarrito();
     validateStock();
 
-    return () => {
-      cancelPreviousRequest();
-    };
-  }, [user, cart.length]);
+    return () => {};
+  }, [cart.length, user]);
 
   return cart.length !== 0 ? (
     <>
       <section className="body-font bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-100">
         <ToastAlert />
+
         <div className="container mx-auto flex flex-wrap px-5 py-10">
           <div className="flex w-full flex-col flex-wrap">
             <div className=" md:py-6 md:pr-10">
@@ -196,7 +212,6 @@ export const CarritoView = () => {
                             color="rojo"
                             callback={() => {
                               removeFromCart(cart[index]);
-                              validateStock();
                             }}
                             fullsize={true}
                             fullheight={true}

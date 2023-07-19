@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DetallePedido } from '../Interfaces/DetallePedido';
-import { notify } from '../components/Toast/ToastAlert';
 import { useAuth0 } from '@auth0/auth0-react';
 
 interface CartContextProps {
@@ -80,11 +79,8 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       const updatedCart = cart.filter(
         (detallePedido) => detallePedido.idArticuloManufacturado !== detalle.idArticuloManufacturado
       );
-  
       localStorage.setItem('buenSaborCart' + user?.sub, JSON.stringify(updatedCart));
-  
-      // Actualizar el estado del carrito con la versión filtrada y actualizada
-      setCart(updatedCart);
+        setCart(updatedCart);
     }
   };
   

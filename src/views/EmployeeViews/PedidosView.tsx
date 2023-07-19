@@ -128,18 +128,12 @@ export const PedidosView = () => {
                         <td className="px-6 py-4">{pedido.total}</td>
                         <td className="px-6 py-4">
                           {pedido.estado !== PedidoStatus.COMPLETADO ? (
-                            <div className="flex gap-5">
+                            <div className="flex gap-5 ">
                               <EstadosSelect
                                 pedido={pedido}
                                 callback={(e) => {
-                                  pedido.estado = e.target.value;
+                                  setEstadoDePedido(pedido.id, e.target.value);
                                 }}
-                              />
-                              <Button
-                                type="button"
-                                color="negro"
-                                content={'Cambiar estado'}
-                                callback={() => setEstadoDePedido(pedido.id, pedido.estado)}
                               />
                             </div>
                           ) : (
