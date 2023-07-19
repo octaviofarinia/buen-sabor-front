@@ -56,6 +56,7 @@ const CargaDomicilioView: React.FC = () => {
 
       sendUserData();
     }
+    return ()=>{}
   }, [user]);
 
   return (

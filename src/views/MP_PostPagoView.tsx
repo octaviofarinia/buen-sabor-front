@@ -95,8 +95,8 @@ export const MP_PostPagoView = () => {
       setTimer((prev) => prev - 1);
     }, 1000);
     const timeout = delayedRedirect(() => navigate('/'), 15000);
+    generarPedido();
     return () => {
-      generarPedido();
       clearInterval(interval);
       clearInterval(timeout);
     };

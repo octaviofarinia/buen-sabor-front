@@ -26,8 +26,9 @@ export const ProductDetailView = () => {
   };
 
   useEffect(() => {
+    getProducto();
     return () => {
-      getProducto();
+      
     };
   }, [user]);
   return (
