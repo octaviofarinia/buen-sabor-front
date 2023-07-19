@@ -24,7 +24,6 @@ export const ProductsView = () => {
   const getProductos = async (filtro: string | null) => {
     setLoading(true);
     const cancelToken = axios.CancelToken.source();
-
     axios
       .get(backend_url + '/articulos-manufacturados/listar', {
         params: { filtro: filtro },
@@ -45,9 +44,8 @@ export const ProductsView = () => {
   };
 
   useEffect(() => {
-    return () => {
-      getProductos(filtro);
-    };
+    getProductos(filtro);
+    return () => {};
   }, []);
 
   return loading ? (
@@ -83,16 +81,16 @@ export const ProductsView = () => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col w-full p-3">
-              <div className="flex flex-col sm:flex-row justify-between gap-3">
+            <div className="flex w-full flex-col p-3">
+              <div className="flex flex-col justify-between gap-3 sm:flex-row">
                 <h2 className="pt-4 text-4xl font-bold text-neutral-800 dark:text-neutral-100">
                   Nuestra selección
                 </h2>
                 <div className="relative">
                   <input
                     type="text"
-                    className="rounded border w-full sm:w-auto bg-neutral-50 px-3 py-2 pl-8 text-neutral-800
-              outline-none ring-amber-400 transition duration-100 focus:ring focus:ring-amber-400 dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+                    className="w-full rounded border bg-neutral-50 px-3 py-2 pl-8 text-neutral-800 outline-none
+              ring-amber-400 transition duration-100 focus:ring focus:ring-amber-400 dark:border-neutral-400 dark:bg-neutral-700 dark:text-white sm:w-auto"
                     placeholder="Filtrar..."
                     onChange={(e) => simpleHandleChange(e, inputValue, setInputValue)}
                   />
@@ -103,7 +101,7 @@ export const ProductsView = () => {
                 </div>
               </div>
 
-              <div className="pt-5 grid gap-4 grid-cols-1 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 pt-5 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3">
                 {productos
                   .filter((product) =>
                     product.denominacion?.toLowerCase().includes(inputValue || '')
