@@ -15,9 +15,9 @@ export const DropdownHeader = ({ routes }: DropdownProps) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="flex items-center w-full justify-center gap-x-1.5 rounded-md  p-1 xl:px-3 xl:py-2 text-amber-400 hover:bg-neutral-800 hover:text-amber-500 active:text-amber-500">
+        <Menu.Button className="flex w-full items-center justify-center gap-x-1.5 rounded-md   text-amber-400 hover:bg-neutral-800 hover:text-amber-500 active:text-amber-500 xl:px-3 ">
           <h2 className="text-sm lg:text-lg">ABM</h2>
-          <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+          <ChevronDownIcon className="-mr-1 h-5 w-5 text-neutral-400" aria-hidden="true" />
         </Menu.Button>
       </div>
 
@@ -30,17 +30,23 @@ export const DropdownHeader = ({ routes }: DropdownProps) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute left-16 md:right-0 md:left-0 z-10 mt-2 min-w-max w-44  origin-top-right rounded-md
-         bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="py-1">
-            {routes.map((route,index) => (
-              <Menu.Item key={"Ruta"+index}>
+        <Menu.Items
+          className="absolute left-16 z-10 mt-2 w-44 min-w-max origin-top-right rounded-md  bg-neutral-100 shadow-lg
+         ring-1 ring-black ring-opacity-5 focus:outline-none md:right-0 md:left-0"
+        >
+          <div className="">
+            {routes.map((route, index) => (
+              <Menu.Item key={'Ruta' + index}>
                 {({ active }) => (
                   <Link
-                     to={!userRoles.includes('employee') ? route.name : `/employee/${route.type}/${route.route}`}
+                    to={
+                      !userRoles.includes('employee')
+                        ? route.name
+                        : `/employee/${route.type}/${route.route}`
+                    }
                     className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block px-4 py-2 text-sm whitespace-nowrap hover:border-r-amber-500 hover:border-r-8 hover:ease-out hover:duration-500'
+                      active ? 'bg-neutral-100 text-neutral-900' : 'text-neutral-700',
+                      'border-box block whitespace-nowrap px-4 py-2 text-sm hover:rounded-r-md hover:border-r-8 hover:border-r-amber-500 hover:bg-amber-300 hover:duration-500 hover:ease-out active:border-r-amber-700 active:bg-amber-500 active:text-neutral-100  '
                     )}
                   >
                     {route.dropdown}

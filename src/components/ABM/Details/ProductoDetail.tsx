@@ -1,8 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { APIRouter } from '../../../API/APIRouter';
 import { getOne } from '../../../API/Requests/BaseRequests';
-import { base_ingredient, base_product } from '../../../Interfaces/ABM/InterfaceDelivery';
+import { base_product } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { AxiosError } from 'axios';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { Button } from '../../Botones/Button';
