@@ -1,14 +1,14 @@
 import { AuthenticationGuard } from '../components/Auth0/AuthenticationGuard';
-import CargaDomicilioView from '../views/CargaDomicilioView';
-import { CarritoView } from '../views/CarritoView';
-import { ClientMain } from '../views/ClientMain';
+import CargaDomicilioView from '../views/generalViews/CargaDomicilioView';
+import { CarritoView } from '../views/generalViews/CarritoView';
+import { ClientMain } from '../views/generalViews/ClientMain';
 import { PreguntasView } from '../views/staticViews/PreguntasView';
-import { ProductDetailView } from '../views/ProductDetail';
-import { ProductsView } from '../views/ProductsView';
+import { ProductDetailView } from '../views/generalViews/ProductDetail';
+import { ProductsView } from '../views/generalViews/ProductsView';
 import { TeamView } from '../views/staticViews/TeamView';
-import { MP_PostPagoView } from '../views/MP_PostPagoView';
-import { PostPagoView } from '../views/PostPagoView';
-import { PerfilView } from '../views/PerfilView';
+import { MP_PostPagoView } from '../views/generalViews/MP_PostPagoView';
+import { PostPagoView } from '../views/generalViews/PostPagoView';
+import { PerfilView } from '../views/generalViews/PerfilView';
 
 const ClientDinamicRoutes = [
   { path: 'Productos/:categoria', element: '' },

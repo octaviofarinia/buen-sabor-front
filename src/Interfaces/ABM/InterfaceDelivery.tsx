@@ -1,17 +1,17 @@
-import CartConstants from '../../Utils/Constants/CartConstants';
-import { Carrito } from '../Carrito';
-import { Domicilio } from '../Domicilio';
-import { Pedido } from '../Pedido';
-import { Categoria } from './Categoria';
+import CartConstants from '../../Utils/constants/CartConstants';
+import { Carrito } from '../ClientSide/Carrito';
+import { Domicilio } from '../ClientSide/Domicilio';
+import { Pedido } from '../ClientSide/Pedido';
+import { RubroArticulo } from './RubroArticulo';
 import { DetalleProducto } from './DetalleProducto';
-import { Ingrediente } from './Ingrediente';
-import { Producto } from './Producto';
+import { ArticuloInsumo } from './ArticuloInsumo';
+import { ArticuloManufacturado } from './ArticuloManufacturado';
 import { UnidadDeMedida } from './UnidadDeMedida';
 
-export const base_category: Categoria = {
+export const base_category: RubroArticulo = {
   id: null,
   denominacion: null,
-  RubroPadre: null,
+  rubroPadre: null,
   idRubroPadre: null,
   subRubros: null,
 };
@@ -29,7 +29,7 @@ export const base_detalle_producto: DetalleProducto = {
   idArticuloManufacturado: null,
 };
 
-export const base_product: Producto = {
+export const base_product: ArticuloManufacturado = {
   id: null,
   denominacion: null,
   descripcion: null,
@@ -38,7 +38,7 @@ export const base_product: Producto = {
   tiempoEstimadoCocina: null,
 };
 
-export const base_ingredient: Ingrediente = {
+export const base_ingredient: ArticuloInsumo = {
   id: null,
   denominacion: null,
   urlImagen: null,

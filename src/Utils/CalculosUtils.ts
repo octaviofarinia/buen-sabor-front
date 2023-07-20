@@ -1,7 +1,7 @@
-import { Producto } from '../Interfaces/ABM/Producto';
-import { DetallePedido } from '../Interfaces/DetallePedido';
+import { ArticuloManufacturado } from '../Interfaces/ABM/ArticuloManufacturado';
+import { DetallePedido } from '../Interfaces/ClientSide/DetallePedido';
 
-export const calcularSubtotal = (productosPedido: Producto[], detalles: DetallePedido[]) => {
+export const calcularSubtotal = (productosPedido: ArticuloManufacturado[], detalles: DetallePedido[]) => {
   let subtotal = 0;
 
   for (let producto of productosPedido) {
@@ -11,7 +11,7 @@ export const calcularSubtotal = (productosPedido: Producto[], detalles: DetalleP
   return subtotal;
 };
 
-export const calcularTiempoEspera = (productosPedido: Producto[]) => {
+export const calcularTiempoEspera = (productosPedido: ArticuloManufacturado[]) => {
   let promedioT = 0;
   for (let producto of productosPedido) {
     if (producto.tiempoEstimadoCocina !== null) promedioT += producto.tiempoEstimadoCocina;

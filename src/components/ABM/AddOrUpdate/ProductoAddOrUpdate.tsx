@@ -1,31 +1,31 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import styles from './AddOrUpdate.module.css';
 import { base_ingredient, base_product } from '../../../Interfaces/ABM/InterfaceDelivery';
-import { Ingrediente } from '../../../Interfaces/ABM/Ingrediente';
-import { Producto } from '../../../Interfaces/ABM/Producto';
+import { ArticuloInsumo } from '../../../Interfaces/ABM/ArticuloInsumo';
+import { ArticuloManufacturado } from '../../../Interfaces/ABM/ArticuloManufacturado';
 import { IngredienteModal } from './Modal/IngredienteModal';
-import TablaIngredientes from './TablaIngredientes';
+import TablaIngredientes from './Tables/TablaIngredientes';
 import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto';
 import {
   updateProducto,
-  getProductoRegister,
   createProducto,
-} from '../../../API/SpecializedEndpoints/ProductoRequests/ProductoRequests';
-import { getDetalles } from '../../../API/SpecializedEndpoints/ProductoRequests/DetalleProductoRequests';
+} from '../../../API/Requests/ProductoRequests/ProductoRequests';
+import { getDetalles } from '../../../API/Requests/ProductoRequests/DetalleProductoRequests';
 import { handleChange, handleImageChange } from '../../../Utils/FormUtils';
 import { Button } from '../../Botones/Button';
 import { ClipLoader } from 'react-spinners';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { AxiosError } from 'axios';
+import { HardDeleteButton } from '../../Botones/HardDeleteButton';
+import { getOne } from '../../../API/Requests/BaseRequests';
 
 export const ProductoAddOrUpdate = () => {
   const { id } = useParams();
   const [imagen, setImagen] = useState<File | null>(null);
   const [detalle, setDetalle] = useState<DetalleProducto[]>([]);
   const [cantidad, setCantidad] = useState(0);
-  const [producto, setProducto] = useState<Producto>(base_product);
-  const [ingrediente, setIngrediente] = useState<Ingrediente>(base_ingredient);
+  const [producto, setProducto] = useState<ArticuloManufacturado>(base_product);
+  const [ingrediente, setIngrediente] = useState<ArticuloInsumo>(base_ingredient);
   const [isLoading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -88,7 +88,7 @@ export const ProductoAddOrUpdate = () => {
   const setPropsOfExistentProduct = async () => {
     try {
       setLoading(true);
-      const productoData = await getProductoRegister(id);
+      const productoData = await getOne({ id: Number(id), endpoint: 'articulos-manufacturados' });
       const detalleData = await getDetalles({ id: id });
 
       detalleData.status === 200 && setDetalle(detalleData.data);
@@ -124,11 +124,12 @@ export const ProductoAddOrUpdate = () => {
               Producto | Artículo - Manufacturado
             </h3>
           </div>
+          {id !== undefined && <HardDeleteButton id={Number(id)} endpoint={'unidades-medida'} />}
         </div>
 
         <form
           encType="multipart/form-data"
-          className={`mx-auto grid w-11/12 items-center gap-4 sm:grid-cols-3 lg:gap-10 ${styles} text-end dark:text-white`}
+          className={`mx-auto grid w-11/12 items-center gap-4 text-end dark:text-white  sm:grid-cols-3 lg:gap-10`}
           onSubmit={(e) => handleSubmit(e)}
         >
           <label htmlFor="denominacion" className="lg:text-2xl">

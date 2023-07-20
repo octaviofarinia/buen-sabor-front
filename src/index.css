@@ -38,6 +38,6 @@ h3,
 h4,
 h5,
 h6,
-a,select {
+a,select,label {
   font-family: 'Bebas Neue';
 }

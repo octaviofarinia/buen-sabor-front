@@ -1,31 +1,31 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import styles from './AddOrUpdate.module.css';
 import {
   base_category,
   base_ingredient,
   base_unidad,
 } from '../../../Interfaces/ABM/InterfaceDelivery';
-import { Ingrediente } from '../../../Interfaces/ABM/Ingrediente';
-import { Categoria } from '../../../Interfaces/ABM/Categoria';
+import { ArticuloInsumo } from '../../../Interfaces/ABM/ArticuloInsumo';
+import { RubroArticulo } from '../../../Interfaces/ABM/RubroArticulo';
 import { UnidadDeMedidaModal } from './Modal/UnidadDeMedidaModal';
 import { UnidadDeMedida } from '../../../Interfaces/ABM/UnidadDeMedida';
 import { CategoryModal } from './Modal/CategoriaModal';
 import {
   createIngredienteRegister,
-  getIngredienteRegister,
   updateIngredienteRegister,
-} from '../../../API/SpecializedEndpoints/IngredienteRequests/IngredienteRequests';
+} from '../../../API/Requests/IngredienteRequests/IngredienteRequests';
 import { handleChange, handleImageChange } from '../../../Utils/FormUtils';
 import { Button } from '../../Botones/Button';
 import { ClipLoader } from 'react-spinners';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { AxiosError } from 'axios';
+import { HardDeleteButton } from '../../Botones/HardDeleteButton';
+import { getOne } from '../../../API/Requests/BaseRequests';
 
 export const IngredienteAddOrUpdate = () => {
   const { id } = useParams();
-  const [ingrediente, setIngrediente] = useState<Ingrediente>(base_ingredient);
-  const [categoria, setCategoria] = useState<Categoria>(base_category);
+  const [ingrediente, setIngrediente] = useState<ArticuloInsumo>(base_ingredient);
+  const [categoria, setCategoria] = useState<RubroArticulo>(base_category);
   const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad);
   const [imagen, setImagen] = useState<File | null>(null);
   const [isLoading, setLoading] = useState(false);
@@ -76,7 +76,7 @@ export const IngredienteAddOrUpdate = () => {
 
   const setPropsOfExistentIngredient = async () => {
     try {
-      const ingredienteData = await getIngredienteRegister(id);
+      const ingredienteData = await getOne({ id: Number(id), endpoint: 'articulos-insumo' });
       ingredienteData.status === 200 && setIngrediente(ingredienteData.data);
       setCategoria(ingredienteData.data.rubroArticulo);
       setUnidadDeMedida(ingredienteData.data.unidadMedida);
@@ -111,11 +111,12 @@ export const IngredienteAddOrUpdate = () => {
               Ingrediente | Artículo - Insumo
             </h3>
           </div>
+          {id !== undefined && <HardDeleteButton id={Number(id)} endpoint={'articulos-insumo'} />}
         </div>
 
         <form
           encType="multipart/form-data"
-          className={`mx-auto grid max-w-2xl items-center gap-4 sm:grid-cols-3 lg:gap-10 ${styles} text-end dark:text-white`}
+          className={`mx-auto grid max-w-2xl items-center gap-4 text-end dark:text-white sm:grid-cols-3 lg:gap-10`}
           onSubmit={(e) => handleSubmit(e)}
         >
           <label htmlFor="denominacion" className="lg:text-2xl">

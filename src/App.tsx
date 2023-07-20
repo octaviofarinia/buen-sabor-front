@@ -4,7 +4,7 @@ import { Header } from './components/Header/Header';
 import EmployeeDinamicRoutes, { EmployeeStaticRoutes } from './routes/EmployeeRoutesConfigs';
 import ClientDinamicRoutes, { ClientStaticRoutes } from './routes/ClientRoutesConfigs';
 import { Footer } from './components/Footer/Footer';
-import { NotFoundView } from './views/NotFoundView';
+import { NotFoundView } from './views/generalViews/NotFoundView';
 import { Breadcrumb } from './components/Breadcrumb/Breadcrumb';
 import { ThemeContextProvider } from './context/ThemeProvider';
 import CallbackPage from './components/Auth0/CallbackPage';

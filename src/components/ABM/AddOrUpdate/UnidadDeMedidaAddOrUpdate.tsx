@@ -1,8 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { createRegister, getRegister, updateRegister } from '../../../API/APIHandler';
-import { APIRouter } from '../../../API/APIRouter';
-import styles from './AddOrUpdate.module.css';
+import {  getOne, save, update } from '../../../API/Requests/BaseRequests';
 import { UnidadDeMedida } from '../../../Interfaces/ABM/UnidadDeMedida';
 import { base_unidad } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { HardDeleteButton } from '../../Botones/HardDeleteButton';
@@ -13,7 +11,7 @@ import { AxiosError } from 'axios';
 import { handleChange } from '../../../Utils/FormUtils';
 
 export const UnidadDeMedidaAddOrUpdate = () => {
-  const { RequestedEndpoint, id } = useParams();
+  const { id } = useParams();
   const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -24,17 +22,16 @@ export const UnidadDeMedidaAddOrUpdate = () => {
     setLoading(true);
     try {
       if (id) {
-        const request = await updateRegister({
-          requestedEndpoint: APIRouter(RequestedEndpoint),
-          persistenObject: unidadDeMedida,
-          id: id,
+        const request = await update({
+          endpoint: 'unidades-medida',
+          object: unidadDeMedida,
+          id: Number(id),
         });
         status = request.status;
       } else {
-        const request = await createRegister({
-          requestedEndpoint: APIRouter(RequestedEndpoint),
-          persistenObject: unidadDeMedida,
-          id: '',
+        const request = await save({
+          endpoint: 'unidades-medida',
+          object: unidadDeMedida,
         });
         status = request.status;
         setLoading(false);
@@ -53,12 +50,11 @@ export const UnidadDeMedidaAddOrUpdate = () => {
 
   const setPropsOfExistentUnidadDeMedida = async () => {
     try {
-      await getRegister({
-        id: id,
-        requestedEndpoint: APIRouter('UnidadDeMedida'),
-        persistenObject: unidadDeMedida,
-        RegisterSetter: setUnidadDeMedida,
+      const response = await getOne({
+        id: Number(id),
+        endpoint: 'unidades-medida',
       });
+      setUnidadDeMedida(response);
       notify('Se cargó el registro correctamente', 'success');
     } catch (err) {
       const AxiosError = err as AxiosError;
@@ -93,11 +89,11 @@ export const UnidadDeMedidaAddOrUpdate = () => {
               Unidad de Medida
             </h3>
           </div>
-          {id !== undefined && <HardDeleteButton id={id} requestedEndpoint={RequestedEndpoint} />}
+          {id !== undefined && <HardDeleteButton id={Number(id)} endpoint={'unidades-medida'} />}
         </div>
 
         <form
-          className={`mx-auto grid max-w-2xl  gap-4 sm:grid-cols-3 lg:gap-10 ${styles} text-end dark:text-white`}
+          className={`mx-auto grid max-w-2xl  gap-4 text-end dark:text-white  sm:grid-cols-3 lg:gap-10`}
           onSubmit={(e) => handleSubmit(e)}
         >
           <label htmlFor="denominacion" className="lg:text-2xl">

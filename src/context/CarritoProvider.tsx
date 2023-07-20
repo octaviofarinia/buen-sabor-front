@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { DetallePedido } from '../Interfaces/DetallePedido';
+import { DetallePedido } from '../Interfaces/ClientSide/DetallePedido';
 import { useAuth0 } from '@auth0/auth0-react';
 
 interface CartContextProps {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PedidoPlanilla } from '../Interfaces/PedidoWS';
+import { PedidoPlanilla } from '../Interfaces/ABM/PedidoPlanilla';
 import { backend_url } from './ConstUtils';
 import { notify } from '../components/Toast/ToastAlert';
 import { ChangeEvent } from 'react';

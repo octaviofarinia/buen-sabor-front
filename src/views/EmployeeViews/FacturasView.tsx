@@ -7,7 +7,7 @@ import {
   faTruck,
 } from '@fortawesome/free-solid-svg-icons';
 import { Loader } from '../../components/Loader/Loader';
-import { Factura } from '../../Interfaces/Factura';
+import { Factura } from '../../Interfaces/ABM/Factura';
 export const FacturasView = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [facturas, setFacturas] = useState<Factura[]>([]);

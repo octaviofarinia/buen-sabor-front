@@ -1,23 +1,23 @@
-import { ABMIngredientes } from "../../components/ABM/ABMIngredientes";
+import { ABMIngredientes } from "../../components/ABM/Tables/ABMIngredientes";
 import { IngredienteAddOrUpdate } from "../../components/ABM/AddOrUpdate/IngredienteAddOrUpdate";
 import { IngredientesDetail } from "../../components/ABM/Details/IngredientesDetail";
 import { AuthenticationGuard } from "../../components/Auth0/AuthenticationGuard";
 
 export const IngredienteABMRoutes=[
     {
-      path: 'employee/ABM/Ingrediente',
+      path: 'employee/ABM/Ingredientes',
       element: <AuthenticationGuard component={ABMIngredientes} />,
     },
     {
-      path: 'employee/ABM/Ingrediente/:id',
+      path: 'employee/ABM/Ingredientes/:id',
       element: <AuthenticationGuard component={IngredientesDetail} />,
     },
     {
-      path: 'employee/ABM/Ingrediente/newRegister',
+      path: 'employee/ABM/Ingredientes/newRegister',
       element: <AuthenticationGuard component={IngredienteAddOrUpdate} />,
     },
     {
-      path: 'employee/ABM/Ingrediente/edit/:id',
+      path: 'employee/ABM/Ingredientes/edit/:id',
       element: <AuthenticationGuard component={IngredienteAddOrUpdate} />,
     },
   ]

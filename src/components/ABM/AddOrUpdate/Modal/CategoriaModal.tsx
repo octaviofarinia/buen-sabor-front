@@ -1,35 +1,42 @@
 import { useState, useEffect } from 'react';
-import { Categoria } from '../../../../Interfaces/ABM/Categoria';
-import { getAllFathers } from '../../../../API/SpecializedEndpoints/CategoriaRequests/CategoriaRequests';
+import { RubroArticulo } from '../../../../Interfaces/ABM/RubroArticulo';
+import { getAllFathers } from '../../../../API/Requests/CategoriaRequests/CategoriaRequests';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ToastAlert, notify } from '../../../Toast/ToastAlert';
 import { Button } from '../../../Botones/Button';
+import { AxiosError } from 'axios';
+import { getAll } from '../../../../API/Requests/BaseRequests';
 
 export interface CategoryModalProps {
-  fatherSetter: React.Dispatch<React.SetStateAction<Categoria>>;
+  fatherSetter: React.Dispatch<React.SetStateAction<RubroArticulo>>;
   id?: string | number;
 }
 
 export const CategoryModal = ({ fatherSetter, id }: CategoryModalProps) => {
-  const [categories, setCategories] = useState<Categoria[]>([]);
+  const [categories, setCategories] = useState<RubroArticulo[]>([]);
   const [visible, toggleVisible] = useState(false);
 
+  const getPadresDeRubro = async () => {
+    try {
+      const data = await getAllFathers();
+      setCategories(data);
+    } catch (err) {
+      const axiosErr = err as AxiosError;
+    }
+  };
+
   useEffect(() => {
-    getAllFathers({
-      RegistersSetter: setCategories,
-      id: null,
-      IndividualRegisterSetter: null,
-    });
+    getPadresDeRubro();
   }, []);
-  const setFather = (categoria: Categoria) => {
+  const setFather = (categoria: RubroArticulo) => {
     id !== categoria.id
       ? fatherSetter(categoria)
       : notify('Lo siento! Una Categoría no puede ser su padre.', 'error');
     toggleVisible(false);
   };
-  const renderFilasCategorias = (categorias: Categoria[]) => {
+  const renderFilasCategorias = (categorias: RubroArticulo[]) => {
     return categorias.map((categoria) => (
       <React.Fragment key={categoria.id}>
         <tr
@@ -69,7 +76,7 @@ export const CategoryModal = ({ fatherSetter, id }: CategoryModalProps) => {
       <div
         className={`${
           visible ? 'visible' : 'hidden'
-        } absolute inset-0 overflow-y-auto bg-neutral-400 bg-opacity-75 transition-opacity dark:bg-neutral-700 dark:bg-opacity-75 z-10`}
+        } absolute inset-0 z-10 overflow-y-auto bg-neutral-400 bg-opacity-75 transition-opacity dark:bg-neutral-700 dark:bg-opacity-75`}
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal={true}

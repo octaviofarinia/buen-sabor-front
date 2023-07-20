@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Producto } from '../../Interfaces/ABM/Producto';
+import { ArticuloManufacturado } from '../../Interfaces/ABM/ArticuloManufacturado';
 import { Button } from '../Botones/Button';
 import { CartContext } from '../../context/CarritoProvider';
 import { useContext } from 'react';
@@ -7,7 +7,7 @@ import { ToastAlert, notify } from '../Toast/ToastAlert';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 interface ProductCardProps {
-  producto: Producto;
+  producto: ArticuloManufacturado;
 }
 
 export const ProductCard = ({ producto }: ProductCardProps) => {

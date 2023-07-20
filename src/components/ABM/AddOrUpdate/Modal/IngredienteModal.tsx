@@ -1,28 +1,28 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
-import { Ingrediente } from '../../../../Interfaces/ABM/Ingrediente';
-import { getAllIngredientes } from '../../../../API/SpecializedEndpoints/IngredienteRequests/IngredienteRequests';
+import { ArticuloInsumo } from '../../../../Interfaces/ABM/ArticuloInsumo';
 import { Button } from '../../../Botones/Button';
 import { ToastAlert } from '../../../Toast/ToastAlert';
+import { getAll } from '../../../../API/Requests/BaseRequests';
 export interface IngredienteModalProps {
-  fatherSetter: React.Dispatch<React.SetStateAction<Ingrediente>>;
+  fatherSetter: React.Dispatch<React.SetStateAction<ArticuloInsumo>>;
 }
 
 export const IngredienteModal = ({ fatherSetter }: IngredienteModalProps) => {
-  const [ingredientes, setIngredientes] = useState<Ingrediente[]>([]);
+  const [ingredientes, setIngredientes] = useState<ArticuloInsumo[]>([]);
   const [visible, toggleVisible] = useState(false);
   useEffect(() => {
     getIngredientes();
   }, []);
   const getIngredientes = async () => {
-    const data = await getAllIngredientes();
+    const data = await getAll({endpoint:"articulos-insumo"});
     setIngredientes(data);
   };
-  const setFather = (ingrediente: Ingrediente) => {
+  const setFather = (ingrediente: ArticuloInsumo) => {
     fatherSetter(ingrediente);
     toggleVisible(false);
   };
-  const renderFilasIngredientes = (ingredientes: Ingrediente[]) => {
+  const renderFilasIngredientes = (ingredientes: ArticuloInsumo[]) => {
     return ingredientes.map((ingrediente) => (
       <React.Fragment key={ingrediente.id}>
         <tr

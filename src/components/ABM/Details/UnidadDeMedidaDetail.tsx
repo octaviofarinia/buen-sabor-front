@@ -1,8 +1,8 @@
 import { Link, useParams } from 'react-router-dom';
-import { Categoria } from '../../../Interfaces/ABM/Categoria';
+import { RubroArticulo } from '../../../Interfaces/ABM/RubroArticulo';
 import { useEffect, useState } from 'react';
 import { APIRouter } from '../../../API/APIRouter';
-import { ApiProps, getRegister } from '../../../API/APIHandler';
+import { ApiProps, getOne } from '../../../API/Requests/BaseRequests';
 import { base_category, base_unidad } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
@@ -10,20 +10,21 @@ import { AxiosError } from 'axios';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { Button } from '../../Botones/Button';
 import { UnidadDeMedida } from '../../../Interfaces/ABM/UnidadDeMedida';
+import { Loader } from '../../Loader/Loader';
 
 export const UnidadDeMedidaDetail = () => {
-  const { RequestedEndpoint, id } = useParams();
+  const { id } = useParams();
   const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad);
   const [loading, setLoading] = useState(false);
 
   const getRegisterData = async () => {
     setLoading(true);
     try {
-      const response = await getRegister({
-        id: id,
-        requestedEndpoint: APIRouter(RequestedEndpoint),
-        RegisterSetter: setUnidadDeMedida,
+      const response = await getOne({
+        id: Number(id),
+        endpoint: 'unidades-medida',
       });
+      setUnidadDeMedida(response);
       notify('Se cargo el registro: ' + response.status, 'success');
       setLoading(false);
     } catch (err) {
@@ -38,6 +39,8 @@ export const UnidadDeMedidaDetail = () => {
 
   return (
     <div className="flex w-full px-5 lg:px-0">
+      {loading &&<Loader texto="Cargando registros" closeLoading={setLoading} />}
+
       <div
         className="mx-auto my-10  w-full max-w-4xl rounded-lg border-b-4 border-l-4 border-amber-200  bg-white p-5 py-3 px-4 
      text-xl shadow-lg dark:bg-neutral-800 md:text-2xl lg:py-8"
@@ -49,7 +52,7 @@ export const UnidadDeMedidaDetail = () => {
           </h1>
 
           <Link to={`/employee/UnidadDeMedida`} className="shadow-md">
-            <Button content="Volver" color="amarillo" type="button"  />
+            <Button content="Volver" color="amarillo" type="button" />
           </Link>
         </div>
         <div className="flex flex-col gap-5">

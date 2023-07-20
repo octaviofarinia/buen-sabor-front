@@ -9,7 +9,7 @@ import {
   faTruck,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { PedidoPlanilla } from '../../Interfaces/PedidoWS';
+import { PedidoPlanilla } from '../../Interfaces/ABM/PedidoPlanilla';
 import { Loader } from '../../components/Loader/Loader';
 import { Button } from '../../components/Botones/Button';
 import { over } from 'stompjs';

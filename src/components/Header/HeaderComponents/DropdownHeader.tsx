@@ -30,7 +30,8 @@ export const DropdownHeader = ({ routes }: DropdownProps) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute left-16 md:right-0 md:left-0 z-10 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute left-16 md:right-0 md:left-0 z-10 mt-2 min-w-max w-44  origin-top-right rounded-md
+         bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             {routes.map((route,index) => (
               <Menu.Item key={"Ruta"+index}>
@@ -39,10 +40,10 @@ export const DropdownHeader = ({ routes }: DropdownProps) => {
                      to={!userRoles.includes('employee') ? route.name : `/employee/${route.type}/${route.route}`}
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block px-4 py-2 text-sm'
+                      'block px-4 py-2 text-sm whitespace-nowrap hover:border-r-amber-500 hover:border-r-8 hover:ease-out hover:duration-500'
                     )}
                   >
-                    {route.name}
+                    {route.dropdown}
                   </Link>
                 )}
               </Menu.Item>

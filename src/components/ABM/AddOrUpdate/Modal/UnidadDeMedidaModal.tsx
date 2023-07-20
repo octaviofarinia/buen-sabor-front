@@ -1,24 +1,28 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { getAllUnidadesDeMedida } from '../../../../API/SpecializedEndpoints/UnidadDeMedidaRequests/UnidadDeMedidaRequests';
 import { UnidadDeMedida } from '../../../../Interfaces/ABM/UnidadDeMedida';
 import { Button } from '../../../Botones/Button';
 import { ToastAlert } from '../../../Toast/ToastAlert';
+import { getAll } from '../../../../API/Requests/BaseRequests';
 export interface UnidadDeMedidaModalProps {
   fatherSetter: React.Dispatch<React.SetStateAction<UnidadDeMedida>>;
 }
 
 export const UnidadDeMedidaModal = ({ fatherSetter }: UnidadDeMedidaModalProps) => {
-  const [unidadesDeMedida, setUnidadesDeMedida] = useState<UnidadDeMedidaa[]>([]);
+  const [unidadesDeMedida, setUnidadesDeMedida] = useState<UnidadDeMedida[]>([]);
   const [visible, toggleVisible] = useState(false);
+
+  const getUnidadesDeMedida = async () => {
+    try {
+      const data = await getAll({ endpoint: 'unidades-medida' });
+      setUnidadesDeMedida(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
-    getAllUnidadesDeMedida({
-      RegistersSetter: setUnidadesDeMedida,
-      id: null,
-      IndividualRegisterSetter: null,
-    });
+    getUnidadesDeMedida();
+    return () => {};
   }, []);
   const setFather = (unidadDeMedida: UnidadDeMedida) => {
     fatherSetter(unidadDeMedida);
