@@ -22,9 +22,15 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
   return (
     <select
       className="rounded-md  py-2 pr-8 text-xl font-bold text-neutral-900"
-      defaultValue={pedido?.estado && pedido !== null ? pedido.estado : PedidoStatus.PAGADO}
+      defaultValue={pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
       onChange={(e) => callback(e)}
     >
+      {pedido === null && (
+        <option selected className="text-xl font-bold text-neutral-900">
+          SELECCIONE
+        </option>
+      )}
+
       {pedido === null && (
         <option className="text-xl font-bold text-green-700" value={PedidoStatus.COMPLETADO}>
           {PedidoStatus.COMPLETADO}

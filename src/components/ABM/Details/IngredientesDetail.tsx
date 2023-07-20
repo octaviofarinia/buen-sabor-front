@@ -18,7 +18,7 @@ export const IngredientesDetail = () => {
     try {
       const response = await getRegister({
         id: id,
-        requestedEndpoint: APIRouter(RequestedEndpoint),
+        requestedEndpoint: "articulos-insumo",
         RegisterSetter: setIngrediente,
       });
       notify('Se cargo el registro: ' + response.status, 'success');
@@ -45,7 +45,7 @@ export const IngredientesDetail = () => {
             <span className="text-start text-xl text-amber-400 ">Ingrediente | Artículo - Insumo </span>
           </h1>
 
-          <Link to={`/employee/Ingredientes`} className="shadow-md">
+          <Link to={`/employee/ABM/Ingrediente`} className="shadow-md">
             <Button content="Volver" color="amarillo" type="button" />
           </Link>
         </div>
@@ -66,10 +66,7 @@ export const IngredientesDetail = () => {
             <span className="text-neutral-900 dark:text-white ">Precio de Compra:</span>
             {ingrediente.precioCompra}
           </h5>
-          <h5 className="border-1  mb-2 flex justify-between  gap-1 rounded-lg rounded-l-xl border-b-2 border-l-2 border-amber-200  dark:border-amber-400 dark:bg-neutral-700  py-5 px-5 font-semibold leading-none text-red-500 shadow-md dark:text-red-200 ">
-            <span className="text-neutral-900 dark:text-white ">Precio de Venta:</span>
-            {ingrediente.precioVenta}
-          </h5>
+         
           <h5 className="border-1  mb-2 flex justify-between  gap-1 rounded-lg rounded-l-xl border-b-2 border-l-2 border-amber-200  dark:border-amber-400 dark:bg-neutral-700  py-5 px-5 font-semibold leading-none text-red-500 shadow-md dark:text-red-200 ">
             <span className="text-neutral-900 dark:text-white ">Stock Actual:</span>
             {ingrediente.stockActual}

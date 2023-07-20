@@ -8,8 +8,8 @@ interface IngredienteAddOrUpdateProps {
 }
 
 export const getAllIngredientes = async () => {
-  const response = await axios.get(`${backend_url}/articulos-insumo`);
   try {
+    const response = await axios.get(`${backend_url}/articulos-insumo`);
     return response.data;
   } catch (e) {
     console.error(e);

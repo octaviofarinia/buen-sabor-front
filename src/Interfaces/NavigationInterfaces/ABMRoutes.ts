@@ -8,9 +8,9 @@ export const routes:Route[] = [
     type: 'ABM',
   },
   {
-    name: 'Ingredientes',
+    name: 'Ingrediente',
     imagen: '/ingredient.png',
-    route: 'Ingredientes',
+    route: 'Ingrediente',
     type: 'ABM',
   },
   {

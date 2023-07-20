@@ -12,7 +12,7 @@ export interface ApiProps<T> {
   TableDataSetter?: React.Dispatch<React.SetStateAction<RegisterRow[]>> | null;
   KeyTableDataSetter?: React.Dispatch<React.SetStateAction<HeaderKey[]>> | null;
   RegisterSetter?: React.Dispatch<React.SetStateAction<T>> | null;
-  id?: string | undefined;
+  id?: string | number | undefined;
   requestedEndpoint?: string;
   persistenObject?: T | null;
 }

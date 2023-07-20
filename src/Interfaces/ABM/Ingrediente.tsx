@@ -2,11 +2,11 @@ import { Base } from '../../API/BaseAPIInterface';
 import { Categoria } from './Categoria';
 import { UnidadDeMedida } from './UnidadDeMedida';
 
-export interface Ingrediente extends Base{
+export interface Ingrediente extends Base {
+  id?: number;
   denominacion: string | null;
   urlImagen: string | null;
   precioCompra: number | null;
-  precioVenta: number | null;
   stockActual: number | null;
   stockMinimo: number | null;
   idUnidadMedida?: number | null;

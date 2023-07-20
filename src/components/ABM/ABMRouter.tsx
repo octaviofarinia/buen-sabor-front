@@ -7,6 +7,7 @@ import { FacturasView } from '../../views/EmployeeViews/FacturasView';
 import { PedidosView } from '../../views/EmployeeViews/PedidosView';
 import routes from '../../Interfaces/NavigationInterfaces/ABMRoutes';
 import { Route } from '../../Interfaces/NavigationInterfaces/NavigationInterface';
+import { ABMIngredientes } from './ABMIngredientes';
 
 export const AbmRouter = () => {
   const { RequestedEndpoint, Tipo } = useParams();
@@ -19,9 +20,9 @@ export const AbmRouter = () => {
   function findRoute() {
     switch (Tipo) {
       case 'ABM':
-        return getABMRoute()
+        return getABMRoute();
       case 'Planilla':
-        return getPlanilaRoute()
+        return getPlanilaRoute();
       default:
         return <NotFoundView />;
     }
@@ -38,13 +39,15 @@ export const AbmRouter = () => {
   }
   function getABMRoute() {
     const route = possibleRoutes.find((obj) => obj.route === RequestedEndpoint);
-  
+
     if (route) {
-      return <ABMView tableName={RequestedEndpoint} requestedEndpoint={APIRouter(RequestedEndpoint)} />;
+      return (
+        <ABMView tableName={RequestedEndpoint} requestedEndpoint={APIRouter(RequestedEndpoint)} />
+      );
     } else {
       return <NotFoundView />;
     }
   }
-  
+
   return <div>{findRoute()}</div>;
 };

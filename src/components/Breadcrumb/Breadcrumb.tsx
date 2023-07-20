@@ -35,15 +35,11 @@ export const Breadcrumb = () => {
             />
             <span className="text-black dark:text-zinc-50">/</span>
           </Link>
-        ) : link === 'edit' ? (
-          <Link
-            key={link + '' + index}
-            to={`/employee/${generarBreadcrumb()[index - 1]}`}
-            className="flex gap-1 text-black dark:text-zinc-50"
-          >
+        ) : link === 'edit' || link == 'ABM' ? (
+          <h6 className="flex gap-1 text-black dark:text-zinc-50">
             {parseUnidadDeMedida(link)}
             <span className="text-black dark:text-zinc-50">/</span>
-          </Link>
+          </h6>
         ) : (
           <Link
             to={generarEnlace(generarBreadcrumb(), index)}
