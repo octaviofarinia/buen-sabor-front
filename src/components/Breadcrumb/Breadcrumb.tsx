@@ -35,7 +35,7 @@ export const Breadcrumb = () => {
             />
             <span className="text-black dark:text-zinc-50">/</span>
           </Link>
-        ) : link === 'edit' || link == 'ABM' ? (
+        ) : link === 'edit' || link == 'ABM' || link =="Detalle" ? (
           <h6 className="flex gap-1 text-black dark:text-zinc-50"  key={link}>
             {parseUnidadDeMedida(link)}
             <span className="text-black dark:text-zinc-50">/</span>

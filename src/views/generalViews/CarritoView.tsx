@@ -90,7 +90,6 @@ export const CarritoView = () => {
   };
 
   const validateStock = async () => {
-    console.log("validate stock");
     if (user?.sub !== undefined) {
       const cancelTokenSource = axios.CancelToken.source();
       if (cart.length > 0) {
@@ -122,6 +121,7 @@ export const CarritoView = () => {
   };
 
   useEffect(() => {
+    savePedidoData();
     getDomiciliosUsuario();
     obtenerProductosDelCarrito();
     validateStock();
@@ -134,7 +134,13 @@ export const CarritoView = () => {
       <section className="body-font bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-100">
         <ToastAlert />
 
-        <div className="container mx-auto flex flex-wrap px-5 py-10">
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="container mx-auto flex flex-wrap px-5 py-10"
+          onChange={() => {
+            savePedidoData();
+          }}
+        >
           <div className="flex w-full flex-col flex-wrap">
             <div className=" md:py-6 md:pr-10">
               <div className="relative flex w-full pb-12 ">
@@ -431,7 +437,7 @@ export const CarritoView = () => {
               </div>
             )}
           </div>
-        </div>
+        </form>
       </section>
     </>
   ) : (

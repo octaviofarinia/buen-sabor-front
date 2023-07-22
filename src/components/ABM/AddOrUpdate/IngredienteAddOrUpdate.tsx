@@ -77,9 +77,9 @@ export const IngredienteAddOrUpdate = () => {
   const setPropsOfExistentIngredient = async () => {
     try {
       const ingredienteData = await getOne({ id: Number(id), endpoint: 'articulos-insumo' });
-      ingredienteData.status === 200 && setIngrediente(ingredienteData.data);
-      setCategoria(ingredienteData.data.rubroArticulo);
-      setUnidadDeMedida(ingredienteData.data.unidadMedida);
+      setIngrediente(ingredienteData);
+      setCategoria(ingredienteData.rubroArticulo);
+      setUnidadDeMedida(ingredienteData.unidadMedida);
       notify('Se cargo el registro', 'success');
       setLoading(false);
     } catch (err) {

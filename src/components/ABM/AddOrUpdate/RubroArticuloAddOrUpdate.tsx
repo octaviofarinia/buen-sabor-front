@@ -67,7 +67,8 @@ export const RubroArticuloAddOrUpdate = () => {
 
   const setPropsOfExistentCategoria = async () => {
     try {
-      await getCategoryComplete(Number(id));
+      const response = await getCategoryComplete(Number(id));
+      setCategoria(response)
     } catch (err) {
       console.error(err);
     }

@@ -30,31 +30,31 @@ export const PostPagoView = () => {
       let pedido: Pedido = JSON.parse(informacionPedidoString);
       pedido.factura = factura;
       console.log(pedido);
-      await axios
-        .post(`${backend_url}/pedidos`, pedido, {
+      try {
+        const response = await axios.post(`${backend_url}/pedidos`, pedido, {
           cancelToken: cancelToken.token,
-        })
-        .then(() => {
-          localStorage.removeItem('informacionPedido');
-          resetCart();
-          setStatus(true);
-        })
-        .catch((err) => {
-          if (axios.isCancel(err)) {
-            notify('Ocurrio un error: ' + err.message, 'error');
-            setStatus(false);
-          }
         });
+        console.log(response);
+        localStorage.removeItem('informacionPedido');
+        resetCart();
+        setStatus(true);
+      } catch (err) {
+        console.log(err);
+        if (axios.isCancel(err)) {
+          notify('Ocurrio un error: ' + err.message, 'error');
+          setStatus(false);
+        }
+      }
     }
     return () => cancelToken.cancel();
   };
 
   useEffect(() => {
+    generarPedido();
     const interval = setInterval(() => {
       setTimer((prev) => prev - 1);
     }, 1000);
     const timeout = delayedRedirect(() => navigate('/'), 15000);
-    generarPedido();
     return () => {
       clearInterval(interval);
       clearInterval(timeout);

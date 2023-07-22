@@ -9,6 +9,7 @@ import { Factura, Pedido } from '../../Interfaces/ClientSide/Pedido';
 import CartConstants from '../../Utils/constants/CartConstants';
 import { useCart } from '../../context/CarritoProvider';
 import { delayedRedirect } from '../../Utils/NavigationUtils';
+import { notify } from '../../components/Toast/ToastAlert';
 export const MP_PostPagoView = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -72,18 +73,21 @@ export const MP_PostPagoView = () => {
     if (informacionPedidoString !== null) {
       let pedido: Pedido = JSON.parse(informacionPedidoString);
       pedido.factura = factura;
+      console.log(mpstatus);
       if (mpstatus === 'approved') {
-        await axios
-          .post(`${backend_url}/pedidos`, pedido, {
+        try {
+          const response = await axios.post(`${backend_url}/pedidos`, pedido, {
             cancelToken: cancelToken.token,
-          })
-          .then(() => {
-            localStorage.removeItem('informacionPedido');
-            resetCart();
-          })
-          .catch((err) => {
-            console.error(err);
           });
+          resetCart();
+
+          localStorage.removeItem('informacionPedido');
+        } catch (err) {
+          console.log(err);
+          if (axios.isCancel(err)) {
+            notify('Ocurrio un error: ' + err.message, 'error');
+          }
+        }
       }
     }
     return () => cancelToken.cancel();
@@ -95,7 +99,6 @@ export const MP_PostPagoView = () => {
       setTimer((prev) => prev - 1);
     }, 1000);
     const timeout = delayedRedirect(() => navigate('/'), 15000);
-    generarPedido();
     return () => {
       clearInterval(interval);
       clearInterval(timeout);

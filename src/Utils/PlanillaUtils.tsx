@@ -7,13 +7,13 @@ import { ChangeEvent } from 'react';
 export enum PedidoStatus {
   PAGADO = 'PAGADO',
   COMPLETADO = 'COMPLETADO',
-  ACEPTADO = 'ACEPTADO',
-  PENDIENTE = 'PENDIENTE',
+  PENDIENTE_PAGO = 'PENDIENTE_PAGO',
   PREPARACION = 'PREPARACION',
   EN_CAMINO = 'EN_CAMINO',
-  ENTREGADO = 'ENTREGADO',
+  CANCELADO = 'CANCELADO',
   RECHAZADO = 'RECHAZADO',
 }
+
 interface EstadoSelect {
   pedido: PedidoPlanilla | null;
   callback: (e: ChangeEvent<HTMLSelectElement>) => void;
@@ -30,7 +30,6 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
           SELECCIONE
         </option>
       )}
-
       {pedido === null && (
         <option className="text-xl font-bold text-green-700" value={PedidoStatus.COMPLETADO}>
           {PedidoStatus.COMPLETADO}
@@ -39,20 +38,15 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
       <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
         {PedidoStatus.PAGADO}
       </option>
-      <option className="text-xl font-bold text-emerald-500" value={PedidoStatus.ACEPTADO}>
-        {PedidoStatus.ACEPTADO}
-      </option>
-      <option className="text-xl font-bold text-amber-700" value={PedidoStatus.PENDIENTE}>
-        {PedidoStatus.PENDIENTE}
+
+      <option className="text-xl font-bold text-amber-700" value={PedidoStatus.PENDIENTE_PAGO}>
+        {PedidoStatus.PENDIENTE_PAGO}
       </option>
       <option className="text-xl font-bold text-amber-500" value={PedidoStatus.PREPARACION}>
         {PedidoStatus.PREPARACION}
       </option>
       <option className="text-xl font-bold text-blue-500" value={PedidoStatus.EN_CAMINO}>
         {PedidoStatus.EN_CAMINO}
-      </option>
-      <option className="text-xl font-bold text-blue-700" value={PedidoStatus.ENTREGADO}>
-        {PedidoStatus.ENTREGADO}
       </option>
       <option className="text-xl font-bold text-rose-700" value={PedidoStatus.RECHAZADO}>
         {PedidoStatus.RECHAZADO}
@@ -61,7 +55,7 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
   );
 };
 
-export const setEstadoDePedido = async (id: number | null, estado: string | null) => {
+export const setEstadoDePedido = async (estado: string | null, id?: number) => {
   await axios
     .put(backend_url + '/pedidos/cambiar-estado', null, {
       params: {

@@ -18,7 +18,7 @@ export const ProductDetailView = () => {
   const getProducto = async () => {
     try {
       const response = await getOne({ endpoint: 'articulos-manufacturados', id: Number(id) });
-      setProducto(response.data);
+      setProducto(response);
     } catch (err) {
       notify('Ocurrio un error. Redirigiendo al inicio', 'error');
       delayedRedirect(() => navigate('/'), 5000);

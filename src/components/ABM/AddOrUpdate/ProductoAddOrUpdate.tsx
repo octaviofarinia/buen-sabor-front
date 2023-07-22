@@ -90,9 +90,8 @@ export const ProductoAddOrUpdate = () => {
       setLoading(true);
       const productoData = await getOne({ id: Number(id), endpoint: 'articulos-manufacturados' });
       const detalleData = await getDetalles({ id: id });
-
-      detalleData.status === 200 && setDetalle(detalleData.data);
-      productoData.status === 200 && setProducto(productoData.data);
+      setDetalle(detalleData.data);
+      setProducto(productoData);
       notify('Se cargo el registro', 'success');
       setLoading(false);
     } catch (err) {

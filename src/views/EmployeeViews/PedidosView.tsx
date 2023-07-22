@@ -16,6 +16,7 @@ import SockJS from 'sockjs-client/dist/sockjs';
 import axios from 'axios';
 import { EstadosSelect, PedidoStatus, setEstadoDePedido } from '../../Utils/PlanillaUtils';
 import { backend_url } from '../../Utils/ConstUtils';
+import { anularPedido } from '../../API/Requests/PlanillaRequests/PedidoRequests';
 
 export const PedidosView = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -126,19 +127,25 @@ export const PedidosView = () => {
                         <td className="px-6 py-4">{pedido.id}</td>
                         <td className="px-6 py-4">{pedido.total}</td>
                         <td className="px-6 py-4">
-                          {pedido.estado !== PedidoStatus.COMPLETADO ? (
-                            <div className="flex gap-5 ">
+                          {pedido.estado !== PedidoStatus.COMPLETADO &&
+                          pedido.estado !== PedidoStatus.RECHAZADO &&
+                          pedido.estado !== PedidoStatus.CANCELADO ? (
+                            <div className="flex gap-5">
                               <EstadosSelect
                                 pedido={pedido}
                                 callback={(e) => {
-                                  setEstadoDePedido(pedido.id, e.target.value);
+                                  setEstadoDePedido(e.target.value, pedido.id);
                                 }}
                               />
                             </div>
                           ) : (
                             <h2 className="flex gap-3 py-2 pr-8 text-xl font-bold">
-                              <FontAwesomeIcon icon={faCheck} size="lg" />
-                              COMPLETADO
+                              {pedido.estado === PedidoStatus.COMPLETADO ? (
+                                <FontAwesomeIcon icon={faCheck} size="lg" />
+                              ) : (
+                                <FontAwesomeIcon icon={faXmark} size="lg" />
+                              )}
+                              {pedido.estado}
                             </h2>
                           )}
                         </td>
@@ -148,24 +155,52 @@ export const PedidosView = () => {
 
                         <td className="px-6 py-4">
                           <div className="m-0 flex h-full items-center justify-center gap-16 p-0">
-                            {pedido.estado !== 'COMPLETADO' ? (
-                              <Button
-                                type="button"
-                                color="verde"
-                                content={
-                                  <p className="flex gap-3">
-                                    Confirmar finalizado
-                                    <FontAwesomeIcon icon={faXmark} size="lg" />
-                                  </p>
-                                }
-                                callback={() => {
-                                  setEstadoDePedido(pedido.id, PedidoStatus.COMPLETADO);
-                                }}
-                              />
+                            {pedido.estado !== PedidoStatus.COMPLETADO &&
+                            pedido.estado !== PedidoStatus.RECHAZADO &&
+                            pedido.estado !== PedidoStatus.CANCELADO ? (
+                              <div className="flex gap-5">
+                                <Button
+                                  type="button"
+                                  color="verde"
+                                  content={
+                                    <p className="flex gap-3">
+                                      Confirmar finalizado
+                                      <FontAwesomeIcon icon={faXmark} size="lg" />
+                                    </p>
+                                  }
+                                  callback={() => {
+                                    if (pedido.estado === PedidoStatus.PAGADO) {
+                                      setEstadoDePedido(PedidoStatus.COMPLETADO, pedido.id);
+                                    } else {
+                                      notify(
+                                        'No se puede marcar completado el pedido si no ha sido pagado',
+                                        'info'
+                                      );
+                                    }
+                                  }}
+                                />
+                                <Button
+                                  type="button"
+                                  color="rojo"
+                                  content={
+                                    <p className="flex gap-3">
+                                      Anular pedido
+                                      <FontAwesomeIcon icon={faXmark} size="lg" />
+                                    </p>
+                                  }
+                                  callback={() => {
+                                    anularPedido(pedido.id);
+                                  }}
+                                />
+                              </div>
                             ) : (
                               <h5 className="text- flex gap-3 md:text-xl">
-                                Pedido finalizado
-                                <FontAwesomeIcon icon={faCheck} size="lg" />
+                                Pedido {pedido.estado}
+                                {pedido.estado === PedidoStatus.COMPLETADO ? (
+                                  <FontAwesomeIcon icon={faCheck} size="lg" />
+                                ) : (
+                                  <FontAwesomeIcon icon={faXmark} size="lg" />
+                                )}
                               </h5>
                             )}
                           </div>

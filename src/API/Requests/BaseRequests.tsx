@@ -1,20 +1,9 @@
 import axios, { AxiosError } from 'axios';
 
-import { UnidadDeMedida } from '../../Interfaces/ABM/UnidadDeMedida';
-import { DetalleProducto } from '../../Interfaces/ABM/DetalleProducto';
-import { HeaderKey, RegisterRow } from '../../Interfaces/ABM/GenericTableInterfaces';
 import { backend_url } from '../../Utils/ConstUtils';
 import { Base } from '../BaseAPIInterface';
 
-export type T = UnidadDeMedida | DetalleProducto;
-export interface ApiProps<T> {
-  TableDataSetter?: React.Dispatch<React.SetStateAction<RegisterRow[]>> | null;
-  KeyTableDataSetter?: React.Dispatch<React.SetStateAction<HeaderKey[]>> | null;
-  RegisterSetter?: React.Dispatch<React.SetStateAction<T>> | null;
-  id?: string | number | undefined;
-  requestedEndpoint?: string;
-  persistenObject?: T | null;
-}
+
 interface RequestInterface {
   endpoint: string;
   id?: number;

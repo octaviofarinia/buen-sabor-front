@@ -34,7 +34,7 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
   const resetCart = () => {
     setCart([]);
-    localStorage.setItem('buenSaborCart' + user?.sub, JSON.stringify(cart));
+    localStorage.setItem('buenSaborCart' + user?.sub, JSON.stringify([]));
   };
   const addToCart = async (detalle: DetallePedido) => {
     if (user?.sub === undefined) {

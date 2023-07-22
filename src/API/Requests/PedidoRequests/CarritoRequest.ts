@@ -15,7 +15,7 @@ export const getProductosDelCarrito = async (userid: string) => {
       endpoint: 'articulos-manufacturados',
       id: Number(item.idArticuloManufacturado),
     });
-    productos.push(response.data);
+    productos.push(response);
   });
 
   await Promise.all(promises);
