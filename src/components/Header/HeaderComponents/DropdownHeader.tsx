@@ -3,20 +3,17 @@ import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';
 import { DropdownProps } from '../../../Interfaces/NavigationInterfaces/NavigationInterface';
-import { useUser } from '../../../context/UserProvider';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 export const DropdownHeader = ({ routes }: DropdownProps) => {
-  const { userRoles } = useUser();
-
   return (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu as="div" className="relative inline-block pl-3 text-left">
       <div>
-        <Menu.Button className="flex w-full items-center justify-center gap-x-1.5 rounded-md   text-amber-400 hover:bg-neutral-800 hover:text-amber-500 active:text-amber-500 xl:px-3 ">
-          <h2 className="text-sm lg:text-lg">ABM</h2>
+        <Menu.Button className="flex w-full items-center justify-center gap-x-1.5 rounded-md  p-1 text-amber-400  hover:border-b-4 hover:border-b-neutral-700   hover:bg-neutral-800 hover:text-amber-500 hover:duration-300 hover:ease-in-out active:text-amber-500 xl:py-2 xl:px-3 ">
+          <h2 className="text-base lg:text-lg ">ABM</h2>
           <ChevronDownIcon className="-mr-1 h-5 w-5 text-neutral-400" aria-hidden="true" />
         </Menu.Button>
       </div>
@@ -39,11 +36,7 @@ export const DropdownHeader = ({ routes }: DropdownProps) => {
               <Menu.Item key={'Ruta' + index}>
                 {({ active }) => (
                   <Link
-                    to={
-                      !userRoles.includes('employee')
-                        ? route.name
-                        : `/employee/${route.type}/${route.route}`
-                    }
+                    to={`/employee/${route.type}/${route.route}`}
                     className={classNames(
                       active ? 'bg-neutral-100 text-neutral-900' : 'text-neutral-700',
                       'border-box block whitespace-nowrap px-4 py-2 text-sm hover:rounded-r-md hover:border-r-8 hover:border-r-amber-500 hover:bg-amber-300 hover:duration-500 hover:ease-out active:border-r-amber-700 active:bg-amber-500 active:text-neutral-100  '

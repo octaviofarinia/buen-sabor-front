@@ -1,6 +1,6 @@
 import { Route } from './NavigationInterface';
 
-export const routes: Route[] = [
+export const ABMRoutes: Route[] = [
   {
     name: 'Rubro de los Artículos | Categorías',
     imagen: '/category.png',
@@ -29,20 +29,8 @@ export const routes: Route[] = [
     dropdown: 'Unidades de Medida',
     type: 'ABM',
   },
-  {
-    name: 'Pedidos',
-    imagen: '/pedido.jpg',
-    route: 'Pedidos',
-    dropdown: 'Pedidos',
-    type: 'Planilla',
-  },
-  {
-    name: 'Facturas',
-    imagen: '/facturas.jpg',
-    route: 'Facturas',
-    dropdown: 'Facturas',
-    type: 'Planilla',
-  },
 ];
 
-export default routes;
+
+
+export default ABMRoutes;

@@ -19,15 +19,20 @@ import { useAuth0 } from '@auth0/auth0-react';
 import styles from './Header.module.css';
 import { frontend_url } from '../../Utils/ConstUtils';
 import { useCart } from '../../context/CarritoProvider';
+import { employeeRoles } from '../../Utils/constants/UserRoles';
 
 export const Header = () => {
-  const { userRoles } = useUser();
+  const { userRole } = useUser();
   const { cart } = useCart();
   const { isDarkMode, toggleTheme } = useTheme();
   const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
-  useEffect(() => {}, [cart.length]);
-  const navigation = userRoles.includes('employee') ? EmployeeStaticRoutes : ClientStaticRoutes;
+  useEffect(() => {
+  }, [cart.length, userRole]);
+  
+  const navigation = Object.values(employeeRoles).includes(userRole)
+    ? EmployeeStaticRoutes
+    : ClientStaticRoutes;
   return (
     <Disclosure as="nav" className="bg-neutral-900">
       {({ open }) => (
@@ -47,7 +52,7 @@ export const Header = () => {
               </div>
               <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
                 <Link
-                  to={!userRoles.includes('employee') ? '/' : '/employee'}
+                  to={!userRole.includes('administrador') ? '/' : '/employee'}
                   className="inline-flex items-center gap-2.5 text-lg font-bold uppercase text-amber-400 md:text-3xl"
                   aria-label="logo"
                 >
@@ -68,7 +73,12 @@ export const Header = () => {
                         {item.name}
                       </Link>
                     ))}
-                    {userRoles.includes('employee') && <DropdownHeader routes={EmployeeRoutes} />}
+                    {[employeeRoles.ADMINISTRADOR, employeeRoles.LOGISTICA]
+                      .toLocaleString()
+                      .toLowerCase()
+                      .includes(userRole.toLowerCase()) && (
+                      <DropdownHeader routes={EmployeeRoutes} />
+                    )}
                   </div>
                 </div>
               </div>
@@ -201,7 +211,10 @@ export const Header = () => {
                 </Disclosure.Button>
               ))}
               <Disclosure.Button>
-                {userRoles.includes('employee') && <DropdownHeader routes={EmployeeRoutes} />}
+                {[employeeRoles.ADMINISTRADOR, employeeRoles.LOGISTICA]
+                  .toLocaleString()
+                  .toLowerCase()
+                  .includes(userRole.toLowerCase()) && <DropdownHeader routes={EmployeeRoutes} />}
               </Disclosure.Button>
             </div>
           </Disclosure.Panel>

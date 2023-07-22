@@ -1,36 +1,42 @@
-import { Link } from 'react-router-dom';
-import { Overlay } from '../../components/Overlay/Overlay';
-import { routes } from '../../Interfaces/NavigationInterfaces/ABMRoutes';
+import { ABMRoutes } from '../../Interfaces/NavigationInterfaces/ABMRoutes';
+import { useUser } from '../../context/UserProvider';
+import { ABMRoles, facturaRoles, pedidoRoles } from '../../Utils/constants/UserRoles';
+import { ImageLink } from '../../components/ImageLink/ImageLink';
 
 export const EmployeeMain = () => {
+  const { userRole } = useUser();
   return (
-    <div className="pt-3 pb-10 bg-white dark:bg-neutral-800">
+    <div className="bg-white pt-3 pb-10 dark:bg-neutral-800">
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
         <div className="relative grid gap-6 sm:grid-cols-2">
-          {routes.map((route) => (
-            <Link
-              to={`${route.type}/${route.route}`}
-              key={route.route}
-              className="group relative flex h-80 items-end overflow-hidden rounded-lg bg-gray-100 dark:bg-neutral-800 p-4 shadow-lg"
-            >
-              <img
-                src={route.imagen}
-                loading="lazy"
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
+          {Object.values(ABMRoles).includes(userRole) &&
+            ABMRoutes.map((route) => (
+              <ImageLink
+                dropdown={route.dropdown}
+                imagen={route.imagen}
+                name={route.name}
+                type={route.type}
+                route={route.route}
               />
-              <Overlay />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-50"></div>
-
-              <div className="relative flex flex-col">
-                <span className="text-gray-300 text-lg">{route.type}</span>
-                <span className="text-lg font-semibold capitalize text-white lg:text-3xl">
-                  {route.name}
-                </span>
-              </div>
-            </Link>
-          ))}
-          
+            ))}
+          {Object.values(pedidoRoles).includes(userRole) && (
+            <ImageLink
+              dropdown={'Pedidos'}
+              imagen={'/pedido.jpg'}
+              name={'Pedidos'}
+              type={'Planilla'}
+              route={'Pedidos'}
+            />
+          )}
+          {Object.values(facturaRoles).includes(userRole) && (
+            <ImageLink
+              dropdown={'Facturas'}
+              imagen={'/facturas.jpg'}
+              name={'Facturas'}
+              type={'Planilla'}
+              route={'Facturas'}
+            />
+          )}
         </div>
       </div>
     </div>

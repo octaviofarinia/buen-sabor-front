@@ -2,7 +2,9 @@ import axios from 'axios';
 import { PedidoPlanilla } from '../Interfaces/ABM/PedidoPlanilla';
 import { backend_url } from './ConstUtils';
 import { notify } from '../components/Toast/ToastAlert';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { useUser } from '../context/UserProvider';
+import { employeeRoles } from './constants/UserRoles';
 
 export enum PedidoStatus {
   PAGADO = 'PAGADO',
@@ -11,7 +13,8 @@ export enum PedidoStatus {
   PREPARACION = 'PREPARACION',
   EN_CAMINO = 'EN_CAMINO',
   CANCELADO = 'CANCELADO',
-  RECHAZADO = 'RECHAZADO',
+  NOTA_CREDITO = 'NOTA_CREDITO',
+  PENDIENTE_ENVIO = 'PENDIENTE_ENVIO',
 }
 
 interface EstadoSelect {
@@ -19,38 +22,81 @@ interface EstadoSelect {
   callback: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
+  const { userRole } = useUser();
+
+  useEffect(() => {}, [userRole]);
+
   return (
     <select
-      className="rounded-md  py-2 pr-8 text-xl font-bold text-neutral-900"
+      className="rounded-md py-2 pr-8 text-xl font-bold text-neutral-900"
       defaultValue={pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
       onChange={(e) => callback(e)}
     >
-      {pedido === null && (
-        <option selected className="text-xl font-bold text-neutral-900">
-          SELECCIONE
-        </option>
-      )}
-      {pedido === null && (
-        <option className="text-xl font-bold text-green-700" value={PedidoStatus.COMPLETADO}>
-          {PedidoStatus.COMPLETADO}
-        </option>
-      )}
-      <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
-        {PedidoStatus.PAGADO}
+      <option selected className="text-xl font-bold text-green-700" disabled hidden>
+        {pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
       </option>
+      {userRole === employeeRoles.ADMINISTRADOR && (
+        <>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
+            PAGADO
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.COMPLETADO}>
+            COMPLETADO
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PENDIENTE_PAGO}>
+            PENDIENTE PAGO
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PREPARACION}>
+            EN PREPARACION
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.EN_CAMINO}>
+            EN CAMINO
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.CANCELADO}>
+            CANCELADO
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.NOTA_CREDITO}>
+            NOTA DE CRÉDITO
+          </option>
+        </>
+      )}
 
-      <option className="text-xl font-bold text-amber-700" value={PedidoStatus.PENDIENTE_PAGO}>
-        {PedidoStatus.PENDIENTE_PAGO}
-      </option>
-      <option className="text-xl font-bold text-amber-500" value={PedidoStatus.PREPARACION}>
-        {PedidoStatus.PREPARACION}
-      </option>
-      <option className="text-xl font-bold text-blue-500" value={PedidoStatus.EN_CAMINO}>
-        {PedidoStatus.EN_CAMINO}
-      </option>
-      <option className="text-xl font-bold text-rose-700" value={PedidoStatus.RECHAZADO}>
-        {PedidoStatus.RECHAZADO}
-      </option>
+      {userRole === employeeRoles.COCINERO && (
+        <option className="text-xl font-bold text-green-700" value={PedidoStatus.PREPARACION}>
+          PREPARACION
+        </option>
+      )}
+
+      {userRole === employeeRoles.DELIVERY && (
+        <>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.EN_CAMINO}>
+            EN_CAMINO
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PENDIENTE_ENVIO}>
+            PENDIENTE DE ENVIO
+          </option>
+        </>
+      )}
+
+      {userRole === employeeRoles.CAJERO && (
+        <>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
+            PAGADO
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.COMPLETADO}>
+            COMPLETADO
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PENDIENTE_PAGO}>
+            PENDIENTE DE PAGO
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PREPARACION}>
+            EN PREPARACIÓN
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.EN_CAMINO}>
+            EN CAMINO
+          </option>
+        </>
+      )}
     </select>
   );
 };

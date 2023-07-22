@@ -17,8 +17,11 @@ import axios from 'axios';
 import { EstadosSelect, PedidoStatus, setEstadoDePedido } from '../../Utils/PlanillaUtils';
 import { backend_url } from '../../Utils/ConstUtils';
 import { anularPedido } from '../../API/Requests/PlanillaRequests/PedidoRequests';
+import { useUser } from '../../context/UserProvider';
+import { employeeRoles } from '../../Utils/constants/UserRoles';
 
 export const PedidosView = () => {
+  const { userRole } = useUser();
   const [isLoading, setIsLoading] = useState(true);
   const [pedidos, setPedidos] = useState<PedidoPlanilla[]>([]);
   const [conectado, setConectado] = useState<boolean>(false);
@@ -38,6 +41,15 @@ export const PedidosView = () => {
       .catch((err) => console.error(err));
   };
 
+  const filterByRole = () => {
+    if (userRole == employeeRoles.CAJERO || userRole === employeeRoles.ADMINISTRADOR) {
+      getPedidos(null);
+    } else if (userRole === employeeRoles.DELIVERY) {
+      getPedidos(PedidoStatus.PENDIENTE_ENVIO);
+    } else {
+      getPedidos(PedidoStatus.PAGADO);
+    }
+  };
   useEffect(() => {
     setIsLoading(true);
     if (!conectado) {
@@ -95,7 +107,7 @@ export const PedidosView = () => {
             color="negro"
             textSize="text-xl"
             callback={() => {
-              getPedidos(null);
+              filterByRole();
               setEstadoPedidos('');
             }}
           />
@@ -128,7 +140,7 @@ export const PedidosView = () => {
                         <td className="px-6 py-4">{pedido.total}</td>
                         <td className="px-6 py-4">
                           {pedido.estado !== PedidoStatus.COMPLETADO &&
-                          pedido.estado !== PedidoStatus.RECHAZADO &&
+                          pedido.estado !== PedidoStatus.NOTA_CREDITO &&
                           pedido.estado !== PedidoStatus.CANCELADO ? (
                             <div className="flex gap-5">
                               <EstadosSelect
@@ -156,7 +168,7 @@ export const PedidosView = () => {
                         <td className="px-6 py-4">
                           <div className="m-0 flex h-full items-center justify-center gap-16 p-0">
                             {pedido.estado !== PedidoStatus.COMPLETADO &&
-                            pedido.estado !== PedidoStatus.RECHAZADO &&
+                            pedido.estado !== PedidoStatus.NOTA_CREDITO &&
                             pedido.estado !== PedidoStatus.CANCELADO ? (
                               <div className="flex gap-5">
                                 <Button

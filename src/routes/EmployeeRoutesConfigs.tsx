@@ -6,8 +6,9 @@ import { ProductoRoutes } from './ABMRoutes/ProductoRoutes';
 import { RubroArticuloRoutes } from './ABMRoutes/RubroArticuloRoutes';
 import { UnidadDeMedidaRoutes } from './ABMRoutes/UnidadDeMedidaRoutes';
 import { PedidoFacturaRoutes } from './ABMRoutes/PedidoAndFacturaRoutes';
+import { employeeRoles } from '../Utils/constants/UserRoles';
 
-const EmployeeDinamicRoutes = [
+const AllEmployeeDinamicRoutes = [
   ...ClientDinamicRoutes,
   ...IngredienteABMRoutes,
   ...ProductoRoutes,
@@ -15,6 +16,16 @@ const EmployeeDinamicRoutes = [
   ...UnidadDeMedidaRoutes,
   ...PedidoFacturaRoutes,
 ];
+
+const LogisticaDinamicRoutes = [
+  ...ClientDinamicRoutes,
+  ...IngredienteABMRoutes,
+  ...ProductoRoutes,
+  ...RubroArticuloRoutes,
+  ...UnidadDeMedidaRoutes,
+];
+
+const NormalEmployeesDinamicRoutes = [...PedidoFacturaRoutes];
 
 export const EmployeeStaticRoutes = [
   ...ClientStaticRoutes,
@@ -25,4 +36,13 @@ export const EmployeeStaticRoutes = [
   },
 ];
 
-export default EmployeeDinamicRoutes;
+export const getEmployeeRoutes = (role: string) => {
+  if (role === employeeRoles.ADMINISTRADOR) {
+    return [...AllEmployeeDinamicRoutes, ...EmployeeStaticRoutes];
+  } else if (role === employeeRoles.LOGISTICA) {
+    return [...EmployeeStaticRoutes, ...LogisticaDinamicRoutes];
+  } else {
+    return [...EmployeeStaticRoutes, ...NormalEmployeesDinamicRoutes];
+  }
+};
+export default AllEmployeeDinamicRoutes;

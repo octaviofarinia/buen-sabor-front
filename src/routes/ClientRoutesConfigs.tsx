@@ -27,4 +27,5 @@ export const ClientStaticRoutes = [
   { name: 'Preguntas', path: '/Preguntas', element: <PreguntasView /> },
 ];
 
+export const AllClientRoutes = [...ClientDinamicRoutes, ...ClientStaticRoutes];
 export default ClientDinamicRoutes;
