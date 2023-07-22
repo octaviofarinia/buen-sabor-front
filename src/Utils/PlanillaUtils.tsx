@@ -43,19 +43,19 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.COMPLETADO}>
             COMPLETADO
           </option>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PENDIENTE_PAGO}>
+          <option className="text-xl font-bold text-amber-500" value={PedidoStatus.PENDIENTE_PAGO}>
             PENDIENTE PAGO
           </option>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PREPARACION}>
+          <option className="text-xl font-bold text-violet-700" value={PedidoStatus.PREPARACION}>
             EN PREPARACION
           </option>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.EN_CAMINO}>
+          <option className="text-xl font-bold text-blue-700" value={PedidoStatus.EN_CAMINO}>
             EN CAMINO
           </option>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.CANCELADO}>
+          <option className="text-xl font-bold text-rose-700" value={PedidoStatus.CANCELADO}>
             CANCELADO
           </option>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.NOTA_CREDITO}>
+          <option className="text-xl font-bold text-rose-700" value={PedidoStatus.NOTA_CREDITO}>
             NOTA DE CRÉDITO
           </option>
         </>
@@ -69,7 +69,7 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
 
       {userRole === employeeRoles.DELIVERY && (
         <>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.EN_CAMINO}>
+          <option className="text-xl font-bold text-blue-700" value={PedidoStatus.EN_CAMINO}>
             EN_CAMINO
           </option>
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.PENDIENTE_ENVIO}>
@@ -83,16 +83,13 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
             PAGADO
           </option>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.COMPLETADO}>
-            COMPLETADO
-          </option>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PENDIENTE_PAGO}>
+          <option className="text-xl font-bold text-amber-500" value={PedidoStatus.PENDIENTE_PAGO}>
             PENDIENTE DE PAGO
           </option>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PREPARACION}>
+          <option className="text-xl font-bold text-violet-700" value={PedidoStatus.PREPARACION}>
             EN PREPARACIÓN
           </option>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.EN_CAMINO}>
+          <option className="text-xl font-bold text-blue-700" value={PedidoStatus.EN_CAMINO}>
             EN CAMINO
           </option>
         </>
