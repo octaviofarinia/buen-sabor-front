@@ -1,4 +1,4 @@
-import CartConstants from '../../Utils/constants/CartConstants';
+import CartConstants from '../../Utils/Constants/CartConstants';
 import { Domicilio } from '../ClientSide/Domicilio';
 import { Pedido } from '../ClientSide/Pedido';
 import { RubroArticulo } from './RubroArticulo';
@@ -56,7 +56,7 @@ export const base_pedido: Pedido = {
   id: null,
   total: 0,
   tipoEnvio: CartConstants.RETIRO_EN_LOCAL,
-  idDomicilioEntrega:0,
+  idDomicilioEntrega: 0,
   auth0Id: undefined,
   tiempoEstimadoFinalizacion: 0,
   productos: null,

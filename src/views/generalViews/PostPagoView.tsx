@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { backend_url } from '../../Utils/ConstUtils';
 import { Factura, Pedido } from '../../Interfaces/ClientSide/Pedido';
-import CartConstants from '../../Utils/constants/CartConstants';
+import CartConstants from '../../Utils/Constants/CartConstants';
 import { useCart } from '../../context/CarritoProvider';
 import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
 import { delayedRedirect } from '../../Utils/NavigationUtils';

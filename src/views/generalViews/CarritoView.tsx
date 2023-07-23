@@ -22,7 +22,7 @@ import { useCart } from '../../context/CarritoProvider';
 import axios from 'axios';
 import { backend_url } from '../../Utils/ConstUtils';
 import { Wallet } from '@mercadopago/sdk-react';
-import CartConstants from '../../Utils/constants/CartConstants';
+import CartConstants from '../../Utils/Constants/CartConstants';
 import { base_pedido } from '../../Interfaces/ABM/InterfaceDelivery';
 import { getProductosDelCarrito } from '../../API/Requests/PedidoRequests/CarritoRequest';
 import { ArticuloManufacturado } from '../../Interfaces/ABM/ArticuloManufacturado';

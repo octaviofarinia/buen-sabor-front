@@ -1,4 +1,4 @@
-import { EmployeeMain } from '../views/employeeViews/EmployeeMain';
+import { EmployeeMain } from '../views/EmployeeViews/EmployeeMain';
 import ClientDinamicRoutes, { ClientStaticRoutes } from './ClientRoutesConfigs';
 import { AuthenticationGuard } from '../components/Auth0/AuthenticationGuard';
 import { IngredienteABMRoutes } from './ABMRoutes/IngredienteRoutes';
@@ -6,7 +6,7 @@ import { ProductoRoutes } from './ABMRoutes/ProductoRoutes';
 import { RubroArticuloRoutes } from './ABMRoutes/RubroArticuloRoutes';
 import { UnidadDeMedidaRoutes } from './ABMRoutes/UnidadDeMedidaRoutes';
 import { PedidoFacturaRoutes } from './ABMRoutes/PedidoAndFacturaRoutes';
-import { employeeRoles } from '../Utils/constants/UserRoles';
+import { employeeRoles } from '../Utils/Constants/UserRoles';
 
 const AllEmployeeDinamicRoutes = [
   ...ClientDinamicRoutes,
