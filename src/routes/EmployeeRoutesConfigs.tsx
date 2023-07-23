@@ -1,4 +1,4 @@
-import { EmployeeMain } from '../views/employeeViews/EmployeeMain';
+import { EmployeeMain } from '../views/EmployeeViews/EmployeeMain';
 import ClientDinamicRoutes, { ClientStaticRoutes } from './ClientRoutesConfigs';
 import { AuthenticationGuard } from '../components/Auth0/AuthenticationGuard';
 import { IngredienteABMRoutes } from './ABMRoutes/IngredienteRoutes';

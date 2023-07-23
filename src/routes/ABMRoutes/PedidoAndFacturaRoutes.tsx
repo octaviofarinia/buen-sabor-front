@@ -1,8 +1,7 @@
-
 import { RubroArticuloDetail } from '../../components/ABM/Details/RubroArticuloDetail';
 import { AuthenticationGuard } from '../../components/Auth0/AuthenticationGuard';
-import { FacturasView } from '../../views/employeeViews/FacturasView';
-import { PedidosView } from '../../views/employeeViews/PedidosView';
+import { FacturasView } from '../../views/EmployeeViews/FacturasView';
+import { PedidosView } from '../../views/EmployeeViews/PedidosView';
 
 export const PedidoFacturaRoutes = [
   {
