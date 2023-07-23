@@ -19,7 +19,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import styles from './Header.module.css';
 import { frontend_url } from '../../Utils/ConstUtils';
 import { useCart } from '../../context/CarritoProvider';
-import { employeeRoles } from '../../Utils/constants/UserRoles';
+import { employeeRoles } from '../../Utils/Constants/UserRoles';
 
 export const Header = () => {
   const { userRole } = useUser();

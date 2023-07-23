@@ -6,7 +6,7 @@ import { ProductoRoutes } from './ABMRoutes/ProductoRoutes';
 import { RubroArticuloRoutes } from './ABMRoutes/RubroArticuloRoutes';
 import { UnidadDeMedidaRoutes } from './ABMRoutes/UnidadDeMedidaRoutes';
 import { PedidoFacturaRoutes } from './ABMRoutes/PedidoAndFacturaRoutes';
-import { employeeRoles } from '../Utils/constants/UserRoles';
+import { employeeRoles } from '../Utils/Constants/UserRoles';
 
 const AllEmployeeDinamicRoutes = [
   ...ClientDinamicRoutes,

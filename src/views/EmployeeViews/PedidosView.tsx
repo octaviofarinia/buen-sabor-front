@@ -18,7 +18,7 @@ import { EstadosSelect, PedidoStatus, setEstadoDePedido } from '../../Utils/Plan
 import { backend_url } from '../../Utils/ConstUtils';
 import { anularPedido } from '../../API/Requests/PlanillaRequests/PedidoRequests';
 import { useUser } from '../../context/UserProvider';
-import { employeeRoles } from '../../Utils/constants/UserRoles';
+import { employeeRoles } from '../../Utils/Constants/UserRoles';
 
 export const PedidosView = () => {
   const { userRole } = useUser();
