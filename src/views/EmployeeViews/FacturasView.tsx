@@ -1,12 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faFaceSadCry,
-  faMoneyBill,
-  faMoneyBills,
-  faTruck,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faFaceSadCry, faMoneyBills, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Loader } from '../../components/Loader/Loader';
 import { Factura } from '../../Interfaces/ABM/Factura';
 import { AxiosError } from 'axios';
@@ -35,7 +29,7 @@ export const FacturasView = () => {
     return () => {};
   }, []);
   return (
-    <div className=" relative flex w-full flex-1 flex-col gap-5 bg-neutral-50 px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">
+    <div className=" relative flex w-full flex-1 flex-col gap-5 bg-neutral-100 px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">
       {isLoading && (
         <Loader
           texto="Cargando las facturas..."
@@ -51,7 +45,7 @@ export const FacturasView = () => {
         </h1>
       </div>
 
-      {facturas.length != 0 ? (
+      {isLoading ? (
         <div className=" mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-neutral-800">
           <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">

@@ -61,7 +61,7 @@ const CargaDomicilioView: React.FC = () => {
 
   return (
     <>
-      <div className="grid grid-cols-2 bg-white p-6 dark:bg-neutral-800">
+      <div className="grid grid-cols-2 bg-neutral-100 p-6 dark:bg-neutral-800">
         <div className="col-span-1 mx-auto px-4 md:px-8">
           <div className="flex items-center gap-1 py-3 text-neutral-800 dark:text-zinc-100">
             <FontAwesomeIcon icon={faHome} size="lg" />
@@ -78,7 +78,7 @@ const CargaDomicilioView: React.FC = () => {
                   Calle
                 </label>
                 <input
-                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-white focus:outline-none"
+                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-neutral-100 focus:outline-none"
                   type="text"
                   placeholder="Calle..."
                   required
@@ -95,7 +95,7 @@ const CargaDomicilioView: React.FC = () => {
                   Número
                 </label>
                 <input
-                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-white focus:outline-none"
+                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-neutral-100 focus:outline-none"
                   id="grid-last-name"
                   type="text"
                   placeholder="123..."
@@ -115,7 +115,7 @@ const CargaDomicilioView: React.FC = () => {
                   Localidad
                 </label>
                 <input
-                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-white focus:outline-none"
+                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-neutral-100 focus:outline-none"
                   id="grid-city"
                   type="text"
                   placeholder="4ta sección..."
@@ -133,7 +133,7 @@ const CargaDomicilioView: React.FC = () => {
                   Código Postal
                 </label>
                 <input
-                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-white focus:outline-none"
+                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-neutral-100 focus:outline-none"
                   id="grid-zip"
                   type="text"
                   required
@@ -172,7 +172,7 @@ const CargaDomicilioView: React.FC = () => {
                   Número Departamento
                 </label>
                 <input
-                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-white focus:outline-none"
+                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-neutral-100 focus:outline-none"
                   type="text"
                   placeholder="Departamento 1..."
                   aria-errormessage="Debe ingresar el departamento."
@@ -188,7 +188,7 @@ const CargaDomicilioView: React.FC = () => {
                   Piso
                 </label>
                 <input
-                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-white focus:outline-none"
+                  className="block w-full appearance-none rounded border border-neutral-200 bg-neutral-200 py-3 px-4 leading-tight text-neutral-700 focus:border-neutral-500 focus:bg-neutral-100 focus:outline-none"
                   id="grid-last-name"
                   type="text"
                   placeholder="Primer piso..."

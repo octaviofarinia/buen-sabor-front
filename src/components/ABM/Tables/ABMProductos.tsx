@@ -43,7 +43,7 @@ export const ABMProductos = () => {
   }, []);
 
   return (
-    <div className=" relative flex w-full flex-col gap-5 bg-white px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">
+    <div className=" relative flex w-full flex-col gap-5 bg-neutral-100 px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">
       {isLoading && (
         <Loader
           texto="Cargando los ingredientes..."
@@ -52,7 +52,7 @@ export const ABMProductos = () => {
         />
       )}
       <div className="flex items-center justify-between">
-        <h1 className="flex items-center gap-3 text-3xl font-extrabold uppercase text-black dark:text-white">
+        <h1 className="flex items-center gap-3 text-3xl font-extrabold uppercase text-neutral-900 dark:text-white">
           <FontAwesomeIcon icon={faPizzaSlice} />
           Artículos Manufacturados | Productos
         </h1>
@@ -84,7 +84,7 @@ export const ABMProductos = () => {
                   <tbody>
                     {productos.map((producto) => (
                       <tr
-                        className="border-b border-b-neutral-200 odd:bg-white even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-white dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
+                        className="border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-white dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
                         key={producto.id}
                       >
                         <td className="px-6 py-4 font-bold">{producto.id}</td>

@@ -6,7 +6,7 @@ import { ImageLink } from '../../components/ImageLink/ImageLink';
 export const EmployeeMain = () => {
   const { userRole } = useUser();
   return (
-    <div className="bg-white pt-3 pb-10 dark:bg-neutral-800">
+    <div className="bg-neutral-100 pt-3 pb-10 dark:bg-neutral-800">
       <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
         <div className="relative grid gap-6 sm:grid-cols-2">
           {Object.values(ABMRoles).includes(userRole) &&

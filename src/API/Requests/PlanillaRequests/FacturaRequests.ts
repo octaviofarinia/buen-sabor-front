@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { backend_url } from '../../../Utils/ConstUtils';
+import { PedidoStatus } from '../../../Utils/PlanillaUtils';
 
 export const anularFactura = async (id?: number) => {
   const cancelToken = axios.CancelToken.source();
@@ -8,8 +9,12 @@ export const anularFactura = async (id?: number) => {
     if (id == undefined) {
       throw Error('Invalid id');
     }
-    const response = await axios.post(`${backend_url}/facturas/anular?id=${id}`, {
-      cancelToken: cancelToken.token,
+    const response = await axios.put(backend_url + '/pedidos/cambiar-estado', null, {
+      params: {
+        id: id,
+        estado: PedidoStatus.NOTA_CREDITO,
+        cancelToken: cancelToken.token,
+      },
     });
     return response.data;
   } catch (err) {

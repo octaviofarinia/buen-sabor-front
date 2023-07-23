@@ -40,10 +40,10 @@ export const CategoryModal = ({ fatherSetter, id }: CategoryModalProps) => {
     return categorias.map((categoria) => (
       <React.Fragment key={categoria.id}>
         <tr
-          className="border-b border-b-neutral-200 odd:bg-white
+          className="border-b border-b-neutral-200 odd:bg-neutral-100
              even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 
               dark:border-b-neutral-400 dark:bg-neutral-500
-              dark:text-white dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
+              dark:text-neutral-100 dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
         >
           <td className="whitespace-nowrap px-6 py-4">{categoria.id}</td>
           <td className="whitespace-nowrap px-6 py-4">{categoria.denominacion}</td>
@@ -88,26 +88,26 @@ export const CategoryModal = ({ fatherSetter, id }: CategoryModalProps) => {
           rounded-lg bg-neutral-900 p-5 text-left align-bottom shadow-2xl transition-all sm:my-8"
           >
             <div className="flex   gap-16">
-              <h2 className="w-full flex-grow text-2xl text-white">Elige la categoria padre</h2>
+              <h2 className="w-full flex-grow text-2xl text-neutral-100">Elige la categoria padre</h2>
               {closeButton}
             </div>
             <div className="overflow-hidden overflow-x-auto rounded-lg px-8 sm:-mx-6 lg:-mx-8 ">
               <div className="mt-3 overflow-hidden  rounded-lg text-left">
-                <table className="min-w-full bg-white text-left text-sm font-light dark:bg-neutral-900 ">
+                <table className="min-w-full bg-neutral-100 text-left text-sm font-light dark:bg-neutral-900 ">
                   <thead className="rounded-t-md font-medium uppercase">
-                    <tr className="rounded-t-md border-b-4 border-b-neutral-500 bg-white  dark:border-b-white dark:bg-neutral-800 ">
-                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-white">
+                    <tr className="rounded-t-md border-b-4 border-b-neutral-500 bg-neutral-100  dark:border-b-white dark:bg-neutral-800 ">
+                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-neutral-100">
                         ID
                       </th>
-                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-white">
+                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-neutral-100">
                         Denominación
                       </th>
-                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-white">
+                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-neutral-100">
                         ID Rubro Padre
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-4 text-center text-neutral-900 dark:text-white"
+                        className="px-6 py-4 text-center text-neutral-900 dark:text-neutral-100"
                       >
                         Seleccionar
                       </th>

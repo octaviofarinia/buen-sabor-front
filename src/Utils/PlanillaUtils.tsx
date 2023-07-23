@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { PedidoPlanilla } from '../Interfaces/ABM/PedidoPlanilla';
 import { backend_url } from './ConstUtils';
 import { notify } from '../components/Toast/ToastAlert';
@@ -40,6 +40,82 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
             PAGADO
           </option>
+          <option className="text-xl font-bold text-green-400" value={PedidoStatus.COMPLETADO}>
+            COMPLETADO
+          </option>
+          <option className="text-xl font-bold text-amber-500" value={PedidoStatus.PENDIENTE_PAGO}>
+            PENDIENTE PAGO
+          </option>
+          <option className="text-xl font-bold text-violet-700" value={PedidoStatus.PREPARACION}>
+            EN PREPARACION
+          </option>
+          <option className="text-xl font-bold text-blue-700" value={PedidoStatus.EN_CAMINO}>
+            EN CAMINO
+          </option>
+          <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENVIO}>
+            PENDIENTE DE ENVIO
+          </option>
+          <option className="text-xl font-bold text-rose-700" value={PedidoStatus.CANCELADO}>
+            CANCELADO
+          </option>
+          <option className="text-xl font-bold text-rose-700" value={PedidoStatus.NOTA_CREDITO}>
+            NOTA DE CRÉDITO
+          </option>
+        </>
+      )}
+
+      {userRole === employeeRoles.COCINERO && (
+        <>
+          <option className="text-xl font-bold text-violet-700" value={PedidoStatus.PREPARACION}>
+            EN PREPARACION
+          </option>
+          <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENVIO}>
+            PENDIENTE DE ENVIO
+          </option>
+        </>
+      )}
+
+      {userRole === employeeRoles.DELIVERY && (
+        <>
+          <option className="text-xl font-bold text-blue-700" value={PedidoStatus.EN_CAMINO}>
+            EN_CAMINO
+          </option>
+          <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENVIO}>
+            PENDIENTE DE ENVIO
+          </option>
+        </>
+      )}
+
+      {userRole === employeeRoles.CAJERO && (
+        <>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
+            PAGADO
+          </option>
+        </>
+      )}
+    </select>
+  );
+};
+
+export const EstadosSelectFiltro = ({ pedido, callback }: EstadoSelect) => {
+  const { userRole } = useUser();
+
+  useEffect(() => {}, [userRole]);
+
+  return (
+    <select
+      className="rounded-md py-2 pr-8 text-xl font-bold text-neutral-900"
+      defaultValue={pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
+      onChange={(e) => callback(e)}
+    >
+      <option selected className="text-xl font-bold text-green-700" disabled hidden>
+        {pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
+      </option>
+      {userRole === employeeRoles.ADMINISTRADOR && (
+        <>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
+            PAGADO
+          </option>
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.COMPLETADO}>
             COMPLETADO
           </option>
@@ -62,18 +138,23 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
       )}
 
       {userRole === employeeRoles.COCINERO && (
-        <option className="text-xl font-bold text-green-700" value={PedidoStatus.PREPARACION}>
-          PREPARACION
-        </option>
+        <>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PREPARACION}>
+            PREPARACION
+          </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
+            PAGADO
+          </option>
+          <option className="text-xl font-bold text-amber-500" value={PedidoStatus.PENDIENTE_PAGO}>
+            PENDIENTE PAGO
+          </option>
+        </>
       )}
 
       {userRole === employeeRoles.DELIVERY && (
         <>
           <option className="text-xl font-bold text-blue-700" value={PedidoStatus.EN_CAMINO}>
             EN_CAMINO
-          </option>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PENDIENTE_ENVIO}>
-            PENDIENTE DE ENVIO
           </option>
         </>
       )}
@@ -85,12 +166,6 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
           </option>
           <option className="text-xl font-bold text-amber-500" value={PedidoStatus.PENDIENTE_PAGO}>
             PENDIENTE DE PAGO
-          </option>
-          <option className="text-xl font-bold text-violet-700" value={PedidoStatus.PREPARACION}>
-            EN PREPARACIÓN
-          </option>
-          <option className="text-xl font-bold text-blue-700" value={PedidoStatus.EN_CAMINO}>
-            EN CAMINO
           </option>
         </>
       )}
@@ -109,7 +184,8 @@ export const setEstadoDePedido = async (estado: string | null, id?: number) => {
     .then(() => {
       notify('Se cambio el estado a: ' + estado, 'success');
     })
-    .catch(() => {
-      notify('Ocurrio un error', 'error');
+    .catch((err) => {
+      const error = err as AxiosError;
+      notify(error.response?.data as string, 'error');
     });
 };

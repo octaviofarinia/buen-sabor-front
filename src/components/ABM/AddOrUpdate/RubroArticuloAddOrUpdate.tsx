@@ -77,11 +77,11 @@ export const RubroArticuloAddOrUpdate = () => {
     id !== undefined && setPropsOfExistentCategoria();
   }, []);
   return (
-    <div className="relative min-h-600 bg-white py-6 dark:bg-neutral-800 sm:py-8 lg:py-12 ">
+    <div className="relative min-h-600 bg-neutral-100 py-6 dark:bg-neutral-800 sm:py-8 lg:py-12 ">
       <div className="mx-auto max-w-screen-xl px-4 md:px-8 lg:px-20">
         <div className="mb-10 flex w-full items-center justify-between md:mb-16">
           <div className="flex flex-col ">
-            <h2 className=" text-center text-2xl font-bold text-gray-800 dark:text-white  lg:text-4xl">
+            <h2 className=" text-center text-2xl font-bold text-gray-800 dark:text-neutral-100  lg:text-4xl">
               {id === undefined ? (
                 <>
                   <span className="block">Carga de registro </span>
@@ -99,7 +99,7 @@ export const RubroArticuloAddOrUpdate = () => {
         </div>
 
         <form
-          className={`mx-auto grid max-w-2xl items-center gap-4 text-end dark:text-white sm:grid-cols-3 lg:gap-10`}
+          className={`mx-auto grid max-w-2xl items-center gap-4 text-end dark:text-neutral-100 sm:grid-cols-3 lg:gap-10`}
           onSubmit={(e) => handleSubmit(e)}
         >
           <label htmlFor="denominacion" className="lg:text-2xl">
@@ -109,7 +109,7 @@ export const RubroArticuloAddOrUpdate = () => {
             name={'denominacion'}
             id={'denominacion'}
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
             onChange={(e) => handleChange(e)}
             value={categoria.denominacion || ''}
             placeholder="Denominación..."
@@ -129,7 +129,7 @@ export const RubroArticuloAddOrUpdate = () => {
             {categoryFather.id !== null && (
               <span
                 className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-start text-gray-800 outline-none
-              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
               >
                 {categoryFather.denominacion}
               </span>

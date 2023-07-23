@@ -1,6 +1,4 @@
 import {
-  faCheck,
-  faCheckCircle,
   faCreditCard,
   faFaceSadCry,
   faListCheck,
@@ -11,9 +9,9 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../../components/Botones/Button';
-import { handleChange, handleSelectChange } from '../../Utils/FormUtils';
+import { handleChange } from '../../Utils/FormUtils';
 import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
 import { Domicilio } from '../../Interfaces/ClientSide/Domicilio';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -32,17 +30,14 @@ import { Pedido } from '../../Interfaces/ClientSide/Pedido';
 import { useTheme } from '../../context/ThemeProvider';
 import { faFaceSmileWink } from '@fortawesome/free-regular-svg-icons';
 import { Banner } from '../../components/Banner/Banner';
-import { Loader } from '../../components/Loader/Loader';
 
 export const CarritoView = () => {
   const { cart, removeFromCart, addToCart, reduceAmountFromCart } = useCart();
   const { user } = useAuth0();
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [medioDePago, setMedioDePago] = useState<string>(CartConstants.EFECTIVO);
   const [domicilios, setDomicilios] = useState<Domicilio[]>([]);
-  const [selectedOption, setSelectedOption] = useState<string>('');
   const [preferenceId, setPreferenceId] = useState<string>('');
   const [informacionPedido, setInformacionPedido] = useState<Pedido>(base_pedido);
   const [cartItems, setCartItems] = useState<ArticuloManufacturado[]>([]);
@@ -343,23 +338,29 @@ export const CarritoView = () => {
                 </div>
                 {informacionPedido.tipoEnvio === CartConstants.DELIVERY && (
                   <div className="flex flex-col gap-3 pt-5">
+                    {domicilios.length != 0 && (
+                      <>
+                        <h2 className="text-lg text-neutral-800 dark:text-neutral-300 md:text-xl">
+                          Selecciona tu domicilio
+                        </h2>
+                        <select
+                          name="domicilio"
+                          required
+                          className="focus:shadow-outline block w-full appearance-none rounded border border-neutral-400 bg-neutral-100 px-4 py-2 pr-8 leading-tight shadow hover:border-neutral-500 focus:outline-none"
+                          onChange={(e) => {
+                            informacionPedido.idDomicilioEntrega = Number(e.target.value);
+                          }}
+                        >
+                          {domicilios.map((domicilio) => (
+                            <option key={domicilio.id} value={domicilio.id?.toString()}>
+                              {domicilio.calle + ' ' + domicilio.numero}
+                            </option>
+                          ))}
+                        </select>
+                      </>
+                    )}
                     <h2 className="text-lg text-neutral-800 dark:text-neutral-300 md:text-xl">
-                      Selecciona tu domicilio
-                    </h2>
-                    <select
-                      name="domicilio"
-                      required
-                      className="focus:shadow-outline block w-full appearance-none rounded border border-neutral-400 bg-white px-4 py-2 pr-8 leading-tight shadow hover:border-neutral-500 focus:outline-none"
-                      onChange={(e) => handleSelectChange(e, selectedOption, setSelectedOption)}
-                    >
-                      {domicilios.map((domicilio) => (
-                        <option key={domicilio.id} value={domicilio.id?.toString()}>
-                          {domicilio.calle + ' ' + domicilio.numero}
-                        </option>
-                      ))}
-                    </select>
-                    <h2 className="text-lg text-neutral-800 dark:text-neutral-300 md:text-xl">
-                      O agrega uno nuevo
+                      Agrega uno nuevo
                     </h2>
                     <Button
                       type="button"

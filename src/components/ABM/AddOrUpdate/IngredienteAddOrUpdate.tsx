@@ -92,11 +92,11 @@ export const IngredienteAddOrUpdate = () => {
   }, []);
 
   return (
-    <div className="relative bg-white py-6 dark:bg-neutral-800 sm:py-8 lg:py-12 ">
+    <div className="relative bg-neutral-100 py-6 dark:bg-neutral-800 sm:py-8 lg:py-12 ">
       <div className="mx-auto max-w-screen-xl px-4 md:px-8 lg:px-20">
         <div className="mb-5 flex w-full items-center justify-between ">
           <div className="flex flex-col ">
-            <h2 className=" text-center text-2xl font-bold text-gray-800 dark:text-white  lg:text-4xl">
+            <h2 className=" text-center text-2xl font-bold text-gray-800 dark:text-neutral-100  lg:text-4xl">
               {id === undefined ? (
                 <>
                   <span className="block">Carga de registro </span>
@@ -116,7 +116,7 @@ export const IngredienteAddOrUpdate = () => {
 
         <form
           encType="multipart/form-data"
-          className={`mx-auto grid max-w-2xl items-center gap-4 text-end dark:text-white sm:grid-cols-3 lg:gap-10`}
+          className={`mx-auto grid max-w-2xl items-center gap-4 text-end dark:text-neutral-100 sm:grid-cols-3 lg:gap-10`}
           onSubmit={(e) => handleSubmit(e)}
         >
           <label htmlFor="denominacion" className="lg:text-2xl">
@@ -126,7 +126,7 @@ export const IngredienteAddOrUpdate = () => {
             name={'denominacion'}
             id={'denominacion'}
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
             onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
             value={ingrediente.denominacion || ''}
             placeholder="Denominación..."
@@ -141,7 +141,7 @@ export const IngredienteAddOrUpdate = () => {
             type="number"
             placeholder="Precio de Compra..."
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
             onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
             value={ingrediente.precioCompra || ''}
             required
@@ -154,7 +154,7 @@ export const IngredienteAddOrUpdate = () => {
             id={'stockActual'}
             type="number"
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
             onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
             placeholder="Stock Actual..."
             value={ingrediente.stockActual || ''}
@@ -168,7 +168,7 @@ export const IngredienteAddOrUpdate = () => {
             id={'stockMinimo'}
             type="number"
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
             onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
             value={ingrediente.stockMinimo || ''}
             placeholder="Stock Mínimo..."
@@ -191,7 +191,7 @@ export const IngredienteAddOrUpdate = () => {
               id="imagen"
               type="file"
               className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
               onChange={(e) => handleImageChange(e, imagen, setImagen)}
               {...(ingrediente.id === null ? { required: true } : {})}
             />
@@ -209,7 +209,7 @@ export const IngredienteAddOrUpdate = () => {
             {categoria.id !== null && (
               <span
                 className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-start text-gray-800 outline-none
-              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
               >
                 {categoria.denominacion}
               </span>
@@ -234,7 +234,7 @@ export const IngredienteAddOrUpdate = () => {
             {unidadDeMedida.id !== null && (
               <span
                 className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-start text-gray-800 outline-none
-              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
               >
                 {unidadDeMedida.denominacion}
               </span>

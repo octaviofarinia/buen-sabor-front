@@ -37,11 +37,11 @@ export const RubroArticuloDetail = () => {
     <div className="flex w-full px-5 lg:px-0">
       {loading &&<Loader texto="Cargando registros" closeLoading={setLoading} />}
       <div
-        className="mx-auto my-10  w-full max-w-4xl rounded-lg border-b-4 border-l-4 border-amber-200  bg-white p-5 py-3 px-4 
+        className="mx-auto my-10  w-full max-w-4xl rounded-lg border-b-4 border-l-4 border-amber-200  bg-neutral-100 p-5 py-3 px-4 
      text-xl shadow-lg dark:bg-neutral-800 md:text-2xl lg:py-8"
       >
         <div className="flex w-full items-center justify-between pb-4">
-          <h1 className="mb-3 flex flex-col items-start justify-between font-bold  text-black dark:text-white md:text-4xl">
+          <h1 className="mb-3 flex flex-col items-start justify-between font-bold  text-neutral-900 dark:text-white md:text-4xl">
             Detalle
             <span className="text-start text-xl text-amber-400 ">Categoría | Rubro Artículo </span>
           </h1>

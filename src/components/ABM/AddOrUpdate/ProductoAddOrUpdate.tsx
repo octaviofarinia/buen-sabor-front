@@ -104,11 +104,11 @@ export const ProductoAddOrUpdate = () => {
   }, []);
 
   return (
-    <div className="relative bg-white py-6 dark:bg-neutral-800 sm:py-8 lg:py-12 ">
+    <div className="relative bg-neutral-100 py-6 dark:bg-neutral-800 sm:py-8 lg:py-12 ">
       <div className="mx-auto max-w-screen-xl px-4 md:px-8 lg:px-20">
         <div className="mb-5 flex w-full items-center justify-between ">
           <div className="flex flex-col ">
-            <h2 className=" text-start text-2xl font-bold text-gray-800 dark:text-white  lg:text-4xl">
+            <h2 className=" text-start text-2xl font-bold text-gray-800 dark:text-neutral-100  lg:text-4xl">
               {id === undefined ? (
                 <>
                   <span className="block">Carga de registro </span>
@@ -128,7 +128,7 @@ export const ProductoAddOrUpdate = () => {
 
         <form
           encType="multipart/form-data"
-          className={`mx-auto grid w-11/12 items-center gap-4 text-end dark:text-white  sm:grid-cols-3 lg:gap-10`}
+          className={`mx-auto grid w-11/12 items-center gap-4 text-end dark:text-neutral-100  sm:grid-cols-3 lg:gap-10`}
           onSubmit={(e) => handleSubmit(e)}
         >
           <label htmlFor="denominacion" className="lg:text-2xl">
@@ -139,7 +139,7 @@ export const ProductoAddOrUpdate = () => {
             id={'denominacion'}
             type="text"
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
             onChange={(e) => handleChange(e, producto, setProducto)}
             placeholder="Denominación"
             value={producto.denominacion || ''}
@@ -153,7 +153,7 @@ export const ProductoAddOrUpdate = () => {
             id={'descripcion'}
             type="text"
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
             onChange={(e) => handleChange(e, producto, setProducto)}
             value={producto.descripcion || ''}
             placeholder="Descripción..."
@@ -167,7 +167,7 @@ export const ProductoAddOrUpdate = () => {
             id={'tiempoEstimadoCocina'}
             type="number"
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
             onChange={(e) => handleChange(e, producto, setProducto)}
             placeholder="Tiempo Estimado..."
             value={producto.tiempoEstimadoCocina || ''}
@@ -181,7 +181,7 @@ export const ProductoAddOrUpdate = () => {
             id={'precioVenta'}
             type="number"
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
             onChange={(e) => handleChange(e, producto, setProducto)}
             placeholder="Precio de Venta..."
             value={producto.precioVenta || ''}
@@ -205,7 +205,7 @@ export const ProductoAddOrUpdate = () => {
               id="imagen"
               type="file"
               className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
               onChange={(e) => handleImageChange(e, imagen, setImagen)}
               {...(producto.id === null ? { required: true } : {})}
             />
@@ -220,7 +220,7 @@ export const ProductoAddOrUpdate = () => {
               <div className="col-span-2 flex w-full gap-3">
                 <span
                   className="flex w-full items-center rounded border bg-gray-50 px-3 py-2 text-start text-gray-800
-            outline-none ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+            outline-none ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
                 >
                   {ingrediente.denominacion}
                 </span>
@@ -229,7 +229,7 @@ export const ProductoAddOrUpdate = () => {
                   id={'cantidad'}
                   type="number"
                   className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-                  ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-white"
+                  ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
                   onChange={(e) => {
                     setCantidad(Number(e.target.value));
                   }}

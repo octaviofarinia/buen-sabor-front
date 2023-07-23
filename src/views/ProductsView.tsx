@@ -89,7 +89,7 @@ export const ProductsView = () => {
                 <div className="relative">
                   <input
                     type="text"
-                    className="w-full rounded border bg-neutral-50 px-3 py-2 pl-8 text-neutral-800 outline-none
+                    className="w-full rounded border bg-neutral-100 px-3 py-2 pl-8 text-neutral-800 outline-none
               ring-amber-400 transition duration-100 focus:ring focus:ring-amber-400 dark:border-neutral-400 dark:bg-neutral-700 dark:text-white sm:w-auto"
                     placeholder="Filtrar..."
                     onChange={(e) => simpleHandleChange(e, inputValue, setInputValue)}

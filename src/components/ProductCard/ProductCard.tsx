@@ -21,7 +21,7 @@ export const ProductCard = ({ producto }: ProductCardProps) => {
     <div className="">
       <Link
         to={`/Productos/Detalle/${producto.id}`}
-        className="group relative mb-2 block h-80 overflow-hidden rounded-lg bg-neutral-50 dark:bg-neutral-900 lg:mb-3"
+        className="group relative mb-2 block h-80 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-900 lg:mb-3"
       >
         <img
           src={producto.urlImagen || ''}

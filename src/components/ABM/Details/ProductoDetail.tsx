@@ -33,7 +33,7 @@ export const ProductoDetail = () => {
   }, []);
 
   return (
-    <div className="flex w-full bg-white px-5 dark:bg-neutral-800  lg:px-0">
+    <div className="flex w-full bg-neutral-100 px-5 dark:bg-neutral-800  lg:px-0">
       {loading &&<Loader texto="Cargando registros" closeLoading={setLoading} />}
 
       <div

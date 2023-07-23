@@ -35,7 +35,7 @@ export const IngredientesDetail = () => {
   }, []);
 
   return (
-    <div className="flex w-full bg-white px-5 dark:bg-neutral-800  lg:px-0">
+    <div className="flex w-full bg-neutral-100 px-5 dark:bg-neutral-800  lg:px-0">
       {loading &&<Loader texto="Cargando registros" closeLoading={setLoading} />}
       <div
         className="mx-auto my-10  w-full max-w-4xl rounded-lg border-b-4 border-l-4 border-amber-200 p-5  py-3 px-4 text-xl shadow-lg 
