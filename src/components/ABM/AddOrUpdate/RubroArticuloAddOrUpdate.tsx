@@ -9,6 +9,7 @@ import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { Button } from '../../Botones/Button';
 import { ClipLoader } from 'react-spinners';
 import { AxiosError } from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export const RubroArticuloAddOrUpdate = () => {
   const { id } = useParams();
@@ -17,36 +18,49 @@ export const RubroArticuloAddOrUpdate = () => {
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const { getAccessTokenSilently } = useAuth0();
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    let status = 0;
     setLoading(true);
     try {
       if (id) {
-        const request = await update({
-          endpoint: 'rubros-articulos',
-          object: categoria,
-          id: Number(id),
-        });
-        status = request.status;
+        getAccessTokenSilently()
+          .then(async (accessToken) => {
+            await update({
+              endpoint: 'rubros-articulos',
+              object: categoria,
+              id: Number(id),
+              token: accessToken,
+            });
+          })
+          .catch((err) => {
+            const error=err as AxiosError;
+            notify(error.response?.data as string, 'error');
+          });
       } else {
-        const request = await save({
-          endpoint: 'rubros-articulos',
-          object: categoria,
-        });
-        status = request.status;
+        getAccessTokenSilently()
+          .then(async (accessToken) => {
+            await save({
+              endpoint: 'rubros-articulos',
+              object: categoria,
+              token: accessToken,
+            });
+            
+            notify('Exito', 'success');
+          })
+          .catch((err) => {
+            const error=err as AxiosError;
+            notify(error.response?.data as string, 'error');
+          });
       }
-      setLoading(false);
-      status === (200 || 201) ? notify('Exito', 'success') : notify('Algo salió mal!', 'error');
       setTimeout(() => {
         navigate(`/employee/ABM/RubroArticulos`);
       }, 2000);
     } catch (error) {
       const AxiosError = error as AxiosError;
-      console.log(AxiosError);
-      setLoading(false);
-      notify('Algo salió mal! Request Status: ' + AxiosError.response?.status, 'error');
+      notify(AxiosError.response?.data as string, 'error');
     }
+    setLoading(false);
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -61,14 +75,20 @@ export const RubroArticuloAddOrUpdate = () => {
       categoria.id == categoryFather.id &&
       (categoria.rubroPadre = categoryFather.rubroPadre),
       (categoria.idRubroPadre = categoryFather.id);
-    notify('Se cargo el registro ', 'success');
     setLoading(false);
   };
 
   const setPropsOfExistentCategoria = async () => {
     try {
-      const response = await getCategoryComplete(Number(id));
-      setCategoria(response)
+      getAccessTokenSilently()
+        .then(async (accessToken) => {
+          const response = await getCategoryComplete(Number(id), accessToken);
+          setCategoria(response);
+        })
+        .catch((err) => {
+          const error=err as AxiosError;
+          notify(error.response?.data as string, 'error');
+        });
     } catch (err) {
       console.error(err);
     }
