@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import {  getOne, save, update } from '../../../API/Requests/BaseRequests';
+import { getOne, save, update } from '../../../API/Requests/BaseRequests';
 import { UnidadDeMedida } from '../../../Interfaces/ABM/UnidadDeMedida';
 import { base_unidad } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { HardDeleteButton } from '../../Botones/HardDeleteButton';
@@ -9,57 +9,75 @@ import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { ClipLoader } from 'react-spinners';
 import { AxiosError } from 'axios';
 import { handleChange } from '../../../Utils/FormUtils';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export const UnidadDeMedidaAddOrUpdate = () => {
   const { id } = useParams();
   const [unidadDeMedida, setUnidadDeMedida] = useState<UnidadDeMedida>(base_unidad);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const { getAccessTokenSilently } = useAuth0();
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    let status = 0;
     setLoading(true);
     try {
       if (id) {
-        const request = await update({
-          endpoint: 'unidades-medida',
-          object: unidadDeMedida,
-          id: Number(id),
-        });
-        status = request.status;
+        getAccessTokenSilently()
+          .then(async (accessToken) => {
+            await update({
+              endpoint: 'unidades-medida',
+              object: unidadDeMedida,
+              id: Number(id),
+              token: accessToken,
+            });
+          })
+          .catch((err) => {
+            const error = err as AxiosError;
+            notify(error.response?.data as string, 'error');
+          });
       } else {
-        const request = await save({
-          endpoint: 'unidades-medida',
-          object: unidadDeMedida,
-        });
-        status = request.status;
-        setLoading(false);
-        status === (200 || 201) && notify('Exito', 'success');
+        getAccessTokenSilently()
+          .then(async (accessToken) => {
+            await save({
+              endpoint: 'unidades-medida',
+              object: unidadDeMedida,
+              token: accessToken,
+            });
+
+            notify('Exito', 'success');
+          })
+          .catch((err) => {
+            const error = err as AxiosError;
+            notify(error.response?.data as string, 'error');
+          });
         setTimeout(() => {
           navigate(`/employee/ABM/UnidadDeMedida`);
         }, 2000);
       }
     } catch (error) {
-      const AxiosError = error as AxiosError;
-      console.log(AxiosError);
-      setLoading(false);
-      notify('Algo salió mal! Request Status: ' + AxiosError.response?.status, 'error');
+      console.log(error);
     }
+    setLoading(false);
   }
 
   const setPropsOfExistentUnidadDeMedida = async () => {
     try {
-      const response = await getOne({
-        id: Number(id),
-        endpoint: 'unidades-medida',
-      });
-      setUnidadDeMedida(response);
+      getAccessTokenSilently()
+        .then(async (accessToken) => {
+          const response = await getOne({
+            id: Number(id),
+            token: accessToken,
+            endpoint: 'unidades-medida',
+          });
+          setUnidadDeMedida(response);
+        })
+        .catch((err) => {
+          const error = err as AxiosError;
+          notify(error.response?.data as string, 'error');
+        });
       notify('Se cargó el registro correctamente', 'success');
     } catch (err) {
-      const AxiosError = err as AxiosError;
-      console.log(AxiosError);
-      notify('Ocurrió un error:' + AxiosError.response?.status, 'error');
+      console.log(err);
     }
   };
 

@@ -202,7 +202,7 @@ export const IngredienteAddOrUpdate = () => {
           <div className="z-0 col-span-2 flex items-center gap-5">
             {categoria.id === null && (
               <CategoryModal
-                fatherSetter={setCategoria}
+                rubroArticulo={setCategoria}
                 id={categoria.id !== null ? categoria.id : undefined}
               />
             )}

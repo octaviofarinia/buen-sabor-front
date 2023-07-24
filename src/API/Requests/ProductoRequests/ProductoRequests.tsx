@@ -9,12 +9,14 @@ interface ProductoRequestProps {
   detalles: DetalleProducto[];
   imagen: File | null;
   id?: string | number | null;
+  token: string;
 }
 
 export const createProducto = async ({
   producto: producto,
   detalles: detalles,
   imagen,
+  token,
 }: ProductoRequestProps) => {
   try {
     const url = `${backend_url}/articulos-manufacturados`;
@@ -31,6 +33,7 @@ export const createProducto = async ({
     const response = await axios.post(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: 'Bearer ' + token,
       },
     });
 
@@ -40,7 +43,7 @@ export const createProducto = async ({
       try {
         detalle.idArticuloManufacturado = idArticuloManufacturado;
         console.log('Detalle: ', detalle);
-        const responseDetalle = await createDetalle({ detalle: detalle });
+        const responseDetalle = await createDetalle({ detalle: detalle, token: token });
         console.log('Status detalle', responseDetalle.status);
       } catch (err) {
         console.error(err);
@@ -59,6 +62,7 @@ export const updateProducto = async ({
   producto: producto,
   detalles: detalles,
   imagen,
+  token,
   id,
 }: ProductoRequestProps) => {
   try {
@@ -76,6 +80,8 @@ export const updateProducto = async ({
     const response = await axios.put(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+
+        Authorization: 'Bearer ' + token,
       },
     });
 
@@ -87,12 +93,12 @@ export const updateProducto = async ({
           console.log('El detalle existe: ' + detalle.denominacion + '  id:' + detalle.id);
         if (detalle.id == null) {
           detalle.idArticuloManufacturado = idArticuloManufacturado;
-          const responseDetalle = await createDetalle({ detalle: detalle });
+          const responseDetalle = await createDetalle({ detalle: detalle, token: token });
           console.log('Status create detalle', responseDetalle.status);
         } else {
           detalle.idArticuloManufacturado = idArticuloManufacturado;
           detalle.idArticuloInsumo = detalle.articuloInsumo?.id || null;
-          const responseDetalle = await updateDetalle({ detalle: detalle });
+          const responseDetalle = await updateDetalle({ detalle: detalle, token: token });
           console.log('Status update detalle', responseDetalle.status);
         }
       } catch (err) {

@@ -2,37 +2,50 @@ import { useState, useEffect } from 'react';
 import { RubroArticulo } from '../../../../Interfaces/ABM/RubroArticulo';
 import { getAllFathers } from '../../../../API/Requests/CategoriaRequests/CategoriaRequests';
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ToastAlert, notify } from '../../../Toast/ToastAlert';
 import { Button } from '../../../Botones/Button';
 import { AxiosError } from 'axios';
-import { getAll } from '../../../../API/Requests/BaseRequests';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export interface CategoryModalProps {
-  fatherSetter: React.Dispatch<React.SetStateAction<RubroArticulo>>;
+  rubroArticulo: React.Dispatch<React.SetStateAction<RubroArticulo>>;
   id?: string | number;
 }
 
-export const CategoryModal = ({ fatherSetter, id }: CategoryModalProps) => {
+export const CategoryModal = ({ rubroArticulo: rubroArticulo, id }: CategoryModalProps) => {
   const [categories, setCategories] = useState<RubroArticulo[]>([]);
   const [visible, toggleVisible] = useState(false);
-
+  const { getAccessTokenSilently } = useAuth0();
   const getPadresDeRubro = async () => {
     try {
-      const data = await getAllFathers();
-      setCategories(data);
+      getAccessTokenSilently()
+        .then(async (accessToken) => {
+          const data = await getAllFathers(accessToken);
+          setCategories(data);
+          if (categories.length > 0) {
+            notify('Exito', 'success');
+          }
+        })
+        .catch((err) => {
+          const error = err as AxiosError;
+          notify(error.response?.data as string, 'error');
+        });
     } catch (err) {
-      const axiosErr = err as AxiosError;
+      console.log(err);
     }
   };
 
   useEffect(() => {
     getPadresDeRubro();
   }, []);
+
   const setFather = (categoria: RubroArticulo) => {
     id !== categoria.id
-      ? fatherSetter(categoria)
+      ? rubroArticulo((prevCategoria) => ({
+          ...prevCategoria,
+          idRubroPadre: categoria.id,
+          rubroPadre: categoria,
+        }))
       : notify('Lo siento! Una Categoría no puede ser su padre.', 'error');
     toggleVisible(false);
   };
@@ -52,7 +65,14 @@ export const CategoryModal = ({ fatherSetter, id }: CategoryModalProps) => {
           </td>
           <td className="px-6 py-4">
             <div className="flex justify-end">
-              <Button callback={() => setFather(categoria)} content="Seleccionar" type="button" />
+              <Button
+                callback={() => {
+                  setFather(categoria);
+                }}
+                content="Seleccionar"
+                type="button"
+                fullsize={true}
+              />
             </div>
           </td>
         </tr>
@@ -70,7 +90,7 @@ export const CategoryModal = ({ fatherSetter, id }: CategoryModalProps) => {
   );
   const closeButton = <Button callback={() => toggleVisible(false)} content="x" type="button" />;
   return (
-    <div className=" flex w-full">
+    <div className=" w-full">
       {openButton}
       <ToastAlert />
       <div
@@ -88,7 +108,9 @@ export const CategoryModal = ({ fatherSetter, id }: CategoryModalProps) => {
           rounded-lg bg-neutral-900 p-5 text-left align-bottom shadow-2xl transition-all sm:my-8"
           >
             <div className="flex   gap-16">
-              <h2 className="w-full flex-grow text-2xl text-neutral-100">Elige la categoria padre</h2>
+              <h2 className="w-full flex-grow text-2xl text-neutral-100">
+                Elige la categoria padre
+              </h2>
               {closeButton}
             </div>
             <div className="overflow-hidden overflow-x-auto rounded-lg px-8 sm:-mx-6 lg:-mx-8 ">

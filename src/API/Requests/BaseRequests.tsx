@@ -9,6 +9,8 @@ interface RequestInterface {
   object?: Base;
   token: string;
 }
+
+
 export const getAll = async ({ endpoint, token }: RequestInterface) => {
   try {
     const response = await axios.get(`${backend_url}/${endpoint}`, {
@@ -55,7 +57,6 @@ export const getOne = async ({ id, endpoint, token }: RequestInterface) => {
 
 export const save = async ({ endpoint, object, token }: RequestInterface) => {
   try {
-    console.log(token);
 
     const response = await axios.post(`${backend_url}/${endpoint}`, object, {
       headers: {
@@ -71,7 +72,6 @@ export const save = async ({ endpoint, object, token }: RequestInterface) => {
 
 export const update = async ({ endpoint, object, id, token }: RequestInterface) => {
   try {
-    console.log(token);
     const res = await axios.put(
       `${backend_url}/${endpoint}/${id}`,
       {

@@ -5,11 +5,16 @@ import { backend_url } from '../../../Utils/ConstUtils';
 interface DetalleProductoRequestProps {
   detalle?: DetalleProducto;
   id?: string | number | null;
+  token: string;
 }
-export const getDetalles = async ({ id }: DetalleProductoRequestProps) => {
+export const getDetalles = async ({ id, token }: DetalleProductoRequestProps) => {
   const url = `${backend_url}/articulos-manufacturados/${id}/detalles`;
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
 
     return response;
   } catch (err) {
@@ -18,10 +23,14 @@ export const getDetalles = async ({ id }: DetalleProductoRequestProps) => {
   }
 };
 
-export const createDetalle = async ({ detalle }: DetalleProductoRequestProps) => {
+export const createDetalle = async ({ detalle, token }: DetalleProductoRequestProps) => {
   try {
     const url = `${backend_url}/detalles-articulos-manufacturados`;
-    const response = await axios.post(url, detalle);
+    const response = await axios.post(url, detalle, {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
     return response;
   } catch (err) {
     console.error(err);
@@ -29,10 +38,14 @@ export const createDetalle = async ({ detalle }: DetalleProductoRequestProps) =>
   }
 };
 
-export const updateDetalle = async ({ detalle }: DetalleProductoRequestProps) => {
+export const updateDetalle = async ({ detalle, token }: DetalleProductoRequestProps) => {
   try {
     const url = `${backend_url}/detalles-articulos-manufacturados/` + detalle?.id;
-    const response = await axios.put(url, detalle);
+    const response = await axios.put(url, detalle, {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
     return response;
   } catch (err) {
     console.error(err);
@@ -40,7 +53,11 @@ export const updateDetalle = async ({ detalle }: DetalleProductoRequestProps) =>
   }
 };
 
-export const deleteDetalle = async ({ id }: DetalleProductoRequestProps) => {
-  const response = await axios.delete(`${backend_url}/detalles-articulos-manufacturados/${id}`);
+export const deleteDetalle = async ({ id, token }: DetalleProductoRequestProps) => {
+  const response = await axios.delete(`${backend_url}/detalles-articulos-manufacturados/${id}`, {
+    headers: {
+      Authorization: 'Bearer ' + token,
+    },
+  });
   return response;
 };

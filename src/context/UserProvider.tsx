@@ -17,7 +17,11 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [userRole, setUserRole] = useState<string>('cliente');
 
   useEffect(() => {
-    getAccessTokenSilently()
+    getAccessTokenSilently({
+      authorizationParams: {
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+      },
+    })
       .then((res) => {
         const decodedToken: { [key: string]: any } = jwtDecode(res);
         setUserRole(decodedToken[`${import.meta.env.VITE_AUTH0_AUDIENCE}/roles`][0]);

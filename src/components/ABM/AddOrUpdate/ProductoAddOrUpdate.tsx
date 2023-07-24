@@ -17,7 +17,8 @@ import { ClipLoader } from 'react-spinners';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { AxiosError } from 'axios';
 import { HardDeleteButton } from '../../Botones/HardDeleteButton';
-import { getOne } from '../../../API/Requests/BaseRequests';
+import { getOne, } from '../../../API/Requests/BaseRequests';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export const ProductoAddOrUpdate = () => {
   const { id } = useParams();
@@ -27,43 +28,51 @@ export const ProductoAddOrUpdate = () => {
   const [producto, setProducto] = useState<ArticuloManufacturado>(base_product);
   const [ingrediente, setIngrediente] = useState<ArticuloInsumo>(base_ingredient);
   const [isLoading, setLoading] = useState(false);
-
+  const { getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    let status = 0;
-    setLoading(true);
     try {
       if (id) {
-        console.log('put');
-        const request = await updateProducto({
-          producto: producto,
-          detalles: detalle,
-          imagen: imagen,
-          id: id,
-        });
-        status = request;
+        getAccessTokenSilently()
+          .then(async (accessToken) => {
+            await updateProducto({
+              producto: producto,
+              detalles: detalle,
+              imagen: imagen,
+              token: accessToken,
+              id: Number(id),
+            });
+          })
+          .catch((err) => {
+            const error = err as AxiosError;
+            notify(error.response?.data as string, 'error');
+          });
       } else {
-        console.log('post');
-        const request = await createProducto({
-          producto: producto,
-          detalles: detalle,
-          imagen: imagen,
-        });
-        status = request;
+        getAccessTokenSilently()
+          .then(async (accessToken) => {
+            await createProducto({
+              producto: producto,
+              detalles: detalle,
+              imagen: imagen,
+              token: accessToken,
+            });
+
+            notify('Exito', 'success');
+          })
+          .catch((err) => {
+            const error = err as AxiosError;
+            notify(error.response?.data as string, 'error');
+          });
+        setTimeout(() => {
+          navigate(`/employee/ABM/UnidadDeMedida`);
+        }, 2000);
       }
-      setLoading(false);
-      status === (200 || 201) && notify('Exito', 'success');
-      setTimeout(() => {
-        navigate(`/employee/ABM/Productos`);
-      }, 2000);
-    } catch (err) {
-      const axiosError = err as AxiosError;
-      console.log(axiosError);
-      setLoading(false);
-      notify('Algo salió mal! Status: ' + axiosError.response?.status, 'error');
+    } catch (error) {
+      console.log(error);
     }
+    setLoading(false);
   }
 
   function handleIngredientesList(e: React.ChangeEvent<HTMLInputElement>) {
@@ -88,10 +97,22 @@ export const ProductoAddOrUpdate = () => {
   const setPropsOfExistentProduct = async () => {
     try {
       setLoading(true);
-      const productoData = await getOne({ id: Number(id), endpoint: 'articulos-manufacturados' });
-      const detalleData = await getDetalles({ id: id });
-      setDetalle(detalleData.data);
-      setProducto(productoData);
+      getAccessTokenSilently()
+        .then(async (accessToken) => {
+          const productoData = await getOne({
+            id: Number(id),
+            endpoint: 'articulos-manufacturados',
+            token: accessToken,
+          });
+          const detalleData = await getDetalles({ id: id, token: accessToken });
+          setDetalle(detalleData.data);
+          setProducto(productoData);
+        })
+        .catch((err) => {
+          const error = err as AxiosError;
+          notify(error.response?.data as string, 'error');
+        });
+
       notify('Se cargo el registro', 'success');
       setLoading(false);
     } catch (err) {

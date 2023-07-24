@@ -21,19 +21,15 @@ export const ABMRubroArticulos = () => {
   const { getAccessTokenSilently } = useAuth0();
   const getRubroInsumo = async () => {
     setIsLoading(true);
-    try {
-      getAccessTokenSilently()
-        .then(async (accessToken) => {
-          const response = await getAll({ endpoint: 'rubros-articulos', token: accessToken });
-          setRubros(response);
-        })
-        .catch((err) => {
-          const error=err as AxiosError;
-          notify(error.response?.data as string, 'error');        });
-    } catch (err) {
-      const axiosError = err as AxiosError;
-      notify(axiosError.response?.data as string, 'error');
-    }
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const response = await getAll({ endpoint: 'rubros-articulos', token: accessToken });
+        setRubros(response);
+      })
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.response?.data as string, 'error');
+      });
 
     setIsLoading(false);
   };
@@ -48,8 +44,9 @@ export const ABMRubroArticulos = () => {
         getRubroInsumo();
       })
       .catch((err) => {
-        const error=err as AxiosError;
-        notify(error.response?.data as string, 'error');      });
+        const error = err as AxiosError;
+        notify(error.response?.data as string, 'error');
+      });
   };
 
   useEffect(() => {
