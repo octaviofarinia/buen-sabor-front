@@ -14,27 +14,27 @@ import { postDomicilio } from '../../API/Requests/DomicilioRequests/DomicilioReq
 
 const CargaDomicilioView: React.FC = () => {
   const location = useLocation();
+
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const isNew = queryParams.get('new') === 'true';
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const [domicilio, setDomicilio] = useState<Domicilio>(base_domicilio);
 
-  const handleSubmitDomicilio = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitDomicilio = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    try {
-      console.log('Post domicilio');
-      postDomicilio({ ...domicilio, auth0Id: user?.sub });
-    } catch (error) {
-      const err = error as AxiosError;
-      notify('Se produjo un error: ' + err.message, 'error');
-    }
-    console.log('Crear domilio');
-    notify('Se ha agreado el domicilio', 'success');
-    setTimeout(() => {
-      navigate(`/`);
-    }, 2000);
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        postDomicilio({ ...domicilio, auth0Id: user?.sub }, accessToken);
+        notify('Se ha agreado el domicilio', 'success');
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
+      })
+      .catch((error) => {
+        const err = error as AxiosError;
+        notify('Se produjo un error: ' + err.message, 'error');
+      });
   };
 
   useEffect(() => {
@@ -42,12 +42,11 @@ const CargaDomicilioView: React.FC = () => {
       const sendUserData = async () => {
         if (user) {
           try {
-            const response = await axios.post(`${backend_url}/usuarios/post_register_save`, {
+            await axios.post(`${backend_url}/usuarios/post_register_save`, {
               auth0Id: user.sub,
               username: user.name,
               email: user.email,
             });
-            console.log(response.data);
           } catch (error) {
             console.log(error);
           }
@@ -56,7 +55,7 @@ const CargaDomicilioView: React.FC = () => {
 
       sendUserData();
     }
-    return ()=>{}
+    return () => {};
   }, [user]);
 
   return (
@@ -161,8 +160,9 @@ const CargaDomicilioView: React.FC = () => {
             </div>
 
             <div
-              className={`-mx-3 mb-6 flex flex-wrap ${domicilio.esDepartamento ? 'visible' : 'hidden'
-                }`}
+              className={`-mx-3 mb-6 flex flex-wrap ${
+                domicilio.esDepartamento ? 'visible' : 'hidden'
+              }`}
             >
               <div className="mb-6 w-full px-3 md:mb-0 md:w-1/2">
                 <label

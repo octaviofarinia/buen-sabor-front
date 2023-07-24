@@ -1,19 +1,32 @@
 import { DetalleProducto } from '../../../../Interfaces/ABM/DetalleProducto';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { deleteDetalle } from '../../../../API/Requests/ProductoRequests/DetalleProductoRequests';
+import { useAuth0 } from '@auth0/auth0-react';
+import { notify } from '../../../Toast/ToastAlert';
+import { AxiosError } from 'axios';
+import { calcularCostoEstimado } from '../../../../Utils/CalculosUtils';
 interface TablaDetallesProps {
   detalles: DetalleProducto[];
   setDetalle: React.Dispatch<React.SetStateAction<DetalleProducto[]>>;
 }
 
 const TablaIngredientes = ({ detalles, setDetalle }: TablaDetallesProps) => {
+  const { getAccessTokenSilently } = useAuth0();
+  const [costo, setCosto] = useState<number>(calcularCostoEstimado(detalles));
   function eliminarDetalle(detalles: DetalleProducto[], elemento: DetalleProducto) {
-    const copiaDetalles = [...detalles];
-    const indice = copiaDetalles.indexOf(elemento);
-    copiaDetalles.splice(indice, 1);
+    getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const copiaDetalles = [...detalles];
+        const indice = copiaDetalles.indexOf(elemento);
+        copiaDetalles.splice(indice, 1);
 
-    elemento.id !== undefined && deleteDetalle({ id: elemento.id });
-    setDetalle(copiaDetalles);
+        elemento.id !== undefined && deleteDetalle({ id: elemento.id, token: accessToken });
+        setDetalle(copiaDetalles);
+      })
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.message, 'error');
+      });
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>, index: number) {
@@ -24,7 +37,12 @@ const TablaIngredientes = ({ detalles, setDetalle }: TablaDetallesProps) => {
     setDetalle(copiaDetalles);
   }
 
-  useEffect(() => {}, [detalles]);
+  useEffect(() => {
+    console.log(detalles);
+    setCosto(calcularCostoEstimado(detalles));
+    console.log(costo);
+
+  }, [detalles.length]);
   return (
     <div className="mt-16 rounded-md bg-neutral-100 shadow-md">
       <div className="rounded-t-md bg-neutral-200 px-4 py-2">
@@ -85,6 +103,15 @@ const TablaIngredientes = ({ detalles, setDetalle }: TablaDetallesProps) => {
             ))}
           </tbody>
         </table>
+        <div className="flex text-lg">
+          <span className="fontBebas  w-1/2 py-2 px-3 ">Costo Estimado</span>
+          <span
+            className="fontBebas w-1/2  bg-amber-400 px-3 py-2 text-start text-gray-800 outline-none
+              ring-amber-400 transition duration-100 focus:ring  dark:text-neutral-100"
+          >
+            ${costo}
+          </span>
+        </div>
       </div>
     </div>
   );

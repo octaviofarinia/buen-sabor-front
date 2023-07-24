@@ -8,19 +8,24 @@ import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
 import { getAll } from '../../API/Requests/BaseRequests';
 import { ConfirmationModal } from '../../components/Modal/ConfirmationModal';
 import { anularFactura } from '../../API/Requests/PlanillaRequests/FacturaRequests';
+import { useAuth0 } from '@auth0/auth0-react';
 export const FacturasView = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [facturas, setFacturas] = useState<Factura[]>([]);
+  const { getAccessTokenSilently } = useAuth0();
 
   const getFacturas = async () => {
-    try {
-      const data = await getAll({ endpoint: 'facturas' });
-      setFacturas(data);
-    } catch (err) {
-      const error = err as AxiosError;
-      console.log(error.message, error.request, error.response);
-      notify('Ocurrio un error', 'error');
-    }
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const data = await getAll({ endpoint: 'facturas', token: accessToken });
+        setFacturas(data);
+      })
+      .catch((err) => {
+        const error = err as AxiosError;
+        console.log(error.message, error.request, error.response);
+        notify('Ocurrio un error', 'error');
+      });
+
     setIsLoading(false);
   };
 
@@ -29,30 +34,26 @@ export const FacturasView = () => {
     return () => {};
   }, []);
   return (
-    <div className=" relative flex w-full flex-1 flex-col gap-5 bg-neutral-100 px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">
-      {isLoading && (
+    <div className="relative flex w-full flex-col gap-5 bg-neutral-100 px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16">
+      {isLoading ? (
         <Loader
           texto="Cargando las facturas..."
           closeLoading={setIsLoading}
           showCloseLoading={true}
         />
-      )}
-      <ToastAlert />
-      <div className="flex items-center justify-between">
-        <h1 className="flex items-center gap-3 text-3xl font-extrabold uppercase text-black dark:text-neutral-50">
-          <FontAwesomeIcon icon={faMoneyBills} />
-          Facturas
-        </h1>
-      </div>
-
-      {isLoading ? (
-        <div className=" mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-neutral-800">
+      ) : (
+        <div className="mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-neutral-800">
+          <ToastAlert />
+          <h1 className="flex items-center gap-3 text-3xl font-extrabold uppercase text-black dark:text-neutral-50">
+            <FontAwesomeIcon icon={faMoneyBills} />
+            Facturas
+          </h1>
           <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
               <div className="overflow-hidden">
                 <table className="min-w-full table-fixed bg-neutral-900 text-left text-sm font-light">
                   <thead className="font-medium uppercase">
-                    <tr className="border-b-4 border-b-neutral-500 bg-neutral-900  dark:border-b-white ">
+                    <tr className="border-b-4 border-b-neutral-500 bg-neutral-900  dark:border-b-white">
                       <th className="px-6 py-4 text-neutral-50">ID</th>
                       <th className="px-6 py-4 text-neutral-50">Fecha de Facturación</th>
                       <th className="px-6 py-4 text-neutral-50">Forma de Pago</th>
@@ -65,12 +66,10 @@ export const FacturasView = () => {
                   <tbody>
                     {facturas.map((factura) => (
                       <tr
-                        className="fontBebas border-b border-b-neutral-200 text-lg odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200
-                         dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-neutral-50 dark:odd:bg-neutral-600
-                          dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
+                        className="fontBebas border-b border-b-neutral-200 text-lg odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-neutral-50 dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
                         key={factura.id}
                       >
-                        <td className="px-6 py-4  font-bold">{factura.id}</td>
+                        <td className="px-6 py-4 font-bold">{factura.id}</td>
                         <td className="px-6 py-4">{factura.fechaFacturacion}</td>
                         <td className="px-6 py-4">
                           <span
@@ -84,22 +83,22 @@ export const FacturasView = () => {
                         <td className="px-6 py-4">${factura.totalVenta}</td>
                         <td className="px-6 py-4">
                           <div className="flex flex-col">
-                            {(factura.mpMerchantOrderId &&
-                              factura.mpPaymentId &&
-                              factura.mpPreferenceId &&
-                              factura.mpPaymentType) !== null ? (
+                            {factura.mpMerchantOrderId &&
+                            factura.mpPaymentId &&
+                            factura.mpPreferenceId &&
+                            factura.mpPaymentType ? (
                               <div className="flex gap-2">
                                 <div className="col-span-1 flex flex-col gap-2">
-                                  <p className="border-r-2  border-r-neutral-900 pr-2 font-bold text-neutral-900">
+                                  <p className="border-r-2 border-r-neutral-900 pr-2 font-bold text-neutral-900">
                                     MP_Merchant Order Id
                                   </p>
-                                  <p className="border-r-2  border-r-neutral-900 pr-2 font-bold text-neutral-900">
+                                  <p className="border-r-2 border-r-neutral-900 pr-2 font-bold text-neutral-900">
                                     MP_Payment ID
                                   </p>
-                                  <p className="border-r-2  border-r-neutral-900 pr-2 font-bold text-neutral-900">
+                                  <p className="border-r-2 border-r-neutral-900 pr-2 font-bold text-neutral-900">
                                     MP_Preference ID
                                   </p>
-                                  <p className="border-r-2  border-r-neutral-900 pr-2 font-bold text-neutral-900">
+                                  <p className="border-r-2 border-r-neutral-900 pr-2 font-bold text-neutral-900">
                                     MP_Payment Type
                                   </p>
                                 </div>
@@ -111,7 +110,7 @@ export const FacturasView = () => {
                                 </div>
                               </div>
                             ) : (
-                              <span className="font-semibold text-neutral-400  ">
+                              <span className="font-semibold text-neutral-400">
                                 No se efectuo el pago por Mercado Pago
                               </span>
                             )}
@@ -122,7 +121,14 @@ export const FacturasView = () => {
                           {factura.fechaBaja === null ? (
                             <ConfirmationModal
                               callback={() => {
-                                anularFactura(factura.id);
+                                getAccessTokenSilently()
+                                  .then(async (accessToken) => {
+                                    anularFactura(accessToken, factura.id);
+                                  })
+                                  .catch((err) => {
+                                    const error = err as AxiosError;
+                                    notify(error.message, 'error');
+                                  });
                               }}
                               alertText={'Se emitio la nota de crédito'}
                               contentText="¿Estás seguro de querer emitir una nota de crédito?"
@@ -152,13 +158,6 @@ export const FacturasView = () => {
             </div>
           </div>
         </div>
-      ) : (
-        <h2
-          className="my-6 rounded-md bg-rose-700 p-2 text-center font-semibold text-zinc-100
-    shadow-lg"
-        >
-          <FontAwesomeIcon icon={faFaceSadCry} size="lg" /> Aun no hay ningun pedido registrado.
-        </h2>
       )}
     </div>
   );

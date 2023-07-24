@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { backend_url } from '../../../Utils/ConstUtils';
 import { PedidoStatus } from '../../../Utils/PlanillaUtils';
 
-export const anularFactura = async (id?: number) => {
+export const anularFactura = async (token: string, id?: number) => {
   const cancelToken = axios.CancelToken.source();
 
   try {
@@ -14,6 +14,9 @@ export const anularFactura = async (id?: number) => {
         id: id,
         estado: PedidoStatus.NOTA_CREDITO,
         cancelToken: cancelToken.token,
+      },
+      headers: {
+        Authorization: 'Bearer ' + token,
       },
     });
     return response.data;

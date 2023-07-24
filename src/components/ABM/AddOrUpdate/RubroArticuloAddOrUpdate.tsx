@@ -10,11 +10,12 @@ import { Button } from '../../Botones/Button';
 import { ClipLoader } from 'react-spinners';
 import { AxiosError } from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Loader } from '../../Loader/Loader';
 
 export const RubroArticuloAddOrUpdate = () => {
   const { id } = useParams();
   const [categoria, setCategoria] = useState<RubroArticulo>(base_category);
-  const [isLoading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const { getAccessTokenSilently } = useAuth0();
@@ -85,89 +86,93 @@ export const RubroArticuloAddOrUpdate = () => {
 
   return (
     <div className="relative min-h-600 bg-neutral-100 py-6 dark:bg-neutral-800 sm:py-8 lg:py-12 ">
-      <div className="mx-auto max-w-screen-xl px-4 md:px-8 lg:px-20">
-        <div className="mb-10 flex w-full items-center justify-between md:mb-16">
-          <div className="flex flex-col ">
-            <h2 className=" text-center text-2xl font-bold text-neutral-800 dark:text-neutral-100  lg:text-4xl">
-              {id === undefined ? (
+      {loading ? (
+        <Loader texto="Cargando registros" closeLoading={setLoading} />
+      ) : (
+        <div className="mx-auto max-w-screen-xl px-4 md:px-8 lg:px-20">
+          <div className="mb-10 flex w-full items-center justify-between md:mb-16">
+            <div className="flex flex-col ">
+              <h2 className=" text-center text-2xl font-bold text-neutral-800 dark:text-neutral-100  lg:text-4xl">
+                {id === undefined ? (
+                  <>
+                    <span className="block">Carga de registro </span>
+                  </>
+                ) : (
+                  <>
+                    <span>Edición de registro </span>
+                  </>
+                )}
+              </h2>{' '}
+              <h3 className="mb-4 text-start  text-xl font-bold text-amber-400 md:mb-6 ">
+                Categoría | Rubro - Artículo
+              </h3>
+            </div>
+          </div>
+
+          <form
+            className={`mx-auto grid max-w-2xl items-center gap-4 text-end dark:text-neutral-100 sm:grid-cols-3 lg:gap-10`}
+            onSubmit={(e) => handleSubmit(e)}
+          >
+            <label htmlFor="denominacion" className="lg:text-2xl">
+              Denominación
+            </label>
+            <input
+              name={'denominacion'}
+              id={'denominacion'}
+              className="col-span-2 w-full rounded border bg-neutral-50 px-3 py-2 text-neutral-800 outline-none
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
+              onChange={(e) => handleChange(e)}
+              value={categoria.denominacion || ''}
+              placeholder="Denominación..."
+              required
+            />
+
+            <label htmlFor="idRubroPadre" className="col-span-1 lg:text-2xl">
+              Categoría padre
+            </label>
+            <div className="col-span-2 flex items-center gap-5">
+              {categoria.idRubroPadre === null && (
                 <>
-                  <span className="block">Carga de registro </span>
-                </>
-              ) : (
-                <>
-                  <span>Edición de registro </span>
+                  <label>No posee</label>
+                  <CategoryModal setRubroArticuloPadre={setCategoria} id={categoria.id} />
                 </>
               )}
-            </h2>{' '}
-            <h3 className="mb-4 text-start  text-xl font-bold text-amber-400 md:mb-6 ">
-              Categoría | Rubro - Artículo
-            </h3>
-          </div>
-        </div>
-
-        <form
-          className={`mx-auto grid max-w-2xl items-center gap-4 text-end dark:text-neutral-100 sm:grid-cols-3 lg:gap-10`}
-          onSubmit={(e) => handleSubmit(e)}
-        >
-          <label htmlFor="denominacion" className="lg:text-2xl">
-            Denominación
-          </label>
-          <input
-            name={'denominacion'}
-            id={'denominacion'}
-            className="col-span-2 w-full rounded border bg-neutral-50 px-3 py-2 text-neutral-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-            onChange={(e) => handleChange(e)}
-            value={categoria.denominacion || ''}
-            placeholder="Denominación..."
-            required
-          />
-
-          <label htmlFor="idRubroPadre" className="col-span-1 lg:text-2xl">
-            ID de Categoría padre
-          </label>
-          <div className="col-span-2 flex items-center gap-5">
-            {categoria.idRubroPadre === null && (
-              <>
-                <label>No posee</label>
-                <CategoryModal rubroArticulo={setCategoria} id={categoria.id} />
-              </>
-            )}
-            {categoria.rubroPadre !== null && (
-              <>
-                <span
-                  className="col-span-2 w-full rounded border bg-neutral-100 px-3 py-2 text-start text-neutral-800 outline-none
+              {categoria.rubroPadre !== null && (
+                <>
+                  <span
+                    className="col-span-2 w-full rounded border bg-neutral-100 px-3 py-2 text-start text-neutral-800 outline-none
               ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-                >
-                  {categoria.rubroPadre?.denominacion}
-                </span>
-                <Button
-                  callback={() => {
-                    setCategoria((prevCategoria) => ({
-                      ...prevCategoria,
-                      idRubroPadre: null,
-                      rubroPadre: null,
-                    }));
-                  }}
-                  type="button"
-                  content="x"
-                  color="rojo"
-                />
-              </>
-            )}
-          </div>
+                  >
+                    {categoria.rubroPadre?.denominacion}
+                  </span>
+                  <Button
+                    callback={() => {
+                      setCategoria((prevCategoria) => ({
+                        ...prevCategoria,
+                        idRubroPadre: null,
+                        rubroPadre: null,
+                      }));
+                    }}
+                    type="button"
+                    content="x"
+                    color="rojo"
+                  />
+                </>
+              )}
+            </div>
 
-          <div className="relative z-0 col-span-3 flex w-full gap-3">
-            <Button type="submit" content="add" fullsize={true} />
-            {isLoading && (
-              <div className="absolute -right-20 flex items-center">
-                <ClipLoader size={45} aria-label="Loading Spinner" data-testid="loader" />
-              </div>
-            )}
-          </div>
-        </form>
-        <ToastAlert />
-      </div>
+            <div className="relative z-0 col-span-3 flex w-full gap-3">
+              <Button type="submit" content="add" fullsize={true} />
+              {loading && (
+                <div className="absolute -right-20 flex items-center">
+                  <ClipLoader size={45} aria-label="Loading Spinner" data-testid="loader" />
+                </div>
+              )}
+            </div>
+          </form>
+          <ToastAlert />
+        </div>
+      )}
     </div>
   );
 };

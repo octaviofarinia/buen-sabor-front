@@ -6,11 +6,13 @@ interface IngredienteAddOrUpdateProps {
   ingrediente: ArticuloInsumo;
   imagen: File | null;
   id: string | undefined | null;
+  token: string;
 }
 
 export const createIngredienteRegister = async ({
   ingrediente: ingrediente,
   imagen,
+  token,
 }: IngredienteAddOrUpdateProps) => {
   try {
     const url = `${backend_url}/articulos-insumo`;
@@ -27,6 +29,7 @@ export const createIngredienteRegister = async ({
     const response = await axios.post(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: 'Bearer ' + token,
       },
     });
     return response.status;
@@ -40,6 +43,7 @@ export const updateIngredienteRegister = async ({
   ingrediente: ingrediente,
   id,
   imagen,
+  token,
 }: IngredienteAddOrUpdateProps) => {
   try {
     const url = `${backend_url}/articulos-insumo/${id}`;
@@ -56,6 +60,7 @@ export const updateIngredienteRegister = async ({
     const response = await axios.put(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: 'Bearer ' + token,
       },
     });
     console.log('Response', response.data);

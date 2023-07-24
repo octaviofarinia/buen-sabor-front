@@ -21,6 +21,7 @@ import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { AxiosError } from 'axios';
 import { HardDeleteButton } from '../../Botones/HardDeleteButton';
 import { getOne } from '../../../API/Requests/BaseRequests';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export const IngredienteAddOrUpdate = () => {
   const { id } = useParams();
@@ -30,57 +31,74 @@ export const IngredienteAddOrUpdate = () => {
   const [imagen, setImagen] = useState<File | null>(null);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { getAccessTokenSilently } = useAuth0();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    let status = 0;
     setLoading(true);
-    try {
-      if (id) {
-        const request = await updateIngredienteRegister({
-          id: id,
-          imagen: imagen,
-          ingrediente: ingrediente,
+    ingrediente.idRubroArticulo = categoria.id;
+    ingrediente.rubroArticulo = categoria;
+    ingrediente.idUnidadMedida = unidadDeMedida.id;
+    ingrediente.unidadMedida = unidadDeMedida;
+    if (id) {
+      await getAccessTokenSilently()
+        .then(async (accessToken) => {
+          await updateIngredienteRegister({
+            id: id,
+            imagen: imagen,
+            token: accessToken,
+            ingrediente: ingrediente,
+          });
+          notify('Exito', 'success');
+        })
+        .catch((err) => {
+          const axiosError = err as AxiosError;
+          notify(axiosError.message, 'error');
         });
-        status = request;
-      } else {
-        const request = await createIngredienteRegister({
-          id: null,
-          imagen: imagen,
-          ingrediente: ingrediente,
+    } else {
+      await getAccessTokenSilently()
+        .then(async (accessToken) => {
+          await createIngredienteRegister({
+            id: null,
+            imagen: imagen,
+            token: accessToken,
+            ingrediente: ingrediente,
+          });
+          notify('Exito', 'success');
+        })
+        .catch((err) => {
+          const axiosError = err as AxiosError;
+          notify(axiosError.message, 'error');
+          console.log(axiosError);
         });
-        status = request;
-      }
-
-      setLoading(false);
-      status === (200 || 201) && notify('Exito', 'success');
-      setTimeout(() => {
-        navigate(`/employee/ABM/Ingredientes`);
-      }, 2000);
-    } catch (err) {
-      const axiosError = err as AxiosError;
-      console.log(axiosError);
-      setLoading(false);
-      notify('Algo salió mal! Status: ' + axiosError.response?.status, 'error');
     }
+
+    setTimeout(() => {
+      navigate(`/employee/ABM/Ingredientes`);
+    }, 2000);
+
+    setLoading(false);
   }
-
-  const buildIngrediente = () => {
-    if (categoria.id !== null && ingrediente !== null) {
-      ingrediente.idRubroArticulo = categoria.id;
-    }
-    if (unidadDeMedida.id !== null && ingrediente !== null) {
-      ingrediente.idUnidadMedida = unidadDeMedida.id;
-    }
-  };
 
   const setPropsOfExistentIngredient = async () => {
     try {
-      const ingredienteData = await getOne({ id: Number(id), endpoint: 'articulos-insumo' });
-      setIngrediente(ingredienteData);
-      setCategoria(ingredienteData.rubroArticulo);
-      setUnidadDeMedida(ingredienteData.unidadMedida);
-      notify('Se cargo el registro', 'success');
+      await getAccessTokenSilently()
+        .then(async (accessToken) => {
+          const ingredienteData = await getOne({
+            id: Number(id),
+            endpoint: 'articulos-insumo',
+            token: accessToken,
+          });
+          setIngrediente(ingredienteData);
+          setCategoria(ingredienteData.rubroArticulo);
+          setUnidadDeMedida(ingredienteData.unidadMedida);
+          notify('Se cargo el registro', 'success');
+        })
+        .catch((err) => {
+          const axiosError = err as AxiosError;
+          notify(axiosError.message, 'error');
+        });
+
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -125,11 +143,12 @@ export const IngredienteAddOrUpdate = () => {
           <input
             name={'denominacion'}
             id={'denominacion'}
+            type="text"
+            placeholder="Denominación..."
             className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
             ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
             onChange={(e) => handleChange(e, ingrediente, setIngrediente)}
             value={ingrediente.denominacion || ''}
-            placeholder="Denominación..."
             required
           />
           <label htmlFor="precioCompra" className="lg:text-2xl">
@@ -186,72 +205,78 @@ export const IngredienteAddOrUpdate = () => {
                 "
               ></img>
             )}
+            
             <input
               name="imagen"
               id="imagen"
               type="file"
               className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
               onChange={(e) => handleImageChange(e, imagen, setImagen)}
               {...(ingrediente.id === null ? { required: true } : {})}
             />
           </div>
-          <label htmlFor="idRubroPadre" className="lg:text-2xl">
+          <label htmlFor="idRubroPadre" className="col-span-1 lg:text-2xl">
             Categoría
           </label>
-          <div className="z-0 col-span-2 flex items-center gap-5">
-            {categoria.id === null && (
-              <CategoryModal
-                rubroArticulo={setCategoria}
-                id={categoria.id !== null ? categoria.id : undefined}
-              />
+          <div className="col-span-2 flex items-center gap-5">
+            {categoria.id == null && (
+              <>
+                <label>No posee</label>
+                <CategoryModal setRubroArticulo={setCategoria} id={categoria.id} />
+              </>
             )}
-            {categoria.id !== null && (
-              <span
-                className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-start text-gray-800 outline-none
+            {categoria.id != null && (
+              <>
+                <span
+                  className="col-span-2 w-full rounded border bg-neutral-100 px-3 py-2 text-start text-neutral-800 outline-none
               ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-              >
-                {categoria.denominacion}
-              </span>
-            )}
-            {categoria.id !== null && (
-              <Button
-                callback={() => {
-                  setCategoria(base_category);
-                }}
-                type="button"
-                content="x"
-                color="rojo"
-              />
+                >
+                  {categoria.denominacion}
+                </span>
+                <Button
+                  callback={() => {
+                    setCategoria(base_category);
+                  }}
+                  type="button"
+                  content="x"
+                  color="rojo"
+                />
+              </>
             )}
           </div>
 
-          <label htmlFor="idUnidadDeMedida" className="lg:text-2xl">
-            Unidad de medida
+          <label htmlFor="idRubroPadre" className="col-span-1 lg:text-2xl">
+            Unidad de Medida
           </label>
-          <div className="col-span-2 flex items-center gap-5 ">
-            {unidadDeMedida.id === null && <UnidadDeMedidaModal fatherSetter={setUnidadDeMedida} />}
-            {unidadDeMedida.id !== null && (
-              <span
-                className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-start text-gray-800 outline-none
-              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-              >
-                {unidadDeMedida.denominacion}
-              </span>
+          <div className="col-span-2 flex items-center gap-5">
+            {unidadDeMedida.id == null && (
+              <>
+                <label>No posee</label>
+                <UnidadDeMedidaModal setUnidadMedida={setUnidadDeMedida} id={unidadDeMedida.id} />
+              </>
             )}
-            {unidadDeMedida.id !== null && (
-              <Button
-                callback={() => {
-                  setUnidadDeMedida(base_unidad);
-                }}
-                type="button"
-                content="x"
-                color="rojo"
-              />
+            {unidadDeMedida.id != null && (
+              <>
+                <span
+                  className="col-span-2 w-full rounded border bg-neutral-100 px-3 py-2 text-start text-neutral-800 outline-none
+              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
+                >
+                  {unidadDeMedida.denominacion}
+                </span>
+                <Button
+                  callback={() => {
+                    setUnidadDeMedida(base_unidad);
+                  }}
+                  type="button"
+                  content="x"
+                  color="rojo"
+                />
+              </>
             )}
           </div>
           <div className="relative z-0 col-span-3 flex w-full gap-3">
-            <Button callback={buildIngrediente} type="submit" content="add" fullsize={true} />
+            <Button callback={() => {}} type="submit" content="add" fullsize={true} />
             {isLoading && (
               <div className="absolute -right-20 flex items-center">
                 <ClipLoader size={45} aria-label="Loading Spinner" data-testid="loader" />

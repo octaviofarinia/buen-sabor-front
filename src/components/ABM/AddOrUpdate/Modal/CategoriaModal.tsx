@@ -8,11 +8,16 @@ import { AxiosError } from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 
 export interface CategoryModalProps {
-  rubroArticulo: React.Dispatch<React.SetStateAction<RubroArticulo>>;
+  setRubroArticuloPadre?: React.Dispatch<React.SetStateAction<RubroArticulo>>;
+  setRubroArticulo?: React.Dispatch<React.SetStateAction<RubroArticulo>>;
   id?: string | number;
 }
 
-export const CategoryModal = ({ rubroArticulo: rubroArticulo, id }: CategoryModalProps) => {
+export const CategoryModal = ({
+  setRubroArticuloPadre: setRubroArticuloPadre,
+  id,
+  setRubroArticulo,
+}: CategoryModalProps) => {
   const [categories, setCategories] = useState<RubroArticulo[]>([]);
   const [visible, toggleVisible] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
@@ -39,9 +44,14 @@ export const CategoryModal = ({ rubroArticulo: rubroArticulo, id }: CategoryModa
     getPadresDeRubro();
   }, []);
 
+  const setCategoria = (categoria: RubroArticulo) => {
+    setRubroArticulo !== undefined && setRubroArticulo(categoria);
+  };
+
   const setFather = (categoria: RubroArticulo) => {
     id !== categoria.id
-      ? rubroArticulo((prevCategoria) => ({
+      ? setRubroArticuloPadre !== undefined &&
+        setRubroArticuloPadre((prevCategoria) => ({
           ...prevCategoria,
           idRubroPadre: categoria.id,
           rubroPadre: categoria,
@@ -67,7 +77,8 @@ export const CategoryModal = ({ rubroArticulo: rubroArticulo, id }: CategoryModa
             <div className="flex justify-end">
               <Button
                 callback={() => {
-                  setFather(categoria);
+                  setRubroArticuloPadre !== undefined && setFather(categoria);
+                  setRubroArticulo !== undefined && setCategoria(categoria);
                 }}
                 content="Seleccionar"
                 type="button"

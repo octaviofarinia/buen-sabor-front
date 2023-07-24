@@ -42,9 +42,7 @@ export const createProducto = async ({
     for (const detalle of detalles) {
       try {
         detalle.idArticuloManufacturado = idArticuloManufacturado;
-        console.log('Detalle: ', detalle);
-        const responseDetalle = await createDetalle({ detalle: detalle, token: token });
-        console.log('Status detalle', responseDetalle.status);
+        await createDetalle({ detalle: detalle, token: token });
       } catch (err) {
         console.error(err);
         throw err;
@@ -89,17 +87,13 @@ export const updateProducto = async ({
 
     for (const detalle of detalles) {
       try {
-        detalle.id != null &&
-          console.log('El detalle existe: ' + detalle.denominacion + '  id:' + detalle.id);
         if (detalle.id == null) {
           detalle.idArticuloManufacturado = idArticuloManufacturado;
-          const responseDetalle = await createDetalle({ detalle: detalle, token: token });
-          console.log('Status create detalle', responseDetalle.status);
+          await createDetalle({ detalle: detalle, token: token });
         } else {
           detalle.idArticuloManufacturado = idArticuloManufacturado;
           detalle.idArticuloInsumo = detalle.articuloInsumo?.id || null;
-          const responseDetalle = await updateDetalle({ detalle: detalle, token: token });
-          console.log('Status update detalle', responseDetalle.status);
+          await updateDetalle({ detalle: detalle, token: token });
         }
       } catch (err) {
         console.error(err);

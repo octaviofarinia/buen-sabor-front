@@ -3,13 +3,14 @@ import { Banner } from '../../components/Banner/Banner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faClock, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { backend_url } from '../../Utils/ConstUtils';
 import { Factura, Pedido } from '../../Interfaces/ClientSide/Pedido';
 import CartConstants from '../../Utils/Constants/CartConstants';
 import { useCart } from '../../context/CarritoProvider';
 import { delayedRedirect } from '../../Utils/NavigationUtils';
 import { notify } from '../../components/Toast/ToastAlert';
+import { useAuth0 } from '@auth0/auth0-react';
 export const MP_PostPagoView = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,7 +18,7 @@ export const MP_PostPagoView = () => {
   const mpstatus = queryParams.get('status');
   const { resetCart } = useCart();
   const [timer, setTimer] = useState<number>(15);
-
+  const { getAccessTokenSilently } = useAuth0();
   const getBanner = () => {
     switch (mpstatus) {
       case 'approved':
@@ -73,21 +74,22 @@ export const MP_PostPagoView = () => {
     if (informacionPedidoString !== null) {
       let pedido: Pedido = JSON.parse(informacionPedidoString);
       pedido.factura = factura;
-      console.log(mpstatus);
-      if (mpstatus === 'approved') {
-        try {
-          const response = await axios.post(`${backend_url}/pedidos`, pedido, {
-            cancelToken: cancelToken.token,
-          });
-          resetCart();
 
-          localStorage.removeItem('informacionPedido');
-        } catch (err) {
-          console.log(err);
-          if (axios.isCancel(err)) {
-            notify('Ocurrio un error: ' + err.message, 'error');
-          }
-        }
+      if (mpstatus === 'approved') {
+        await getAccessTokenSilently()
+          .then(async (accessToken) => {
+            await axios.post(`${backend_url}/pedidos`, pedido, {
+              cancelToken: cancelToken.token,
+              headers: { Authorization: 'Bearer ' + accessToken },
+            });
+            resetCart();
+
+            localStorage.removeItem('informacionPedido');
+          })
+          .catch((err) => {
+            const error = err as AxiosError;
+            notify(error.message, 'error');
+          });
       }
     }
     return () => cancelToken.cancel();

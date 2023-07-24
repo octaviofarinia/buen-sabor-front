@@ -17,8 +17,10 @@ import { ClipLoader } from 'react-spinners';
 import { ToastAlert, notify } from '../../Toast/ToastAlert';
 import { AxiosError } from 'axios';
 import { HardDeleteButton } from '../../Botones/HardDeleteButton';
-import { getOne, } from '../../../API/Requests/BaseRequests';
+import { getOne } from '../../../API/Requests/BaseRequests';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Loader } from '../../Loader/Loader';
+import { calcularCostoEstimado } from '../../../Utils/CalculosUtils';
 
 export const ProductoAddOrUpdate = () => {
   const { id } = useParams();
@@ -27,7 +29,7 @@ export const ProductoAddOrUpdate = () => {
   const [cantidad, setCantidad] = useState(0);
   const [producto, setProducto] = useState<ArticuloManufacturado>(base_product);
   const [ingrediente, setIngrediente] = useState<ArticuloInsumo>(base_ingredient);
-  const [isLoading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
 
@@ -44,6 +46,7 @@ export const ProductoAddOrUpdate = () => {
               token: accessToken,
               id: Number(id),
             });
+            notify('Exito', 'success');
           })
           .catch((err) => {
             const error = err as AxiosError;
@@ -65,10 +68,10 @@ export const ProductoAddOrUpdate = () => {
             const error = err as AxiosError;
             notify(error.response?.data as string, 'error');
           });
-        setTimeout(() => {
-          navigate(`/employee/ABM/UnidadDeMedida`);
-        }, 2000);
       }
+      setTimeout(() => {
+        navigate(`/employee/ABM/Productos`);
+      }, 2000);
     } catch (error) {
       console.log(error);
     }
@@ -87,6 +90,8 @@ export const ProductoAddOrUpdate = () => {
       idArticuloInsumo: ingrediente.id,
       denominacion: ingrediente.denominacion,
       cantidad: cantidad,
+      articuloInsumo: ingrediente,
+      unidadMedida: ingrediente.unidadMedida,
     };
     setDetalle([...detalle, nuevoDetalle]);
     notify('Se agrego el ingrediente', 'success');
@@ -104,8 +109,8 @@ export const ProductoAddOrUpdate = () => {
             endpoint: 'articulos-manufacturados',
             token: accessToken,
           });
-          const detalleData = await getDetalles({ id: id, token: accessToken });
-          setDetalle(detalleData.data);
+          const detalleData = await getDetalles({ id: Number(id), token: accessToken });
+          setDetalle(detalleData);
           setProducto(productoData);
         })
         .catch((err) => {
@@ -113,7 +118,6 @@ export const ProductoAddOrUpdate = () => {
           notify(error.response?.data as string, 'error');
         });
 
-      notify('Se cargo el registro', 'success');
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -126,182 +130,186 @@ export const ProductoAddOrUpdate = () => {
 
   return (
     <div className="relative bg-neutral-100 py-6 dark:bg-neutral-800 sm:py-8 lg:py-12 ">
-      <div className="mx-auto max-w-screen-xl px-4 md:px-8 lg:px-20">
-        <div className="mb-5 flex w-full items-center justify-between ">
-          <div className="flex flex-col ">
-            <h2 className=" text-start text-2xl font-bold text-gray-800 dark:text-neutral-100  lg:text-4xl">
-              {id === undefined ? (
-                <>
-                  <span className="block">Carga de registro </span>
-                </>
-              ) : (
-                <>
-                  <span>Edición de registro </span>
-                </>
-              )}
-            </h2>{' '}
-            <h3 className="mb-4 text-start  text-xl font-bold text-amber-400 md:mb-6 ">
-              Producto | Artículo - Manufacturado
-            </h3>
+      {loading ? (
+        <Loader texto="Cargando registros" closeLoading={setLoading} />
+      ) : (
+        <div className="mx-auto max-w-screen-xl px-4 md:px-8 lg:px-20">
+          <div className="mb-5 flex w-full items-center justify-between ">
+            <div className="flex flex-col ">
+              <h2 className=" text-start text-2xl font-bold text-gray-800 dark:text-neutral-100  lg:text-4xl">
+                {id === undefined ? (
+                  <>
+                    <span className="block">Carga de registro </span>
+                  </>
+                ) : (
+                  <>
+                    <span>Edición de registro </span>
+                  </>
+                )}
+              </h2>{' '}
+              <h3 className="mb-4 text-start  text-xl font-bold text-amber-400 md:mb-6 ">
+                Producto | Artículo - Manufacturado
+              </h3>
+            </div>
+            {id !== undefined && <HardDeleteButton id={Number(id)} endpoint={'unidades-medida'} />}
           </div>
-          {id !== undefined && <HardDeleteButton id={Number(id)} endpoint={'unidades-medida'} />}
-        </div>
 
-        <form
-          encType="multipart/form-data"
-          className={`mx-auto grid w-11/12 items-center gap-4 text-end dark:text-neutral-100  sm:grid-cols-3 lg:gap-10`}
-          onSubmit={(e) => handleSubmit(e)}
-        >
-          <label htmlFor="denominacion" className="lg:text-2xl">
-            Denominacion
-          </label>
-          <input
-            name={'denominacion'}
-            id={'denominacion'}
-            type="text"
-            className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-            onChange={(e) => handleChange(e, producto, setProducto)}
-            placeholder="Denominación"
-            value={producto.denominacion || ''}
-            required
-          />
-          <label htmlFor="descripcion" className="lg:text-2xl">
-            Descripcion
-          </label>
-          <input
-            name={'descripcion'}
-            id={'descripcion'}
-            type="text"
-            className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-            onChange={(e) => handleChange(e, producto, setProducto)}
-            value={producto.descripcion || ''}
-            placeholder="Descripción..."
-            required
-          />
-          <label htmlFor="tiempoEstimadoCocina" className="lg:text-2xl">
-            Tiempo estimado (Min)
-          </label>
-          <input
-            name={'tiempoEstimadoCocina'}
-            id={'tiempoEstimadoCocina'}
-            type="number"
-            className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-            onChange={(e) => handleChange(e, producto, setProducto)}
-            placeholder="Tiempo Estimado..."
-            value={producto.tiempoEstimadoCocina || ''}
-            required
-          />
-          <label htmlFor="precioVenta" className="lg:text-2xl">
-            Precio de Venta
-          </label>
-          <input
-            name={'precioVenta'}
-            id={'precioVenta'}
-            type="number"
-            className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-            onChange={(e) => handleChange(e, producto, setProducto)}
-            placeholder="Precio de Venta..."
-            value={producto.precioVenta || ''}
-            required
-          />
-
-          <label htmlFor="urlImagen" className="lg:text-2xl">
-            Imagen del producto
-          </label>
-          <div className="col-span-2 flex flex-col gap-3">
-            {id !== undefined && (
-              <img
-                src={producto.urlImagen?.toString()}
-                alt={'img'}
-                className="mx-auto h-72  w-full rounded-md border-4 border-amber-400 object-cover mix-blend-multiply dark:border-neutral-400 dark:mix-blend-normal
-                "
-              ></img>
-            )}
+          <form
+            encType="multipart/form-data"
+            className={`mx-auto grid w-11/12 items-center gap-4 text-end dark:text-neutral-100  sm:grid-cols-3 lg:gap-10`}
+            onSubmit={(e) => handleSubmit(e)}
+          >
+            <label htmlFor="denominacion" className="lg:text-2xl">
+              Denominacion
+            </label>
             <input
-              name="imagen"
-              id="imagen"
-              type="file"
+              name={'denominacion'}
+              id={'denominacion'}
+              type="text"
               className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
-              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-              onChange={(e) => handleImageChange(e, imagen, setImagen)}
-              {...(producto.id === null ? { required: true } : {})}
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
+              onChange={(e) => handleChange(e, producto, setProducto)}
+              placeholder="Denominación"
+              value={producto.denominacion || ''}
+              required
             />
-          </div>
+            <label htmlFor="descripcion" className="lg:text-2xl">
+              Descripcion
+            </label>
+            <input
+              name={'descripcion'}
+              id={'descripcion'}
+              type="text"
+              className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
+              onChange={(e) => handleChange(e, producto, setProducto)}
+              value={producto.descripcion || ''}
+              placeholder="Descripción..."
+              required
+            />
+            <label htmlFor="tiempoEstimadoCocina" className="lg:text-2xl">
+              Tiempo estimado (Min)
+            </label>
+            <input
+              name={'tiempoEstimadoCocina'}
+              id={'tiempoEstimadoCocina'}
+              type="number"
+              className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
+              onChange={(e) => handleChange(e, producto, setProducto)}
+              placeholder="Tiempo Estimado..."
+              value={producto.tiempoEstimadoCocina || ''}
+              required
+            />
+            <label htmlFor="precioVenta" className="lg:text-2xl">
+              Precio de Venta
+            </label>
+            <input
+              name={'precioVenta'}
+              id={'precioVenta'}
+              type="number"
+              className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+            ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
+              onChange={(e) => handleChange(e, producto, setProducto)}
+              placeholder="Precio de Venta..."
+              value={producto.precioVenta || ''}
+              required
+            />
 
-          <label htmlFor="idRubroArticulo" className="lg:text-2xl">
-            Ingredientes
-          </label>
-          <div className="z-0 col-span-2 flex items-center gap-5">
-            {ingrediente.id === null && <IngredienteModal fatherSetter={setIngrediente} />}
-            {ingrediente.id !== null && (
-              <div className="col-span-2 flex w-full gap-3">
-                <span
-                  className="flex w-full items-center rounded border bg-gray-50 px-3 py-2 text-start text-gray-800
+            <label htmlFor="urlImagen" className="lg:text-2xl">
+              Imagen del producto
+            </label>
+            <div className="col-span-2 flex flex-col gap-3">
+              {id !== undefined && (
+                <img
+                  src={producto.urlImagen?.toString()}
+                  alt={'img'}
+                  className="mx-auto h-72  w-full rounded-md border-4 border-amber-400 object-cover mix-blend-multiply dark:border-neutral-400 dark:mix-blend-normal
+                "
+                ></img>
+              )}
+              <input
+                name="imagen"
+                id="imagen"
+                type="file"
+                className="col-span-2 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+              ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
+                onChange={(e) => handleImageChange(e, imagen, setImagen)}
+                {...(producto.id === null ? { required: true } : {})}
+              />
+            </div>
+
+            <label htmlFor="idRubroArticulo" className="lg:text-2xl">
+              Agregar Ingrediente
+            </label>
+            <div className="z-0 col-span-2 flex items-center gap-5">
+              {ingrediente.id == null && <IngredienteModal setInsumo={setIngrediente} />}
+              {ingrediente.id != null && (
+                <div className="col-span-2 flex w-full gap-3">
+                  <span
+                    className="flex w-full items-center rounded border bg-gray-50 px-3 py-2 text-start text-gray-800
             outline-none ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-                >
-                  {ingrediente.denominacion}
-                </span>
-                <input
-                  name={'cantidad'}
-                  id={'cantidad'}
-                  type="number"
-                  className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+                  >
+                    {ingrediente.denominacion}
+                  </span>
+                  <input
+                    name={'cantidad'}
+                    id={'cantidad'}
+                    type="number"
+                    className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
                   ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-                  onChange={(e) => {
-                    setCantidad(Number(e.target.value));
-                  }}
-                  placeholder="Cantidad..."
-                  value={cantidad || ''}
-                  required
-                />
-                <input
-                  name={'id'}
-                  id={'idRubroArticulo'}
-                  className="hidden"
-                  onChange={(e) => handleIngredientesList(e)}
-                  value={ingrediente?.id || 0}
-                  required
-                />
-                {ingrediente.id !== null && (
-                  <Button
-                    callback={() => {
-                      setIngrediente(base_ingredient);
+                    onChange={(e) => {
+                      setCantidad(Number(e.target.value));
                     }}
-                    type="button"
-                    content="x"
-                    color="rojo"
+                    placeholder="Cantidad..."
+                    value={cantidad || ''}
+                    required
                   />
-                )}
-
-                {ingrediente.id !== null && (
-                  <Button
-                    callback={() => {
-                      confirmarIngrediente();
-                    }}
-                    type="button"
-                    content="Confirmar Ingrediente"
+                  <input
+                    name={'id'}
+                    id={'idRubroArticulo'}
+                    className="hidden"
+                    onChange={(e) => handleIngredientesList(e)}
+                    value={ingrediente?.id || 0}
+                    required
                   />
-                )}
-              </div>
-            )}
-          </div>
+                  {ingrediente.id !== null && (
+                    <Button
+                      callback={() => {
+                        setIngrediente(base_ingredient);
+                      }}
+                      type="button"
+                      content="x"
+                      color="rojo"
+                    />
+                  )}
 
-          <div className="relative z-0 col-span-2 col-start-2 flex w-full gap-3">
-            <Button type="submit" content="add" fullsize={true} />
-            {isLoading && (
-              <div className="absolute -right-20 flex items-center">
-                <ClipLoader size={45} aria-label="Loading Spinner" data-testid="loader" />
-              </div>
-            )}
-          </div>
-        </form>
-        {detalle.length > 0 && <TablaIngredientes detalles={detalle} setDetalle={setDetalle} />}
-        <ToastAlert />
-      </div>
+                  {ingrediente.id !== null && (
+                    <Button
+                      callback={() => {
+                        confirmarIngrediente();
+                      }}
+                      type="button"
+                      content="Confirmar Ingrediente"
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="relative z-0 col-span-2 col-start-2 flex w-full gap-3">
+              <Button type="submit" content={"Confirmar y agregar registro"} fullsize={true} />
+              {loading && (
+                <div className="absolute -right-20 flex items-center">
+                  <ClipLoader size={45} aria-label="Loading Spinner" data-testid="loader" />
+                </div>
+              )}
+            </div>
+          </form>
+          {detalle.length > 0 && <TablaIngredientes detalles={detalle} setDetalle={setDetalle} />}
+          <ToastAlert />
+        </div>
+      )}
     </div>
   );
 };

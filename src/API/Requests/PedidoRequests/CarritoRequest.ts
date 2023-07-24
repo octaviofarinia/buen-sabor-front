@@ -2,7 +2,7 @@ import { ArticuloManufacturado } from '../../../Interfaces/ABM/ArticuloManufactu
 import { DetallePedido } from '../../../Interfaces/ClientSide/DetallePedido';
 import { getOne } from '../BaseRequests';
 
-export const getProductosDelCarrito = async (userid: string) => {
+export const getProductosDelCarrito = async (userid: string, token) => {
   const productos: ArticuloManufacturado[] = [];
   let storedCart: string | null = '';
   if (userid !== undefined) {
@@ -14,6 +14,7 @@ export const getProductosDelCarrito = async (userid: string) => {
     const response = await getOne({
       endpoint: 'articulos-manufacturados',
       id: Number(item.idArticuloManufacturado),
+      token: token,
     });
     productos.push(response);
   });

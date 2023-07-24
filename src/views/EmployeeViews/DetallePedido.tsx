@@ -8,43 +8,51 @@ import { DetallePedidoComplete } from '../../Interfaces/ClientSide/DetallePedido
 import { AxiosError } from 'axios';
 import { getDetalles } from '../../API/Requests/ProductoRequests/DetalleProductoRequests';
 import { DetalleProducto } from '../../Interfaces/ABM/DetalleProducto';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export const DetallePedidoView = () => {
   const { id } = useParams();
   const [detallePedido, setDetallePedido] = useState<DetallePedidoComplete[]>([]);
   const [detallesProducto, setDetalleProducto] = useState<DetalleProducto[][]>([[], []]);
   const [loading, setLoading] = useState(true);
-
+  const { getAccessTokenSilently } = useAuth0();
   const getRegisterData = async () => {
-    try {
-      const response = await getPedido(Number(id));
-      setDetallePedido(response);
-      if (detallePedido.length > 0) {
-        notify('Se cargó el registro', 'success');
-      }
-    } catch (err) {
-      const axiosErr = err as AxiosError;
-      notify('Ocurrió un error: ' + axiosErr.response?.status, 'error');
-    }
+    getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const response = await getPedido(accessToken, Number(id));
+        setDetallePedido(response);
+        if (detallePedido.length > 0) {
+          notify('Se cargó el registro', 'success');
+        }
+      })
+      .catch((err) => {
+        const axiosErr = err as AxiosError;
+        notify('Ocurrió un error: ' + axiosErr.response?.status, 'error');
+      });
+
     setLoading(false);
   };
 
   const getArticulosInsumos = async () => {
-    try {
-      const promises = detallePedido.map(async (detalle) => {
-        const response = await getDetalles({ id: Number(detalle.articuloManufacturado?.id) });
-        return response.data;
+    getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const promises = detallePedido.map(async (detalle) => {
+          const response = await getDetalles({
+            id: Number(detalle.articuloManufacturado?.id),
+            token: accessToken,
+          });
+          return response;
+        });
+        const resultados = await Promise.all(promises);
+        setDetalleProducto(resultados);
+      })
+      .catch((err) => {
+        const axiosErr = err as AxiosError;
+        notify('Ocurrió un error: ' + axiosErr.response?.status, 'error');
       });
 
-      const resultados = await Promise.all(promises);
+    notify('Todas las solicitudes se completaron correctamente', 'success');
 
-      setDetalleProducto(resultados);
-
-      notify('Todas las solicitudes se completaron correctamente', 'success');
-    } catch (err) {
-      const axiosErr = err as AxiosError;
-      notify('Ocurrió un error: ' + axiosErr.response?.status, 'error');
-    }
     setLoading(false);
   };
 

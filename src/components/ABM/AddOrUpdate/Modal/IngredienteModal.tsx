@@ -2,24 +2,35 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import { ArticuloInsumo } from '../../../../Interfaces/ABM/ArticuloInsumo';
 import { Button } from '../../../Botones/Button';
-import { ToastAlert } from '../../../Toast/ToastAlert';
+import { ToastAlert, notify } from '../../../Toast/ToastAlert';
 import { getAll } from '../../../../API/Requests/BaseRequests';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useUser } from '../../../../context/UserProvider';
+import { Axios, AxiosError } from 'axios';
 export interface IngredienteModalProps {
-  fatherSetter: React.Dispatch<React.SetStateAction<ArticuloInsumo>>;
+  setInsumo: React.Dispatch<React.SetStateAction<ArticuloInsumo>>;
 }
 
-export const IngredienteModal = ({ fatherSetter }: IngredienteModalProps) => {
+export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps) => {
   const [ingredientes, setIngredientes] = useState<ArticuloInsumo[]>([]);
   const [visible, toggleVisible] = useState(false);
+  const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
     getIngredientes();
   }, []);
   const getIngredientes = async () => {
-    const data = await getAll({endpoint:"articulos-insumo"});
-    setIngredientes(data);
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const data = await getAll({ endpoint: 'articulos-insumo', token: accessToken });
+        setIngredientes(data);
+      })
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.message, 'error');
+      });
   };
-  const setFather = (ingrediente: ArticuloInsumo) => {
-    fatherSetter(ingrediente);
+  const getSetInsumo = (ingrediente: ArticuloInsumo) => {
+    setInsumo(ingrediente);
     toggleVisible(false);
   };
   const renderFilasIngredientes = (ingredientes: ArticuloInsumo[]) => {
@@ -35,7 +46,7 @@ export const IngredienteModal = ({ fatherSetter }: IngredienteModalProps) => {
           <td className="whitespace-nowrap px-6 py-4">{ingrediente.denominacion}</td>
           <td className="px-6 py-4">
             <div className="flex justify-end">
-              <Button callback={() => setFather(ingrediente)} content="Seleccionar" type="button" />
+              <Button callback={() => getSetInsumo(ingrediente)} content="Seleccionar" type="button" />
             </div>
           </td>
         </tr>

@@ -2,30 +2,41 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import { UnidadDeMedida } from '../../../../Interfaces/ABM/UnidadDeMedida';
 import { Button } from '../../../Botones/Button';
-import { ToastAlert } from '../../../Toast/ToastAlert';
+import { ToastAlert, notify } from '../../../Toast/ToastAlert';
 import { getAll } from '../../../../API/Requests/BaseRequests';
+import { useAuth0 } from '@auth0/auth0-react';
+import { AxiosError } from 'axios';
 export interface UnidadDeMedidaModalProps {
-  fatherSetter: React.Dispatch<React.SetStateAction<UnidadDeMedida>>;
+  setUnidadMedida: React.Dispatch<React.SetStateAction<UnidadDeMedida>>;
+  id?: number;
 }
 
-export const UnidadDeMedidaModal = ({ fatherSetter }: UnidadDeMedidaModalProps) => {
+export const UnidadDeMedidaModal = ({
+  setUnidadMedida: unidadMedidaSet,
+  id,
+}: UnidadDeMedidaModalProps) => {
   const [unidadesDeMedida, setUnidadesDeMedida] = useState<UnidadDeMedida[]>([]);
   const [visible, toggleVisible] = useState(false);
+  const { getAccessTokenSilently } = useAuth0();
 
   const getUnidadesDeMedida = async () => {
-    try {
-      const data = await getAll({ endpoint: 'unidades-medida' });
-      setUnidadesDeMedida(data);
-    } catch (err) {
-      console.log(err);
-    }
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const data = await getAll({ endpoint: 'unidades-medida', token: accessToken });
+        setUnidadesDeMedida(data);
+      })
+      .catch((err) => {
+        const axiosError = err as AxiosError;
+        notify(axiosError.message, 'error');
+        console.log(axiosError);
+      });
   };
   useEffect(() => {
     getUnidadesDeMedida();
     return () => {};
   }, []);
-  const setFather = (unidadDeMedida: UnidadDeMedida) => {
-    fatherSetter(unidadDeMedida);
+  const setFather = (unidad: UnidadDeMedida) => {
+    unidadMedidaSet(unidad);
     toggleVisible(false);
   };
   const renderFilasUnidadDeMedida = (unidades: UnidadDeMedida[]) => {
@@ -78,12 +89,14 @@ export const UnidadDeMedidaModal = ({ fatherSetter }: UnidadDeMedidaModalProps) 
           rounded-lg bg-neutral-900 p-5 text-left align-bottom shadow-2xl transition-all sm:my-8"
           >
             <div className="flex   gap-16">
-              <h2 className="w-full flex-grow text-2xl text-neutral-100">Elige la unidad de medida</h2>
+              <h2 className="w-full flex-grow text-2xl text-neutral-100">
+                Elige la unidad de medida
+              </h2>
               {closeButton}
             </div>
             <div className="overflow-hidden overflow-x-auto rounded-lg px-8 sm:-mx-6 lg:-mx-8 ">
               <div className="mt-3 overflow-hidden  rounded-lg text-left">
-                <table className="min-w-full bg-neutral-100text-left text-sm font-light dark:bg-neutral-900 ">
+                <table className="bg-neutral-100text-left min-w-full text-sm font-light dark:bg-neutral-900 ">
                   <thead className="rounded-t-md font-medium uppercase">
                     <tr className="rounded-t-md border-b-4 border-b-neutral-500 bg-neutral-100 dark:border-b-white dark:bg-neutral-800 ">
                       <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-neutral-100">

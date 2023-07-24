@@ -17,9 +17,9 @@ import { Domicilio } from '../../Interfaces/ClientSide/Domicilio';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getDomicilios } from '../../API/Requests/DomicilioRequests/DomicilioRequests';
 import { useNavigate } from 'react-router-dom';
-import { calcularSubtotal, calcularTiempoEspera } from '../../Utils/CalculosUtils';
+import { calcularCostoEstimado, calcularTiempoEspera } from '../../Utils/CalculosUtils';
 import { useCart } from '../../context/CarritoProvider';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { backend_url } from '../../Utils/ConstUtils';
 import { Wallet } from '@mercadopago/sdk-react';
 import CartConstants from '../../Utils/Constants/CartConstants';
@@ -35,6 +35,7 @@ export const CarritoView = () => {
   const { cart, removeFromCart, addToCart, reduceAmountFromCart } = useCart();
   const { user } = useAuth0();
   const { isDarkMode } = useTheme();
+  const { getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
   const [medioDePago, setMedioDePago] = useState<string>(CartConstants.EFECTIVO);
   const [domicilios, setDomicilios] = useState<Domicilio[]>([]);
@@ -48,26 +49,39 @@ export const CarritoView = () => {
       informacionPedido.idDomicilioEntrega = null;
     }
     informacionPedido.productos = cart;
-    informacionPedido.total = calcularSubtotal(cartItems, cart);
+    informacionPedido.total = calcularCostoEstimado(cartItems, cart);
     informacionPedido.tiempoEstimadoFinalizacion = calcularTiempoEspera(cartItems);
     localStorage.setItem('informacionPedido', JSON.stringify(informacionPedido));
   };
   const getDomiciliosUsuario = async () => {
-    if (user?.sub !== undefined) {
-      const response = await getDomicilios(user?.sub);
-      setDomicilios(response.data);
-      informacionPedido.idDomicilioEntrega = response.data[0].id;
-    }
-  };
-  const mercadoPagoPayment = () => {
-    const cancelToken = axios.CancelToken.source();
-    axios
-      .post(backend_url + '/mercado-pago/create-preference', cart, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        if (user?.sub !== undefined && user.sub) {
+          const response = await getDomicilios(user?.sub, accessToken);
+          setDomicilios(response.data);
+          informacionPedido.idDomicilioEntrega = response.data[0].id;
+        }
       })
-      .then((response) => {
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.response?.data as string, 'error');
+      });
+  };
+  const mercadoPagoPayment = async () => {
+    const cancelToken = axios.CancelToken.source();
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const response = await axios.post(
+          backend_url + '/mercado-pago/create-preference',
+          { cart, cancelToken: cancelToken.token },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + accessToken,
+            },
+          }
+        );
+
         setPreferenceId(response.data.id);
       })
       .catch((error) => {
@@ -78,10 +92,17 @@ export const CarritoView = () => {
     return () => cancelToken.cancel();
   };
   const obtenerProductosDelCarrito = async () => {
-    if (user?.sub !== undefined && user.sub) {
-      const productos = await getProductosDelCarrito(user?.sub);
-      setCartItems(productos);
-    }
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        if (user?.sub !== undefined && user.sub) {
+          const productos = await getProductosDelCarrito(user?.sub, accessToken);
+          setCartItems(productos);
+        }
+      })
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.response?.data as string, 'error');
+      });
   };
 
   const validateStock = async () => {
@@ -89,28 +110,27 @@ export const CarritoView = () => {
       const cancelTokenSource = axios.CancelToken.source();
       if (cart.length > 0) {
         const requestUrl = `${backend_url}/pedidos/validar-stock`;
-        try {
-          axios
-            .put(requestUrl, cart, { cancelToken: cancelTokenSource.token })
-            .then((response) => {
-              if (response.data) {
-                setInformacionPedido((prevInformacionPedido) => ({
-                  ...prevInformacionPedido,
-                  validated: true,
-                }));
-                notify('Stock suficiente para el pedido', 'success');
-              }
-            })
-            .catch((error) => {
-              if (axios.isCancel(error)) {
-                console.log('Request canceled:', error.message);
-              } else {
-                console.log('Error en la solicitud:', error);
-              }
+        await getAccessTokenSilently()
+          .then(async (accessToken) => {
+            const response = await axios.put(requestUrl, cart, {
+              cancelToken: cancelTokenSource.token,
+              headers: { Authorization: 'Bearer ' + accessToken },
             });
-        } catch (err) {
-          console.log(err);
-        }
+            if (response.data) {
+              setInformacionPedido((prevInformacionPedido) => ({
+                ...prevInformacionPedido,
+                validated: true,
+              }));
+              notify('Stock suficiente para el pedido', 'success');
+            }
+          })
+          .catch((err) => {
+            if (axios.isCancel(err)) {
+              console.log('Request canceled:', err.message);
+            } else {
+              console.log('Error en la solicitud:', err);
+            }
+          });
       }
     }
   };
@@ -399,7 +419,7 @@ export const CarritoView = () => {
                   <div className="flex border-t border-neutral-200 py-2">
                     <span className="text-neutral-500 dark:text-neutral-200">Subtotal</span>
                     <span className="ml-auto text-center text-neutral-900 dark:text-neutral-300">
-                      ${calcularSubtotal(cartItems, cart)}
+                      ${calcularCostoEstimado(cartItems, cart)}
                     </span>
                   </div>
                 </div>

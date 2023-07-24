@@ -32,9 +32,6 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
       defaultValue={pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
       onChange={(e) => callback(e)}
     >
-      <option selected className="text-xl font-bold text-green-700" disabled hidden>
-        {pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
-      </option>
       {userRole === employeeRoles.ADMINISTRADOR && (
         <>
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
@@ -105,12 +102,10 @@ export const EstadosSelectFiltro = ({ pedido, callback }: EstadoSelect) => {
   return (
     <select
       className="rounded-md py-2 pr-8 text-xl font-bold text-neutral-900"
-      defaultValue={pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
-      onChange={(e) => callback(e)}
+      defaultValue={pedido?.estado || 'SELECCIONE'} // Use `defaultValue` on the <select> element
+      onChange={(e) => callback(e) }
     >
-      <option selected className="text-xl font-bold text-green-700" disabled hidden>
-        {pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
-      </option>
+     
       {userRole === employeeRoles.ADMINISTRADOR && (
         <>
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>

@@ -1,22 +1,30 @@
 import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCheck,
-  faFaceSadCry,
-  faTruck,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faFaceSadCry, faTruck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { PedidoPlanilla } from '../../Interfaces/ABM/PedidoPlanilla';
 import { Loader } from '../../components/Loader/Loader';
 import { Button } from '../../components/Botones/Button';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
-import { EstadosSelect, EstadosSelectFiltro, PedidoStatus, setEstadoDePedido } from '../../Utils/PlanillaUtils';
+import {
+  EstadosSelect,
+  EstadosSelectFiltro,
+  PedidoStatus,
+  setEstadoDePedido,
+} from '../../Utils/PlanillaUtils';
 import { backend_url } from '../../Utils/ConstUtils';
-import { anularPedido, getPedidos } from '../../API/Requests/PlanillaRequests/PedidoRequests';
+import {
+  anularPedido,
+  getPedidos,
+  getPedidosCajero,
+  getPedidosCocinero,
+  getPedidosDelivery,
+} from '../../API/Requests/PlanillaRequests/PedidoRequests';
 import { useUser } from '../../context/UserProvider';
 import { employeeRoles } from '../../Utils/Constants/UserRoles';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Axios, AxiosError } from 'axios';
 
 export const PedidosView = () => {
   const { userRole } = useUser();
@@ -24,42 +32,51 @@ export const PedidosView = () => {
   const [pedidos, setPedidos] = useState<PedidoPlanilla[]>([]);
   const [conectado, setConectado] = useState<boolean>(false);
   const [estadoPedidos, setEstadoPedidos] = useState<string>('');
-  
+  const { getAccessTokenSilently } = useAuth0();
   var stompClient: any = null;
 
   const setDataByRole = async () => {
     setIsLoading(true);
-    switch (userRole) {
-      case employeeRoles.ADMINISTRADOR:
-        const data = await getPedidos(null);
-        setPedidos(data);
-        break;
-      case employeeRoles.CAJERO:
-        const pagadosCajero = await getPedidos(PedidoStatus.PAGADO);
-        const pendientesPagoCajero = await getPedidos(PedidoStatus.PENDIENTE_PAGO);
-        setPedidos([...pagadosCajero, ...pendientesPagoCajero]);
-        break;
-      case employeeRoles.COCINERO:
-        const pagados = await getPedidos(PedidoStatus.PAGADO);
-        const pendientesCocinero = await getPedidos(PedidoStatus.PENDIENTE_PAGO);
-        const preparacion = await getPedidos(PedidoStatus.PREPARACION);
-        setPedidos([...pagados, ...pendientesCocinero, ...preparacion]);
-        break;
-      case employeeRoles.DELIVERY:
-        const pendienteEnvio = await getPedidos(PedidoStatus.PENDIENTE_ENVIO);
-        const en_camino = await getPedidos(PedidoStatus.EN_CAMINO);
-        setPedidos([...en_camino, ...pendienteEnvio]);
-        break;
-      default:
-        notify('Rol no permitido', 'error');
-        break;
-    }
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        switch (userRole) {
+          case employeeRoles.ADMINISTRADOR:
+            const data = await getPedidos(null, accessToken);
+            setPedidos(data);
+            break;
+          case employeeRoles.CAJERO:
+            const responseCajero = await getPedidosCajero(accessToken);
+            setPedidos(responseCajero);
+            break;
+          case employeeRoles.COCINERO:
+            const responseCocinero = await getPedidosCocinero(accessToken);
+            setPedidos(responseCocinero);
+            break;
+          case employeeRoles.DELIVERY:
+            const responseDelivery = await getPedidosDelivery(accessToken);
+            setPedidos(responseDelivery);
+            break;
+          default:
+            notify('Rol no permitido', 'error');
+            break;
+        }
+      })
+      .catch(() => {});
+
     setIsLoading(false);
   };
 
   const getFiltered = async (estado: string) => {
-    const data = await getPedidos(estado);
-    setPedidos(data);
+    getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const data = await getPedidos(estado, accessToken);
+        setPedidos(data);
+      })
+      .catch((err) => {
+        const axiosError = err as AxiosError;
+        notify(axiosError.message, 'error');
+        console.log(axiosError);
+      });
   };
   useEffect(() => {
     if (!conectado) {
@@ -77,6 +94,7 @@ export const PedidosView = () => {
   const onConnected = () => {
     setConectado(true);
     setDataByRole();
+
     stompClient.subscribe('/pedidos', onMessageReceived);
   };
 
@@ -122,7 +140,6 @@ export const PedidosView = () => {
             textSize="text-xl"
             callback={() => {
               setDataByRole();
-              setEstadoPedidos('');
             }}
           />
         </div>
@@ -238,7 +255,14 @@ export const PedidosView = () => {
                                         </p>
                                       }
                                       callback={() => {
-                                        anularPedido(pedido.id);
+                                        getAccessTokenSilently()
+                                          .then(async (accessToken) => {
+                                            anularPedido(accessToken, pedido.id);
+                                          })
+                                          .catch((err) => {
+                                            const error = err as AxiosError;
+                                            notify(error.message, 'error');
+                                          });
                                       }}
                                     />
                                   </>
@@ -269,7 +293,7 @@ export const PedidosView = () => {
           className="my-6 rounded-md bg-rose-700 p-2 text-center font-semibold text-zinc-100
     shadow-lg"
         >
-          <FontAwesomeIcon icon={faFaceSadCry} size="lg" /> Lo siento! No hay información disponible 
+          <FontAwesomeIcon icon={faFaceSadCry} size="lg" /> Lo siento! No hay información disponible
         </h2>
       )}
     </div>
