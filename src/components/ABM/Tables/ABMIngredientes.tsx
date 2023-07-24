@@ -5,6 +5,8 @@ import {
   faPenToSquare,
   faPlus,
   faTrashCan,
+  faWarning,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -12,11 +14,13 @@ import { getAll, softDelete } from '../../../API/Requests/BaseRequests';
 import { Loader } from '../../Loader/Loader';
 import { ArticuloInsumo } from '../../../Interfaces/ABM/ArticuloInsumo';
 import { AxiosError } from 'axios';
+import { Button } from '../../Botones/Button';
 
 export const ABMIngredientes = () => {
   const [ingredientes, setIngredientes] = useState<ArticuloInsumo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const porcentajeStockMinimo = 1.2;
   const getIngredientes = async () => {
     setIsLoading(true);
     try {
@@ -79,6 +83,7 @@ export const ABMIngredientes = () => {
                       <th className="px-6 py-4">Precio de Compra</th>
                       <th className="px-6 py-4">Stock Actual</th>
                       <th className="px-6 py-4">Stock Mínimo</th>
+                      <th className="px-6 py-4">Diferencia Stock</th>
                       <th className="px-6 py-4">Categoría</th>
                       <th className="px-6 py-4 text-center text-white"> Acciones</th>
                     </tr>
@@ -100,11 +105,42 @@ export const ABMIngredientes = () => {
                         </td>
                         <td className="px-6 py-4">{ingrediente.unidadMedida?.denominacion}</td>
                         <td className="px-6 py-4">${ingrediente.precioCompra}</td>
-                        <td className="px-6 py-4">{ingrediente.stockActual}</td>
+                        <td className="px-6 py-4">
+                          {ingrediente.stockActual && ingrediente.stockMinimo && (
+                            <p
+                              className={`flex flex-col text-center ${
+                                ingrediente.stockActual <=
+                                Number(ingrediente.stockMinimo * porcentajeStockMinimo)
+                                  ? 'font-bold text-rose-500'
+                                  : ''
+                              }`}
+                            >
+                              {ingrediente.stockActual <=
+                                Number(ingrediente.stockMinimo * porcentajeStockMinimo) && (
+                                <p className="flex gap-1">
+                                  <FontAwesomeIcon icon={faWarning} size="lg" /> STOCK BAJO
+                                </p>
+                              )}
+                              {ingrediente.stockActual}
+                            </p>
+                          )}
+                        </td>
                         <td className="px-6 py-4">{ingrediente.stockMinimo}</td>
+                        <th className="px-6 py-4 font-normal">
+                          {Number(ingrediente.stockActual) - Number(ingrediente.stockMinimo)}
+                        </th>
+
                         <td className="px-6 py-4">{ingrediente.rubroArticulo?.denominacion}</td>
                         <td className="px-6 py-4">
                           <div className="m-0 flex h-full items-center justify-center gap-16 p-0">
+                            <Link to={`/employee/ABM/Ingredientes/${ingrediente.id}/agregarStock`}>
+                              <Button
+                                content={'Agregar stock'}
+                                type="button"
+                                color="amarillo"
+                                textSize="text-base"
+                              />
+                            </Link>
                             <Link to={`/employee/ABM/Ingredientes/edit/${ingrediente.id}`}>
                               <button
                                 type="button"
@@ -129,7 +165,6 @@ export const ABMIngredientes = () => {
                                 />
                               </button>
                             </Link>
-
                             <button
                               type="button"
                               className="inline-block rounded bg-red-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-red-800 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-red-800 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-red-900 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] dark:bg-rose-600 dark:shadow-[0_4px_9px_-4px_rgba(220,76,100,0.5)] dark:hover:bg-red-700 dark:hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)]"

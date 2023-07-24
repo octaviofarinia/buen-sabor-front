@@ -1,6 +1,7 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ArticuloInsumo } from '../../../Interfaces/ABM/ArticuloInsumo';
 import { backend_url } from '../../../Utils/ConstUtils';
+import { notify } from '../../../components/Toast/ToastAlert';
 interface IngredienteAddOrUpdateProps {
   ingrediente: ArticuloInsumo;
   imagen: File | null;
@@ -62,5 +63,29 @@ export const updateIngredienteRegister = async ({
   } catch (err) {
     console.error(err);
     throw err;
+  }
+};
+
+export const updateStock = async (id: number, precio: number, cantidad: number, token: string) => {
+  try {
+    const response = await axios.put(
+      `${backend_url}/articulos-insumo/update-stock/${id}?idInsumo=${id}&stock=${cantidad}&precio=${
+        precio !== 0 && precio
+      }`,
+      null,
+      {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      }
+    );
+
+    notify('Stock actualizado', 'success');
+
+    return response.status;
+  } catch (err) {
+    const error = err as AxiosError;
+    console.log(error.response);
+    notify(error.response?.data as string, 'error');
   }
 };

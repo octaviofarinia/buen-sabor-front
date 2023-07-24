@@ -1,7 +1,7 @@
-import { RubroArticuloDetail } from '../../components/ABM/Details/RubroArticuloDetail';
 import { AuthenticationGuard } from '../../components/Auth0/AuthenticationGuard';
 import { FacturasView } from '../../views/EmployeeViews/FacturasView';
 import { PedidosView } from '../../views/EmployeeViews/PedidosView';
+import { DetallePedidoView } from '../../views/EmployeeViews/DetallePedido';
 
 export const PedidoFacturaRoutes = [
   {
@@ -14,6 +14,6 @@ export const PedidoFacturaRoutes = [
   },
   {
     path: 'employee/Planilla/Pedidos/:id',
-    element: <AuthenticationGuard component={DetallePedido} />,
+    element: <AuthenticationGuard component={DetallePedidoView} />,
   },
 ];

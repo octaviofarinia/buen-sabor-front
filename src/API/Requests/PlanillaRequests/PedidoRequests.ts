@@ -42,3 +42,13 @@ export const getPedidos = async (estado: string | null) => {
     notify('Ocurrio un error: ' + (error.response?.data as string), 'error');
   }
 };
+
+export const getPedido = async (id?: number) => {
+  try {
+    const response = await axios.get(`${backend_url}/pedidos/${id}/detalles`);
+    return response.data;
+  } catch (err) {
+    const error = err as AxiosError;
+    notify('Ocurrio un error: ' + (error.response?.data as string), 'error');
+  }
+};

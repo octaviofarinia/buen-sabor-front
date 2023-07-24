@@ -12,6 +12,7 @@ export const EmployeeMain = () => {
           {Object.values(ABMRoles).includes(userRole) &&
             ABMRoutes.map((route) => (
               <ImageLink
+                key={route.name}
                 dropdown={route.dropdown}
                 imagen={route.imagen}
                 name={route.name}
@@ -21,6 +22,7 @@ export const EmployeeMain = () => {
             ))}
           {Object.values(pedidoRoles).includes(userRole) && (
             <ImageLink
+              key={'pedidoItem'}
               dropdown={'Pedidos'}
               imagen={'/pedido.jpg'}
               name={'Pedidos'}
@@ -30,6 +32,7 @@ export const EmployeeMain = () => {
           )}
           {Object.values(facturaRoles).includes(userRole) && (
             <ImageLink
+              key={'facturaItem'}
               dropdown={'Facturas'}
               imagen={'/facturas.jpg'}
               name={'Facturas'}
