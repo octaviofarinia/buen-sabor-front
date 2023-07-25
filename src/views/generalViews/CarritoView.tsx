@@ -72,16 +72,12 @@ export const CarritoView = () => {
   const mercadoPagoPayment = async () => {
     await getAccessTokenSilently()
       .then(async (accessToken) => {
-        const res = await axios.post(
-          backend_url + '/mercado-pago/create-preference',
-          { cart },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + accessToken,
-            },
-          }
-        );
+        const res = await axios.post(backend_url + '/mercado-pago/create-preference', cart, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + accessToken,
+          },
+        });
         if (res.data.id) {
           setPreferenceId(res.data.id);
         }
@@ -92,7 +88,6 @@ export const CarritoView = () => {
         }
       });
   };
-
 
   const obtenerProductosDelCarrito = async () => {
     await getAccessTokenSilently()
