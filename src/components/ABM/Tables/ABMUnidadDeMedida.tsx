@@ -14,7 +14,7 @@ import { Loader } from '../../Loader/Loader';
 import { AxiosError } from 'axios';
 import { UnidadDeMedida } from '../../../Interfaces/ABM/UnidadDeMedida';
 import { useAuth0 } from '@auth0/auth0-react';
-import { notify } from '../../Toast/ToastAlert';
+import { ToastAlert, notify } from '../../Toast/ToastAlert';
 
 export const ABMUnidadDeMedida = () => {
   const [uMedida, setUmedida] = useState<UnidadDeMedida[]>([]);
@@ -39,8 +39,8 @@ export const ABMUnidadDeMedida = () => {
 
     setIsLoading(false);
   };
-  const handleDeleteRegister = (id?: number) => {
-    getAccessTokenSilently()
+  const handleDeleteRegister = async (id?: number) => {
+    await getAccessTokenSilently()
       .then(async (accessToken) => {
         await softDelete({
           endpoint: 'unidades-medida',
@@ -166,6 +166,7 @@ export const ABMUnidadDeMedida = () => {
           )}
         </>
       )}
+      <ToastAlert />
     </div>
   );
 };

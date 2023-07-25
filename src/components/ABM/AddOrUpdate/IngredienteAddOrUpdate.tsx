@@ -12,7 +12,9 @@ import { UnidadDeMedida } from '../../../Interfaces/ABM/UnidadDeMedida';
 import { CategoryModal } from './Modal/CategoriaModal';
 import {
   createIngrediente,
+  createIngredienteThrottled,
   updateIngrediente,
+  updateIngredienteThrottled,
 } from '../../../API/Requests/IngredienteRequests/IngredienteRequests';
 import { handleChange, handleImageChange } from '../../../Utils/FormUtils';
 import { Button } from '../../Botones/Button';
@@ -37,7 +39,6 @@ export const IngredienteAddOrUpdate = () => {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    let status = false;
     ingrediente.idRubroArticulo = categoria.id;
     ingrediente.rubroArticulo = categoria;
     ingrediente.idUnidadMedida = unidadDeMedida.id;
@@ -45,12 +46,12 @@ export const IngredienteAddOrUpdate = () => {
     if (id) {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
-          await updateIngrediente({
+          await updateIngredienteThrottled({
             id: id,
             imagen: imagen,
             token: accessToken,
             ingrediente: ingrediente,
-          })!.then(() => (status = true));
+          })!;
         })
         .catch((err) => {
           const axiosError = err as AxiosError;
@@ -59,12 +60,12 @@ export const IngredienteAddOrUpdate = () => {
     } else {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
-          await createIngrediente({
+          await createIngredienteThrottled({
             id: null,
             imagen: imagen,
             token: accessToken,
             ingrediente: ingrediente,
-          }).then(() => (status = true));
+          })!;
         })
         .catch((err) => {
           const axiosError = err as AxiosError;
@@ -72,8 +73,6 @@ export const IngredienteAddOrUpdate = () => {
           console.log(axiosError);
         });
     }
-
-    status && notify('Exito', 'success');
     return setTimeout(() => {
       navigate('/employee/ABM/Ingredientes');
     }, DELAYED_REDIRECT_COMMON_TIME);

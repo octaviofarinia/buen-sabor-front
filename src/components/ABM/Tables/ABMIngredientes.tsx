@@ -25,25 +25,19 @@ export const ABMIngredientes = () => {
   const porcentajeStockMinimo = 1.2;
   const getInsumos = async () => {
     setIsLoading(true);
-    try {
-      getAccessTokenSilently()
-        .then(async (accessToken) => {
-          const response = await getAll({ endpoint: 'articulos-insumo', token: accessToken });
-          setInsumos(response);
-        })
-        .catch((err) => {
-          const error = err as AxiosError;
-          notify(error.response?.data as string, 'error');
-        });
-    } catch (err) {
-      const axiosError = err as AxiosError;
-      notify(axiosError.response?.data as string, 'error');
-    }
-
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const response = await getAll({ endpoint: 'articulos-insumo', token: accessToken });
+        setInsumos(response);
+      })
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.response?.data as string, 'error');
+      });
     setIsLoading(false);
   };
-  const handleDeleteRegister = (id?: number) => {
-    getAccessTokenSilently()
+  const handleDeleteRegister = async (id?: number) => {
+    await getAccessTokenSilently()
       .then(async (accessToken) => {
         await softDelete({
           endpoint: 'articulos-insumo',
@@ -72,7 +66,6 @@ export const ABMIngredientes = () => {
         />
       ) : (
         <>
-          <ToastAlert />
           <div className="flex items-center justify-between">
             <h1 className="flex items-center gap-3 text-3xl font-extrabold uppercase text-black dark:text-white">
               <FontAwesomeIcon icon={faBowlFood} />
@@ -218,6 +211,7 @@ export const ABMIngredientes = () => {
           )}
         </>
       )}
+      <ToastAlert />
     </div>
   );
 };

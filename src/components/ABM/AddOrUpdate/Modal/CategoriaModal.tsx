@@ -22,22 +22,15 @@ export const CategoryModal = ({
   const [visible, toggleVisible] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
   const getPadresDeRubro = async () => {
-    try {
-      getAccessTokenSilently()
-        .then(async (accessToken) => {
-          const data = await getAllFathers(accessToken);
-          setCategories(data);
-          if (categories.length > 0) {
-            notify('Exito', 'success');
-          }
-        })
-        .catch((err) => {
-          const error = err as AxiosError;
-          notify(error.response?.data as string, 'error');
-        });
-    } catch (err) {
-      console.log(err);
-    }
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const data = await getAllFathers(accessToken);
+        setCategories(data);
+      })
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.response?.data as string, 'error');
+      });
   };
 
   useEffect(() => {

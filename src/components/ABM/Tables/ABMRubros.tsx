@@ -13,7 +13,7 @@ import { Loader } from '../../Loader/Loader';
 import { AxiosError } from 'axios';
 import { RubroArticulo } from '../../../Interfaces/ABM/RubroArticulo';
 import { useAuth0 } from '@auth0/auth0-react';
-import { notify } from '../../Toast/ToastAlert';
+import { ToastAlert, notify } from '../../Toast/ToastAlert';
 
 export const ABMRubroArticulos = () => {
   const [rubros, setRubros] = useState<RubroArticulo[]>([]);
@@ -33,8 +33,8 @@ export const ABMRubroArticulos = () => {
 
     setIsLoading(false);
   };
-  const handleDeleteRegister = (id?: number) => {
-    getAccessTokenSilently()
+  const handleDeleteRegister = async (id?: number) => {
+    await getAccessTokenSilently()
       .then(async (accessToken) => {
         await softDelete({
           endpoint: 'rubros-articulos',
@@ -174,6 +174,7 @@ shadow-lg"
           )}
         </>
       )}
+      <ToastAlert />
     </div>
   );
 };

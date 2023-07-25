@@ -22,7 +22,7 @@ export const ProductsView = () => {
   const getProductos = async (filtro: string | null) => {
     setLoading(true);
     const cancelToken = axios.CancelToken.source();
-    axios
+    await axios
       .get(backend_url + '/articulos-manufacturados/listar', {
         params: { filtro: filtro },
         cancelToken: cancelToken.token,
@@ -31,11 +31,8 @@ export const ProductsView = () => {
         setProductos(res.data);
       })
       .catch((err) => {
-        if (axios.isCancel(err)) {
-          notify('Se cancelo la request', 'success');
-        } else {
-          notify('Ocurrio un error', 'error');
-        }
+        const error = err as AxiosError;
+        notify(error.message, 'error');
       });
     setLoading(false);
     return () => cancelToken.cancel();
@@ -73,7 +70,9 @@ export const ProductsView = () => {
                     type="button"
                     color="negro"
                     textSize="text-lg"
-                    callback={() => getProductos(null)}
+                    callback={() => {
+                      getProductos(null);
+                    }}
                   />
                 </div>
               </div>

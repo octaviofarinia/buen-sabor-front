@@ -30,7 +30,7 @@ export const MP_PostPagoView = () => {
             callback={() => {
               navigate('/');
             }}
-            homeButton={true}
+            homeButton={false}
           />
         );
       case 'pending':
@@ -42,7 +42,7 @@ export const MP_PostPagoView = () => {
             callback={() => {
               navigate('/');
             }}
-            homeButton={true}
+            homeButton={false}
           />
         );
       case 'rejected':
@@ -54,7 +54,7 @@ export const MP_PostPagoView = () => {
             callback={() => {
               navigate('/');
             }}
-            homeButton={true}
+            homeButton={false}
           />
         );
     }
@@ -69,7 +69,6 @@ export const MP_PostPagoView = () => {
       mpPaymentType: queryParams.get('payment_type'),
       formaPago: CartConstants.MERCADO_PAGO,
     };
-    const cancelToken = axios.CancelToken.source();
 
     if (informacionPedidoString !== null) {
       let pedido: Pedido = JSON.parse(informacionPedidoString);
@@ -79,7 +78,6 @@ export const MP_PostPagoView = () => {
         await getAccessTokenSilently()
           .then(async (accessToken) => {
             await axios.post(`${backend_url}/pedidos`, pedido, {
-              cancelToken: cancelToken.token,
               headers: { Authorization: 'Bearer ' + accessToken },
             });
             resetCart();
@@ -92,7 +90,6 @@ export const MP_PostPagoView = () => {
           });
       }
     }
-    return () => cancelToken.cancel();
   };
 
   useEffect(() => {

@@ -30,6 +30,8 @@ import { Pedido } from '../../Interfaces/ClientSide/Pedido';
 import { useTheme } from '../../context/ThemeProvider';
 import { faFaceSmileWink } from '@fortawesome/free-regular-svg-icons';
 import { Banner } from '../../components/Banner/Banner';
+import { throttle } from 'lodash';
+import { throttleConfig } from '../../API/Requests/BaseRequests';
 
 export const CarritoView = () => {
   const { cart, removeFromCart, addToCart, reduceAmountFromCart } = useCart();
@@ -49,7 +51,7 @@ export const CarritoView = () => {
       informacionPedido.idDomicilioEntrega = null;
     }
     informacionPedido.productos = cart;
-    informacionPedido.total = calcularCostoEstimado(cartItems, cart);
+    informacionPedido.total = calcularCostoEstimado(cart);
     informacionPedido.tiempoEstimadoFinalizacion = calcularTiempoEspera(cartItems);
     localStorage.setItem('informacionPedido', JSON.stringify(informacionPedido));
   };
@@ -68,12 +70,11 @@ export const CarritoView = () => {
       });
   };
   const mercadoPagoPayment = async () => {
-    const cancelToken = axios.CancelToken.source();
     await getAccessTokenSilently()
       .then(async (accessToken) => {
-        const response = await axios.post(
+        const res = await axios.post(
           backend_url + '/mercado-pago/create-preference',
-          { cart, cancelToken: cancelToken.token },
+          { cart },
           {
             headers: {
               'Content-Type': 'application/json',
@@ -81,16 +82,18 @@ export const CarritoView = () => {
             },
           }
         );
-
-        setPreferenceId(response.data.id);
+        if (res.data.id) {
+          setPreferenceId(res.data.id);
+        }
       })
       .catch((error) => {
         if (axios.isCancel(error)) {
           console.error(error);
         }
       });
-    return () => cancelToken.cancel();
   };
+
+
   const obtenerProductosDelCarrito = async () => {
     await getAccessTokenSilently()
       .then(async (accessToken) => {
@@ -419,7 +422,7 @@ export const CarritoView = () => {
                   <div className="flex border-t border-neutral-200 py-2">
                     <span className="text-neutral-500 dark:text-neutral-200">Subtotal</span>
                     <span className="ml-auto text-center text-neutral-900 dark:text-neutral-300">
-                      ${calcularCostoEstimado(cartItems, cart)}
+                      ${calcularCostoEstimado(cart)}
                     </span>
                   </div>
                 </div>
@@ -439,13 +442,17 @@ export const CarritoView = () => {
                       navigate('/PostPayment');
                     }}
                   />
+                ) : preferenceId !== '' ? (
+                  <Wallet
+                    initialization={{ preferenceId: preferenceId }}
+                    customization={{ texts: { action: 'pay' } }}
+                  />
                 ) : (
-                  preferenceId != null && (
-                    <Wallet
-                      initialization={{ preferenceId: preferenceId }}
-                      customization={{ texts: { action: 'pay' } }}
-                    />
-                  )
+                  <Banner
+                    color="rose"
+                    text="Lo sentimos, pero hay un problema generando el link de Mercado Pago"
+                    icon={<FontAwesomeIcon icon={faFaceSadCry} />}
+                  />
                 )}
               </div>
             ) : (

@@ -28,7 +28,6 @@ export const IngredientesDetail = () => {
       })
       .catch((err) => {
         const axiosErr = err as AxiosError;
-        setLoading(false);
         notify('Ocurrió un error: ' + axiosErr.response?.status, 'error');
       });
     setLoading(false);

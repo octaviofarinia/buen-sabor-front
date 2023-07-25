@@ -28,7 +28,6 @@ export const UnidadDeMedidaAddOrUpdate = () => {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    let status = false;
     if (id) {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
@@ -37,7 +36,7 @@ export const UnidadDeMedidaAddOrUpdate = () => {
             object: unidadDeMedida,
             id: Number(id),
             token: accessToken,
-          })!.then(() => (status = true));
+          })!;
         })
         .catch((err) => {
           const error = err as AxiosError;
@@ -50,15 +49,13 @@ export const UnidadDeMedidaAddOrUpdate = () => {
             endpoint: 'unidades-medida',
             object: unidadDeMedida,
             token: accessToken,
-          })!.then(() => (status = true));
+          })!;
         })
         .catch((err) => {
           const error = err as AxiosError;
           notify(error.response?.data as string, 'error');
         });
     }
-    console.log(status);
-    status && notify('Exito', 'success');
     return setTimeout(() => {
       navigate('/employee/ABM/UnidadDeMedida');
     }, DELAYED_REDIRECT_COMMON_TIME);

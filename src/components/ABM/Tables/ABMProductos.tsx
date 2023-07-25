@@ -21,28 +21,23 @@ export const ABMProductos = () => {
   const { getAccessTokenSilently } = useAuth0();
   const getProductos = async () => {
     setIsLoading(true);
-    try {
-      getAccessTokenSilently()
-        .then(async (accessToken) => {
-          const response = await getAll({
-            endpoint: 'articulos-manufacturados',
-            token: accessToken,
-          });
-          setProductos(response);
-        })
-        .catch((err) => {
-          const error = err as AxiosError;
-          notify(error.response?.data as string, 'error');
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const response = await getAll({
+          endpoint: 'articulos-manufacturados',
+          token: accessToken,
         });
-    } catch (err) {
-      const axiosError = err as AxiosError;
-      notify(axiosError.response?.data as string, 'error');
-    }
+        setProductos(response);
+      })
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.response?.data as string, 'error');
+      });
 
     setIsLoading(false);
   };
-  const handleDeleteRegister = (id?: number) => {
-    getAccessTokenSilently()
+  const handleDeleteRegister = async (id?: number) => {
+    await getAccessTokenSilently()
       .then(async (accessToken) => {
         await softDelete({
           endpoint: 'articulos-manufacturados',
@@ -71,7 +66,6 @@ export const ABMProductos = () => {
         />
       ) : (
         <>
-          <ToastAlert />
           <div className="flex items-center justify-between">
             <h1 className="flex items-center gap-3 text-3xl font-extrabold uppercase text-neutral-900 dark:text-white">
               <FontAwesomeIcon icon={faPizzaSlice} />
@@ -181,6 +175,7 @@ shadow-lg"
           )}
         </>
       )}
+      <ToastAlert />
     </div>
   );
 };

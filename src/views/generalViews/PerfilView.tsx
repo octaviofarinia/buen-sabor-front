@@ -18,7 +18,7 @@ export const PerfilView = () => {
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
 
-      <div className="z-10 rounded-lg bg-neutral-100 p-6 m-3 lg:m-0">
+      <div className="z-10 m-3 rounded-lg bg-neutral-100 p-6 lg:m-0">
         {/* quote - start */}
         <div className="flex flex-col items-center gap-4 md:gap-6">
           {isDarkMode ? (

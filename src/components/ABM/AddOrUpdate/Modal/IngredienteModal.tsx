@@ -5,8 +5,7 @@ import { Button } from '../../../Botones/Button';
 import { ToastAlert, notify } from '../../../Toast/ToastAlert';
 import { getAll } from '../../../../API/Requests/BaseRequests';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useUser } from '../../../../context/UserProvider';
-import { Axios, AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 export interface IngredienteModalProps {
   setInsumo: React.Dispatch<React.SetStateAction<ArticuloInsumo>>;
 }

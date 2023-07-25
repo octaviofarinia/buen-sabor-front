@@ -3,18 +3,20 @@ import { Banner } from '../../components/Banner/Banner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faWarning } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { backend_url } from '../../Utils/ConstUtils';
 import { Factura, Pedido } from '../../Interfaces/ClientSide/Pedido';
 import CartConstants from '../../Utils/Constants/CartConstants';
 import { useCart } from '../../context/CarritoProvider';
 import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
 import { delayedRedirect } from '../../Utils/NavigationUtils';
+import { useAuth0 } from '@auth0/auth0-react';
 export const PostPagoView = () => {
   const navigate = useNavigate();
   const { resetCart } = useCart();
   const [status, setStatus] = useState<boolean>(true);
   const [timer, setTimer] = useState<number>(15);
+  const { getAccessTokenSilently } = useAuth0();
 
   const generarPedido = async () => {
     let informacionPedidoString = localStorage.getItem('informacionPedido');
@@ -25,28 +27,25 @@ export const PostPagoView = () => {
       mpPaymentType: null,
       formaPago: CartConstants.EFECTIVO,
     };
-    const cancelToken = axios.CancelToken.source();
     if (informacionPedidoString !== null) {
       let pedido: Pedido = JSON.parse(informacionPedidoString);
       pedido.factura = factura;
-      console.log(pedido);
-      try {
-        const response = await axios.post(`${backend_url}/pedidos`, pedido, {
-          cancelToken: cancelToken.token,
+      await getAccessTokenSilently()
+        .then(async (accessToken) => {
+          await axios.post(`${backend_url}/pedidos`, pedido, {
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+            },
+          });
+          localStorage.removeItem('informacionPedido');
+          resetCart();
+          setStatus(true);
+        })
+        .catch((err) => {
+          const error = err as AxiosError;
+          notify(error.message, 'error');
         });
-        console.log(response);
-        localStorage.removeItem('informacionPedido');
-        resetCart();
-        setStatus(true);
-      } catch (err) {
-        console.log(err);
-        if (axios.isCancel(err)) {
-          notify('Ocurrio un error: ' + err.message, 'error');
-          setStatus(false);
-        }
-      }
     }
-    return () => cancelToken.cancel();
   };
 
   useEffect(() => {
@@ -71,10 +70,6 @@ export const PostPagoView = () => {
             ? `Listo. Generando el pedido, puedes volver al inicio. Recuerda abonar el pedido al recibirlo.`
             : 'Ups. Ocurrio un error. ') + `Seras redirigido en ${timer} segundos`
         }
-        callback={() => {
-          navigate('/');
-        }}
-        homeButton={true}
       />
       <ToastAlert />
     </div>

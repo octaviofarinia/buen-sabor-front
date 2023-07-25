@@ -27,7 +27,6 @@ export const RubroArticuloDetail = () => {
       })
       .catch((error) => {
         const axiosErr = error as AxiosError;
-
         notify('Ocurrió un error: ' + axiosErr.response?.status, 'error');
       });
     setLoading(false);

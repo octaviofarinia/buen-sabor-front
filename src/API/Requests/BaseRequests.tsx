@@ -3,6 +3,7 @@ import { debounce, throttle } from 'lodash';
 
 import { backend_url } from '../../Utils/ConstUtils';
 import { Base } from '../BaseAPIInterface';
+import { notify } from '../../components/Toast/ToastAlert';
 
 interface RequestInterface {
   endpoint: string;
@@ -26,11 +27,19 @@ export const getAll = async ({ endpoint, token }: RequestInterface) => {
 };
 
 export const softDelete = async ({ id, endpoint, token }: RequestInterface) => {
-  return await axios.delete(`${backend_url}/${endpoint}/${id}`, {
-    headers: {
-      Authorization: 'Bearer ' + token,
-    },
-  });
+  try {
+    const response = await axios.delete(`${backend_url}/${endpoint}/${id}`, {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
+
+    notify('Soft deleted', 'info');
+    return response;
+  } catch (err) {
+    const error = err as AxiosError;
+    console.log(error.message, error.request, error.response);
+  }
 };
 
 export const hardDelete = async ({ id, endpoint, token }: RequestInterface) => {
@@ -72,6 +81,7 @@ export const update = async ({ endpoint, object, id, token }: RequestInterface) 
           },
         }
       );
+      notify('Exito', 'success');
       return res;
     }
   } catch (err) {
@@ -90,6 +100,7 @@ export const save = async ({ endpoint, object, token }: RequestInterface) => {
           Authorization: 'Bearer ' + token,
         },
       });
+      notify('Exito', 'success');
       return response;
     }
   } catch (err) {
@@ -108,5 +119,5 @@ export const getAllDebounced = debounce(getAll, DEBOUNCE_DELAY_GET);
 export const softDeleteDebounced = debounce(softDelete, DEBOUNCE_DELAY_GET);
 export const hardDeleteDebounced = debounce(hardDelete, DEBOUNCE_DELAY_GET);
 export const getOneDebounced = debounce(getOne, DEBOUNCE_DELAY_GET);
-export const saveThrottled = throttle(save, THROTTLE_DELAY_SAVE_UPDATE,throttleConfig);
-export const updateThrottled = throttle(update, THROTTLE_DELAY_SAVE_UPDATE,throttleConfig);
+export const saveThrottled = throttle(save, THROTTLE_DELAY_SAVE_UPDATE, throttleConfig);
+export const updateThrottled = throttle(update, THROTTLE_DELAY_SAVE_UPDATE, throttleConfig);

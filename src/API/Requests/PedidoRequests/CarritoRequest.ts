@@ -2,7 +2,7 @@ import { ArticuloManufacturado } from '../../../Interfaces/ABM/ArticuloManufactu
 import { DetallePedido } from '../../../Interfaces/ClientSide/DetallePedido';
 import { getOne } from '../BaseRequests';
 
-export const getProductosDelCarrito = async (userid: string, token) => {
+export const getProductosDelCarrito = async (userid: string, token: string) => {
   const productos: ArticuloManufacturado[] = [];
   let storedCart: string | null = '';
   if (userid !== undefined) {

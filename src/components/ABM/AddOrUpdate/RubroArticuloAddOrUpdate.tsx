@@ -1,6 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { save, update, updateThrottled } from '../../../API/Requests/BaseRequests';
+import {
+  save,
+  saveThrottled,
+  throttleConfig,
+  update,
+  updateThrottled,
+} from '../../../API/Requests/BaseRequests';
 import { RubroArticulo } from '../../../Interfaces/ABM/RubroArticulo';
 import { base_category } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { CategoryModal } from './Modal/CategoriaModal';
@@ -22,7 +28,6 @@ export const RubroArticuloAddOrUpdate = () => {
   const { getAccessTokenSilently } = useAuth0();
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    let status = false;
     if (id) {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
@@ -31,7 +36,7 @@ export const RubroArticuloAddOrUpdate = () => {
             object: categoria,
             id: Number(id),
             token: accessToken,
-          })!.then(() => (status = true));
+          })!;
         })
         .catch((err) => {
           const error = err as AxiosError;
@@ -40,18 +45,17 @@ export const RubroArticuloAddOrUpdate = () => {
     } else {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
-          await save({
+          await saveThrottled({
             endpoint: 'rubros-articulos',
             object: categoria,
             token: accessToken,
-          })!.then(() => (status = true));
+          })!;
         })
         .catch((err) => {
           const error = err as AxiosError;
           notify(error.response?.data as string, 'error');
         });
     }
-    status && notify('Exito', 'success');
     return setTimeout(() => {
       navigate('/employee/ABM/RubroArticulos');
     }, DELAYED_REDIRECT_COMMON_TIME);
