@@ -73,17 +73,16 @@ export const updateIngredienteRegister = async ({
 
 export const updateStock = async (id: number, precio: number, cantidad: number, token: string) => {
   try {
-    const response = await axios.put(
-      `${backend_url}/articulos-insumo/update-stock/${id}?idInsumo=${id}&stock=${cantidad}&precio=${
-        precio !== 0 && precio
-      }`,
-      null,
-      {
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
-      }
-    );
+    let url = `${backend_url}/articulos-insumo/update-stock/${id}?idInsumo=${id}&stock=${cantidad}`;
+    if (precio !== null && precio !== 0 && precio !== undefined) {
+      url += `&precio=${precio}`;
+    }
+
+    const response = await axios.put(url, null, {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
 
     notify('Stock actualizado', 'success');
 
