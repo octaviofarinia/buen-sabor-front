@@ -59,7 +59,7 @@ export const ABMProductos = () => {
 
   useEffect(() => {
     getProductos();
-  }, []);
+  }, [productos.length]);
 
   return (
     <div className=" relative flex w-full flex-col gap-5 bg-neutral-100 px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">

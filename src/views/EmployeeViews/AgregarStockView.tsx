@@ -1,20 +1,31 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react'; // Import 'useState'
-import { ToastAlert } from '../../components/Toast/ToastAlert';
+import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
 import { updateStock } from '../../API/Requests/IngredienteRequests/IngredienteRequests';
 import { Button } from '../../components/Botones/Button';
 import { useAuth0 } from '@auth0/auth0-react';
+import { AxiosError } from 'axios';
+import { DELAYED_REDIRECT_COMMON_TIME } from '../../Utils/NavigationUtils';
 
 export const AgregarStockView = () => {
   const { id } = useParams();
   const [precio, setPrecio] = useState<number>(0); // State para guardar el valor del precio
   const [cantidad, setCantidad] = useState<number>(0); // State para guardar el valor de la cantidad
   const { getAccessTokenSilently } = useAuth0();
+  const navigate = useNavigate();
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    await getAccessTokenSilently().then(async (accessToken) => {
-      await updateStock(Number(id), precio, cantidad, accessToken);
-    });
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        await updateStock(Number(id), precio, cantidad, accessToken);
+        setTimeout(() => {
+          navigate('/employee/ABM/Ingredientes');
+        }, DELAYED_REDIRECT_COMMON_TIME);
+      })
+      .catch((error) => {
+        const err = error as AxiosError;
+        notify(err.message, 'error');
+      });
   }
 
   return (

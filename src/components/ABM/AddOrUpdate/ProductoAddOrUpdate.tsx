@@ -21,6 +21,7 @@ import { getOne } from '../../../API/Requests/BaseRequests';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Loader } from '../../Loader/Loader';
 import { calcularCostoEstimado } from '../../../Utils/CalculosUtils';
+import { DELAYED_REDIRECT_COMMON_TIME } from '../../../Utils/NavigationUtils';
 
 export const ProductoAddOrUpdate = () => {
   const { id } = useParams();
@@ -35,47 +36,42 @@ export const ProductoAddOrUpdate = () => {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    try {
-      if (id) {
-        getAccessTokenSilently()
-          .then(async (accessToken) => {
-            await updateProducto({
-              producto: producto,
-              detalles: detalle,
-              imagen: imagen,
-              token: accessToken,
-              id: Number(id),
-            });
-            notify('Exito', 'success');
-          })
-          .catch((err) => {
-            const error = err as AxiosError;
-            notify(error.response?.data as string, 'error');
-          });
-      } else {
-        getAccessTokenSilently()
-          .then(async (accessToken) => {
-            await createProducto({
-              producto: producto,
-              detalles: detalle,
-              imagen: imagen,
-              token: accessToken,
-            });
-
-            notify('Exito', 'success');
-          })
-          .catch((err) => {
-            const error = err as AxiosError;
-            notify(error.response?.data as string, 'error');
-          });
-      }
-      setTimeout(() => {
-        navigate(`/employee/ABM/Productos`);
-      }, 2000);
-    } catch (error) {
-      console.log(error);
+    let status = false;
+    if (id) {
+      await getAccessTokenSilently()
+        .then(async (accessToken) => {
+          await updateProducto({
+            producto: producto,
+            detalles: detalle,
+            imagen: imagen,
+            token: accessToken,
+            id: Number(id),
+          }).then(() => (status = true));
+        })
+        .catch((err) => {
+          const error = err as AxiosError;
+          notify(error.response?.data as string, 'error');
+        });
+    } else {
+      await getAccessTokenSilently()
+        .then(async (accessToken) => {
+          await createProducto({
+            producto: producto,
+            detalles: detalle,
+            imagen: imagen,
+            token: accessToken,
+          }).then(() => (status = true));
+        })
+        .catch((err) => {
+          const error = err as AxiosError;
+          notify(error.response?.data as string, 'error');
+        });
     }
-    setLoading(false);
+    console.log(status);
+    status && notify('Exito', 'success');
+    return setTimeout(() => {
+      navigate('/employee/ABM/Productos');
+    }, DELAYED_REDIRECT_COMMON_TIME);
   }
 
   function handleIngredientesList(e: React.ChangeEvent<HTMLInputElement>) {
@@ -297,8 +293,8 @@ export const ProductoAddOrUpdate = () => {
               )}
             </div>
 
-            <div className="relative z-0 col-span-2 col-start-2 flex w-full gap-3">
-              <Button type="submit" content={"Confirmar y agregar registro"} fullsize={true} />
+            <div className=" col-span-2 col-start-2 flex w-full gap-3">
+              <Button type="submit" content={'Confirmar y agregar registro'} fullsize={true} />
               {loading && (
                 <div className="absolute -right-20 flex items-center">
                   <ClipLoader size={45} aria-label="Loading Spinner" data-testid="loader" />

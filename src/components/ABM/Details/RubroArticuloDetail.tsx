@@ -24,7 +24,6 @@ export const RubroArticuloDetail = () => {
           token: accessToken,
         });
         setCategoria(response);
-        notify('Se cargo el registro', 'success');
       })
       .catch((error) => {
         const axiosErr = error as AxiosError;
@@ -43,8 +42,8 @@ export const RubroArticuloDetail = () => {
         <Loader texto="Cargando registros" closeLoading={setLoading} />
       ) : (
         <div
-          className="mx-auto my-10  w-full max-w-4xl rounded-lg border-b-4 border-l-4 border-neutral-300 dark:border-b-neutral-500 dark:border-l-neutral-500 bg-neutral-100 p-5 py-3 px-4 
-text-xl shadow-lg dark:bg-neutral-700 md:text-2xl lg:py-8"
+          className="mx-auto my-10  w-full max-w-4xl rounded-lg border-b-4 border-l-4 border-neutral-300 bg-neutral-100 p-5 py-3 px-4 text-xl shadow-lg 
+dark:border-b-neutral-500 dark:border-l-neutral-500 dark:bg-neutral-700 md:text-2xl lg:py-8"
         >
           <div className="mb-6 w-full  lg:mb-0 lg:py-6 lg:pr-10">
             <div className="flex items-center justify-between">
@@ -61,7 +60,7 @@ text-xl shadow-lg dark:bg-neutral-700 md:text-2xl lg:py-8"
               </Link>{' '}
             </div>
 
-            <div className="flex flex-col gap-3 border-t border-neutral-200 dark:border-t-neutral-500 py-2">
+            <div className="flex flex-col gap-3 border-t border-neutral-200 py-2 dark:border-t-neutral-500">
               <p className="fontBebas flex w-full justify-between border-b-2 border-b-neutral-200 dark:border-b-neutral-500">
                 <span className="text-neutral-500 dark:text-neutral-100">ID</span>
                 <span className="ml-auto text-neutral-900 dark:text-neutral-300">

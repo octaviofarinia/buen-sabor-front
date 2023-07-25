@@ -11,6 +11,7 @@ import { ClipLoader } from 'react-spinners';
 import { AxiosError } from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Loader } from '../../Loader/Loader';
+import { DELAYED_REDIRECT_COMMON_TIME } from '../../../Utils/NavigationUtils';
 
 export const RubroArticuloAddOrUpdate = () => {
   const { id } = useParams();
@@ -21,7 +22,7 @@ export const RubroArticuloAddOrUpdate = () => {
   const { getAccessTokenSilently } = useAuth0();
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setLoading(true);
+    let status = false;
     if (id) {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
@@ -30,8 +31,7 @@ export const RubroArticuloAddOrUpdate = () => {
             object: categoria,
             id: Number(id),
             token: accessToken,
-          });
-          notify('Exito', 'success');
+          }).then(() => (status = true));
         })
         .catch((err) => {
           const error = err as AxiosError;
@@ -44,19 +44,17 @@ export const RubroArticuloAddOrUpdate = () => {
             endpoint: 'rubros-articulos',
             object: categoria,
             token: accessToken,
-          });
-          notify('Exito', 'success');
+          }).then(() => (status = true));
         })
         .catch((err) => {
           const error = err as AxiosError;
           notify(error.response?.data as string, 'error');
         });
     }
-    setTimeout(() => {
-      navigate(`/employee/ABM/RubroArticulos`);
-    }, 2000);
-
-    setLoading(false);
+    status && notify('Exito', 'success');
+    return setTimeout(() => {
+      navigate('/employee/ABM/RubroArticulos');
+    }, DELAYED_REDIRECT_COMMON_TIME);
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -67,15 +65,17 @@ export const RubroArticuloAddOrUpdate = () => {
   }
 
   const setPropsOfExistentCategoria = async () => {
+    setLoading(true);
     await getAccessTokenSilently()
       .then(async (accessToken) => {
         const response = await getCategoryComplete(Number(id), accessToken);
         if (response !== undefined) {
           setCategoria(response);
-          notify('Se cargo el registro', 'success');
         }
+        setLoading(false);
       })
       .catch((err) => {
+        setLoading(false);
         const error = err as AxiosError;
         notify(error.response?.data as string, 'error');
       });
@@ -170,9 +170,9 @@ export const RubroArticuloAddOrUpdate = () => {
               )}
             </div>
           </form>
-          <ToastAlert />
         </div>
       )}
+      <ToastAlert />
     </div>
   );
 };

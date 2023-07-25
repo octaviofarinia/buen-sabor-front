@@ -33,7 +33,6 @@ export const ProductoDetail = () => {
         });
         setManufacturado(data);
         setDetalleManufacturado(detalleData);
-        notify('Se cargo el registro', 'success');
       })
       .catch((err) => {
         const axiosErr = err as AxiosError;
@@ -96,12 +95,15 @@ dark:border-b-neutral-500 dark:border-l-neutral-500 dark:bg-neutral-700 md:text-
                   {manufacturado.tiempoEstimadoCocina} Minutos
                 </span>
               </p>
-              <p className="fontBebas grid grid-cols-1  gap-y-2  border-b-2 border-b-neutral-200 py-2 dark:border-b-neutral-500 md:grid-cols-2">
+              <div className="fontBebas grid grid-cols-1  gap-y-2  border-b-2 border-b-neutral-200 py-2 dark:border-b-neutral-500 md:grid-cols-2">
                 <span className="col-span-1 col-start-1 flex-shrink text-neutral-500 dark:text-neutral-100">
                   Insumos Disponibles
                 </span>
                 {detalleManufacturado.map((detalle) => (
-                  <p className="col-span-1 col-start-1 ml-auto flex w-full justify-start gap-2 pl-2 text-start text-neutral-900 dark:text-neutral-300 md:col-start-2 md:border-l-2 md:border-l-neutral-200">
+                  <p
+                    key={'detalle' + detalle.id}
+                    className="col-span-1 col-start-1 ml-auto flex w-full justify-start gap-2 pl-2 text-start text-neutral-900 dark:text-neutral-300 md:col-start-2 md:border-l-2 md:border-l-neutral-200"
+                  >
                     {detalle.articuloInsumo?.denominacion}
                     <span className="ml-auto flex gap-2 text-neutral-900 dark:text-neutral-200">
                       Stock
@@ -113,13 +115,16 @@ dark:border-b-neutral-500 dark:border-l-neutral-500 dark:bg-neutral-700 md:text-
                     </span>
                   </p>
                 ))}
-              </p>
-              <p className="fontBebas grid grid-cols-1 flex-col  gap-y-2 border-b-2 border-b-neutral-200 py-2 dark:border-b-neutral-500  md:grid-cols-2 md:flex-row">
+              </div>
+              <div className="fontBebas grid grid-cols-1 flex-col  gap-y-2 border-b-2 border-b-neutral-200 py-2 dark:border-b-neutral-500  md:grid-cols-2 md:flex-row">
                 <span className="col-span-1 col-start-1 flex-shrink text-neutral-500 dark:text-neutral-100">
                   Insumos Requeridos
                 </span>
                 {detalleManufacturado.map((detalle) => (
-                  <p className="col-span-1 col-start-1 ml-auto flex w-full justify-start gap-2 pl-2 text-start text-neutral-900 dark:text-neutral-300 md:col-start-2 md:border-l-2 md:border-l-neutral-200">
+                  <p
+                    key={'detalleStock' + detalle.id}
+                    className="col-span-1 col-start-1 ml-auto flex w-full justify-start gap-2 pl-2 text-start text-neutral-900 dark:text-neutral-300 md:col-start-2 md:border-l-2 md:border-l-neutral-200"
+                  >
                     Requiere
                     <span className="ml-auto flex gap-2 text-neutral-900 dark:text-neutral-200">
                       {detalle.articuloInsumo?.denominacion}
@@ -128,7 +133,7 @@ dark:border-b-neutral-500 dark:border-l-neutral-500 dark:bg-neutral-700 md:text-
                     </span>
                   </p>
                 ))}
-              </p>
+              </div>
               <p className="flex w-full justify-center">
                 <img
                   src={manufacturado.urlImagen?.toString()}

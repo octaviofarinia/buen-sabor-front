@@ -25,7 +25,6 @@ export const UnidadDeMedidaDetail = () => {
           endpoint: 'unidades-medida',
         });
         setUnidadDeMedida(response);
-        notify('Se cargo el registr', 'success');
       })
       .catch((err) => {
         const error = err as AxiosError;
@@ -77,9 +76,9 @@ dark:border-b-neutral-500 dark:border-l-neutral-500 dark:bg-neutral-700 md:text-
               </p>
             </div>
           </div>
-          <ToastAlert />
         </div>
       )}
+      <ToastAlert />
     </div>
   );
 };

@@ -38,10 +38,7 @@ const TablaIngredientes = ({ detalles, setDetalle }: TablaDetallesProps) => {
   }
 
   useEffect(() => {
-    console.log(detalles);
     setCosto(calcularCostoEstimado(detalles));
-    console.log(costo);
-
   }, [detalles.length]);
   return (
     <div className="mt-16 rounded-md bg-neutral-100 shadow-md">

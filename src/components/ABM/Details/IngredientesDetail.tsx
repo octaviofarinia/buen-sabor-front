@@ -25,7 +25,6 @@ export const IngredientesDetail = () => {
           token: accessToken,
         });
         setInsumo(response);
-        notify('Se cargo el registro', 'success');
       })
       .catch((err) => {
         const axiosErr = err as AxiosError;
@@ -57,7 +56,7 @@ dark:border-b-neutral-500 dark:border-l-neutral-500 dark:bg-neutral-700 md:text-
                   {insumo.denominacion}
                 </h2>
               </div>
-              <Link to={`/employee/ABM/RubroArticulos`} className="shadow-md">
+              <Link to={`/employee/ABM/Ingredientes`} className="shadow-md">
                 <Button content="Volver" color="amarillo" type="button" />
               </Link>{' '}
             </div>
@@ -70,13 +69,13 @@ dark:border-b-neutral-500 dark:border-l-neutral-500 dark:bg-neutral-700 md:text-
               <p className="fontBebas flex w-full justify-between border-b-2 border-b-neutral-200 dark:border-b-neutral-500">
                 <span className="text-neutral-500 dark:text-neutral-100">Stock Actual</span>
                 <span className="ml-auto text-neutral-900 dark:text-neutral-300">
-                  {insumo.stockActual}   {insumo.unidadMedida?.abreviatura}
+                  {insumo.stockActual} {insumo.unidadMedida?.abreviatura}
                 </span>
               </p>
               <p className="fontBebas flex w-full justify-between border-b-2 border-b-neutral-200 dark:border-b-neutral-500">
                 <span className="text-neutral-500 dark:text-neutral-100">Stock Mínimo</span>
                 <span className="ml-auto text-neutral-900 dark:text-neutral-300">
-                  {insumo.stockMinimo}   {insumo.unidadMedida?.abreviatura}
+                  {insumo.stockMinimo} {insumo.unidadMedida?.abreviatura}
                 </span>
               </p>
               <p className="fontBebas flex w-full justify-between border-b-2 border-b-neutral-200 dark:border-b-neutral-500">
@@ -101,7 +100,7 @@ dark:border-b-neutral-500 dark:border-l-neutral-500 dark:bg-neutral-700 md:text-
                 <img
                   src={insumo.urlImagen?.toString()}
                   alt={insumo.denominacion?.toString()}
-                  className="h-80 w-full rounded-lg  object-cover object-center"
+                  className="max-h-96 max-w-md rounded-lg  object-cover "
                 />
               </p>
             </div>

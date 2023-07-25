@@ -107,7 +107,7 @@ export const CategoryModal = ({
       <div
         className={`${
           visible ? 'visible' : 'hidden'
-        } absolute inset-0 z-10 overflow-y-auto bg-neutral-400 bg-opacity-75 transition-opacity dark:bg-neutral-700 dark:bg-opacity-75`}
+        } fixed inset-0 z-10 overflow-y-auto bg-neutral-400 bg-opacity-75 transition-opacity dark:bg-neutral-700 dark:bg-opacity-75`}
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal={true}
