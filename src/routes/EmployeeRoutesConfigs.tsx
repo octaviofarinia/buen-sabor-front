@@ -1,28 +1,31 @@
 import { EmployeeMain } from '../views/EmployeeViews/EmployeeMain';
-import { AbmRouter } from '../components/ABM/ABMRouter';
 import ClientDinamicRoutes, { ClientStaticRoutes } from './ClientRoutesConfigs';
-import { DetailRouter } from '../components/ABM/Details/DetailRouter';
-import { AddOrUpdateRouter } from '../components/ABM/AddOrUpdate/AddOrUpdateRouter';
 import { AuthenticationGuard } from '../components/Auth0/AuthenticationGuard';
+import { IngredienteABMRoutes } from './ABMRoutes/IngredienteRoutes';
+import { ProductoRoutes } from './ABMRoutes/ProductoRoutes';
+import { RubroArticuloRoutes } from './ABMRoutes/RubroArticuloRoutes';
+import { UnidadDeMedidaRoutes } from './ABMRoutes/UnidadDeMedidaRoutes';
+import { PedidoFacturaRoutes } from './ABMRoutes/PedidoAndFacturaRoutes';
+import { employeeRoles } from '../Utils/Constants/UserRoles';
 
-const EmployeeDinamicRoutes = [
+const AllEmployeeDinamicRoutes = [
   ...ClientDinamicRoutes,
-  { path: 'employee/:Tipo/:RequestedEndpoint', element: <AuthenticationGuard component={AbmRouter} /> },
- 
-
-  {
-    path: 'employee/:RequestedEndpoint/:id',
-    element: <AuthenticationGuard component={DetailRouter} />,
-  },
-  {
-    path: 'employee/:RequestedEndpoint/newRegister',
-    element: <AuthenticationGuard component={AddOrUpdateRouter} />,
-  },
-  {
-    path: 'employee/:RequestedEndpoint/edit/:id',
-    element: <AuthenticationGuard component={AddOrUpdateRouter} />,
-  },
+  ...IngredienteABMRoutes,
+  ...ProductoRoutes,
+  ...RubroArticuloRoutes,
+  ...UnidadDeMedidaRoutes,
+  ...PedidoFacturaRoutes,
 ];
+
+const LogisticaDinamicRoutes = [
+  ...ClientDinamicRoutes,
+  ...IngredienteABMRoutes,
+  ...ProductoRoutes,
+  ...RubroArticuloRoutes,
+  ...UnidadDeMedidaRoutes,
+];
+
+const NormalEmployeesDinamicRoutes = [...PedidoFacturaRoutes];
 
 export const EmployeeStaticRoutes = [
   ...ClientStaticRoutes,
@@ -33,4 +36,13 @@ export const EmployeeStaticRoutes = [
   },
 ];
 
-export default EmployeeDinamicRoutes;
+export const getEmployeeRoutes = (role: string) => {
+  if (role === employeeRoles.ADMINISTRADOR) {
+    return [...AllEmployeeDinamicRoutes, ...EmployeeStaticRoutes];
+  } else if (role === employeeRoles.LOGISTICA) {
+    return [...EmployeeStaticRoutes, ...LogisticaDinamicRoutes];
+  } else {
+    return [...EmployeeStaticRoutes, ...NormalEmployeesDinamicRoutes];
+  }
+};
+export default AllEmployeeDinamicRoutes;

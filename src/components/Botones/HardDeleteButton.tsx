@@ -1,94 +1,94 @@
-import { useState, useEffect } from 'react';
-
-import React from 'react';
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { hardDelete } from '../../API/APIHandler';
+import { hardDelete } from '../../API/Requests/BaseRequests';
 import { useNavigate } from 'react-router-dom';
-import { APIRouter } from '../../API/APIRouter';
+import { notify } from '../Toast/ToastAlert';
+import { AxiosError } from 'axios';
+import { Button } from './Button';
+import { useAuth0 } from '@auth0/auth0-react';
+import { DELAYED_REDIRECT_COMMON_TIME } from '../../Utils/NavigationUtils';
 
-export const HardDeleteButton = ({
-  id,
-  requestedEndpoint,
-}: {
-  id: string;
-  requestedEndpoint: string | undefined;
-}) => {
+export const HardDeleteButton = ({ id, endpoint: endpoint }: { id: number; endpoint: string }) => {
   const [visible, toggleVisible] = useState(false);
   const navigate = useNavigate();
-  const handleDelete = async() => {
-    await hardDelete({ id: id, requestedEndpoint: APIRouter(requestedEndpoint) });
-    navigate(`/employee/${requestedEndpoint}`);
+  const { getAccessTokenSilently } = useAuth0();
+  const handleDelete = async () => {
+    let status = false;
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        await hardDelete({ id: id, endpoint: endpoint, token: accessToken }).then(
+          () => (status = true)
+        );
+      })
+      .catch((err) => {
+        const axiosError = err as AxiosError;
+        console.log(axiosError);
+
+        notify('No es posible eliminar el registro. ' + axiosError.response?.status, 'error');
+      });
+    status && notify('Se elimino el registro', 'success');
+    setTimeout(() => {
+      navigate(`/employee`);
+    }, DELAYED_REDIRECT_COMMON_TIME);
   };
-  const openButton = (
-    <button
-      onClick={() => toggleVisible(!visible)}
-      type="button"
-      className="flex flex-col items-center gap-1 rounded bg-red-700 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-red-800 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-red-800 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-red-900 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] dark:bg-rose-600 dark:shadow-[0_4px_9px_-4px_rgba(220,76,100,0.5)] dark:hover:bg-red-700 dark:hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)]"
-    >
-      <FontAwesomeIcon icon={faTriangleExclamation} size="xl" />
-      <h5 className=" md:text-lg">Borrar</h5>
-    </button>
-  );
-  const closeButton = (
-    <button
-      onClick={() => toggleVisible(!visible)}
-      type="button"
-      className="inline-block rounded bg-black px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-black transition
-              duration-150 ease-in-out hover:bg-gray-700 hover:shadow-gray-700 focus:bg-gray-800 focus:shadow-gray-800 focus:outline-none focus:ring-0 active:bg-gray-800
-              active:shadow-gray-800 dark:bg-white dark:text-black dark:shadow-white dark:hover:bg-gray-300 dark:hover:shadow-gray-300 dark:focus:bg-gray-100 dark:focus:shadow-gray-100
-              dark:active:bg-gray-100 dark:active:shadow-gray-100"
-    >
-      <FontAwesomeIcon icon={faXmark} size="lg" />
-    </button>
-  );
+
   return (
     <div className="flex  pl-5">
-      {openButton}
+      <Button
+        callback={() => toggleVisible(!visible)}
+        type="button"
+        color="rojo"
+        content={
+          <p>
+            {' '}
+            <FontAwesomeIcon icon={faTriangleExclamation} size="xl" /> Borrar
+          </p>
+        }
+      ></Button>
       <div
         className={`${
           visible ? 'visible' : 'hidden'
-        } absolute inset-0 overflow-y-auto bg-neutral-400 bg-opacity-75 transition-opacity`}
+        } fixed inset-0 z-20 overflow-y-auto bg-neutral-400 bg-opacity-75 transition-opacity`}
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal={true}
       >
-        <div className=" flex h-full w-1/2  items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0 lg:mx-auto">
+        <div className=" m-auto flex h-full w-1/2 items-center justify-center px-4 pt-4 pb-20 text-center sm:p-0 lg:mx-auto">
           <span className="sm: hidden sm:inline-block sm:align-middle" aria-hidden="true">
             ​
           </span>
           {/*Modal panel : This is where you put the pop-up's content, the div on top this coment is the wrapper */}
           <div
-            className="inset-0 mx-auto flex h-1/3 transform flex-col justify-between gap-5 overflow-hidden
-          rounded-lg bg-neutral-900 p-5 text-left align-bottom shadow-2xl transition-all sm:my-8 sm:max-w-lg
-           sm:align-middle lg:p-6"
+            className=" mx-auto my-auto flex w-2/3 transform flex-col justify-between gap-5 overflow-hidden rounded-lg bg-rose-700 
+          p-12 "
           >
             <div className="flex w-full justify-between ">
               <h2 className="text-2xl text-white">¿Estas seguro de querer eliminar el registro?</h2>
-              {closeButton}
+              <Button
+                callback={() => toggleVisible(!visible)}
+                type="button"
+                color="negro"
+                content={<FontAwesomeIcon icon={faXmark} size="lg" />}
+              ></Button>
             </div>
             <div className="flex w-full items-center justify-center gap-5">
-              <button
-                onClick={() => handleDelete()}
+              <Button
+                callback={() => {
+                  handleDelete();
+                }}
                 type="button"
-                className="flex flex-col items-center gap-1 rounded bg-red-700 px-6 pb-2 pt-2.5 text-xs font-medium uppercase 
-                leading-normal text-white  transition duration-150 ease-in-out
-                 hover:bg-red-800  active:bg-red-900 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)]
-                   dark:bg-rose-600 dark:shadow-[0_4px_9px_-4px_rgba(220,76,100,0.5)]
-                    dark:hover:bg-red-700"
-              >
-                sí, deseo borrar el registro
-              </button>
-              <button
-                onClick={() => toggleVisible(!visible)}
+                color="amarillo"
+                fullsize={true}
+                content={'Sí, Eliminar'}
+              ></Button>
+              <Button
+                callback={() => toggleVisible(!visible)}
                 type="button"
-                className="inline-block rounded bg-neutral-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-black transition
-              duration-150 ease-in-out hover:bg-gray-700 hover:shadow-gray-700 focus:bg-gray-800 focus:shadow-gray-800 focus:outline-none focus:ring-0 active:bg-gray-800
-              active:shadow-gray-800 dark:bg-white dark:text-black dark:shadow-white dark:hover:bg-gray-300 dark:hover:shadow-gray-300 dark:focus:bg-gray-100 dark:focus:shadow-gray-100
-              dark:active:bg-gray-100 dark:active:shadow-gray-100"
-              >
-                NO
-              </button>
+                color="negro"
+                fullsize={true}
+                content={'NO'}
+              ></Button>
             </div>
           </div>
         </div>

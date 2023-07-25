@@ -7,6 +7,7 @@ export interface DropdownProps{
 export interface Route{
     name: string,
     imagen: string,
+    dropdown: string;
     route: string,
     type: string,
   }

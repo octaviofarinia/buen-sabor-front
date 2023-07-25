@@ -25,7 +25,7 @@ export const ToastAlert = () => {
 
   return !isDarkMode ? (
     <ToastContainer
-      position="top-right"
+      position="bottom-right"
       autoClose={5000}
       hideProgressBar={false}
       newestOnTop={true}
@@ -38,7 +38,7 @@ export const ToastAlert = () => {
     />
   ) : (
     <ToastContainer
-      position="top-right"
+      position="bottom-right"
       autoClose={5000}
       hideProgressBar={false}
       newestOnTop={true}

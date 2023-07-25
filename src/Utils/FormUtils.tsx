@@ -51,5 +51,6 @@ export const handleSelectChange: SelectChangeHandler<Base | any> = (e, variable,
     ...variable,
     [e.target.name]: e.target.value,
   });
+  console.log(variable)
 
 };

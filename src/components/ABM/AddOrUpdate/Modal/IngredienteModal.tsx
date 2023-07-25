@@ -1,32 +1,42 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
-import { Ingrediente } from '../../../../Interfaces/ABM/Ingrediente';
-import { getAllIngredientes } from '../../../../API/SpecializedEndpoints/IngredienteRequests/IngredienteRequests';
+import { ArticuloInsumo } from '../../../../Interfaces/ABM/ArticuloInsumo';
 import { Button } from '../../../Botones/Button';
-import { ToastAlert } from '../../../Toast/ToastAlert';
+import { ToastAlert, notify } from '../../../Toast/ToastAlert';
+import { getAll } from '../../../../API/Requests/BaseRequests';
+import { useAuth0 } from '@auth0/auth0-react';
+import { AxiosError } from 'axios';
 export interface IngredienteModalProps {
-  fatherSetter: React.Dispatch<React.SetStateAction<Ingrediente>>;
+  setInsumo: React.Dispatch<React.SetStateAction<ArticuloInsumo>>;
 }
 
-export const IngredienteModal = ({ fatherSetter }: IngredienteModalProps) => {
-  const [ingredientes, setIngredientes] = useState<Ingrediente[]>([]);
+export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps) => {
+  const [ingredientes, setIngredientes] = useState<ArticuloInsumo[]>([]);
   const [visible, toggleVisible] = useState(false);
+  const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
     getIngredientes();
   }, []);
   const getIngredientes = async () => {
-    const data = await getAllIngredientes();
-    setIngredientes(data);
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        const data = await getAll({ endpoint: 'articulos-insumo', token: accessToken });
+        setIngredientes(data);
+      })
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.message, 'error');
+      });
   };
-  const setFather = (ingrediente: Ingrediente) => {
-    fatherSetter(ingrediente);
+  const getSetInsumo = (ingrediente: ArticuloInsumo) => {
+    setInsumo(ingrediente);
     toggleVisible(false);
   };
-  const renderFilasIngredientes = (ingredientes: Ingrediente[]) => {
+  const renderFilasIngredientes = (ingredientes: ArticuloInsumo[]) => {
     return ingredientes.map((ingrediente) => (
       <React.Fragment key={ingrediente.id}>
         <tr
-          className="border-b border-b-neutral-200 odd:bg-white
+          className="border-b border-b-neutral-200 odd:bg-neutral-100
              even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 
               dark:border-b-neutral-400 dark:bg-neutral-500
               dark:text-white dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
@@ -35,7 +45,7 @@ export const IngredienteModal = ({ fatherSetter }: IngredienteModalProps) => {
           <td className="whitespace-nowrap px-6 py-4">{ingrediente.denominacion}</td>
           <td className="px-6 py-4">
             <div className="flex justify-end">
-              <Button callback={() => setFather(ingrediente)} content="Seleccionar" type="button" />
+              <Button callback={() => getSetInsumo(ingrediente)} content="Seleccionar" type="button" />
             </div>
           </td>
         </tr>
@@ -53,13 +63,13 @@ export const IngredienteModal = ({ fatherSetter }: IngredienteModalProps) => {
   );
   const closeButton = <Button callback={() => toggleVisible(false)} content="x" type="button" />;
   return (
-    <div className=" flex w-full">
+    <div className=" flex w-full ">
       {openButton}
       <ToastAlert />
       <div
         className={`${
           visible ? 'visible' : 'hidden'
-        } absolute inset-0 z-10 overflow-y-auto bg-neutral-400 bg-opacity-75 transition-opacity dark:bg-neutral-700 dark:bg-opacity-75`}
+        } fixed inset-0 z-10 overflow-y-auto bg-neutral-400 bg-opacity-75 transition-opacity dark:bg-neutral-700 dark:bg-opacity-75`}
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal={true}
@@ -71,14 +81,14 @@ export const IngredienteModal = ({ fatherSetter }: IngredienteModalProps) => {
           rounded-lg bg-neutral-900 p-5 text-left align-bottom shadow-2xl transition-all sm:my-8"
           >
             <div className="flex   gap-16">
-              <h2 className="w-full flex-grow text-2xl text-white">Elige el ingrediente:</h2>
+              <h2 className="w-full flex-grow text-2xl text-neutral-100">Elige el ingrediente:</h2>
               {closeButton}
             </div>
             <div className="overflow-hidden overflow-x-auto rounded-lg px-8 sm:-mx-6 lg:-mx-8 ">
               <div className="mt-3 overflow-hidden  rounded-lg text-left">
-                <table className="min-w-full bg-white text-left text-sm font-light dark:bg-neutral-900 ">
+                <table className="min-w-full bg-neutral-100 text-left text-sm font-light dark:bg-neutral-900 ">
                   <thead className="rounded-t-md font-medium uppercase">
-                    <tr className="rounded-t-md border-b-4 border-b-neutral-500 bg-white  dark:border-b-white dark:bg-neutral-800 ">
+                    <tr className="rounded-t-md border-b-4 border-b-neutral-500 bg-neutral-100  dark:border-b-white dark:bg-neutral-800 ">
                       <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-white">
                         ID
                       </th>

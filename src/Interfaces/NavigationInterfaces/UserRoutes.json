@@ -1,18 +1,18 @@
 [
   {
-    "name": "Hamburguesas",
+    "name": "Hamburguesa",
     "imagen": "/burga.jpg"
   },
   {
-    "name": "Panchos",
+    "name": "Pancho",
     "imagen": "/panchos.jpg"
   },
   {
-    "name": "Pizzas",
+    "name": "Pizza",
     "imagen": "/pizza.jpg"
   },
   {
-    "name": "Papas Fritas",
+    "name": "Papas Frita",
     "imagen": "/papas.jpg"
   }
 ]

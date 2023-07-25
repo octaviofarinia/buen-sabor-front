@@ -1,42 +1,36 @@
-import { Route } from "./NavigationInterface";
+import { Route } from './NavigationInterface';
 
-export const routes:Route[] = [
+export const ABMRoutes: Route[] = [
   {
-    name: 'Categorias',
+    name: 'Rubro de los Artículos | Categorías',
     imagen: '/category.png',
-    route: 'Categorias',
+    route: 'RubroArticulos',
+    dropdown: 'Rubro de los Artículos',
     type: 'ABM',
   },
   {
-    name: 'Ingredientes',
+    name: 'Artículos Insumos | Ingredientes',
     imagen: '/ingredient.png',
     route: 'Ingredientes',
+    dropdown: 'Artículos Insumos',
     type: 'ABM',
   },
   {
-    name: 'Productos',
+    name: 'Artículos Manufacturados | Productos',
     imagen: '/burgasMain.jpg',
     route: 'Productos',
+    dropdown: 'Artículos Manufacturados',
     type: 'ABM',
   },
   {
     name: 'Unidad De Medida',
     imagen: '/measure.png',
     route: 'UnidadDeMedida',
+    dropdown: 'Unidades de Medida',
     type: 'ABM',
-  },
-  {
-    name: 'Pedidos',
-    imagen: '/pedido.jpg',
-    route: 'Pedidos',
-    type: 'Planilla',
-  },
-  {
-    name: 'Facturas',
-    imagen: '/facturas.jpg',
-    route: 'Facturas',
-    type: 'Planilla',
   },
 ];
 
-export default routes;
+
+
+export default ABMRoutes;

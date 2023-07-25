@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
@@ -18,13 +18,21 @@ import { useTheme } from '../../context/ThemeProvider';
 import { useAuth0 } from '@auth0/auth0-react';
 import styles from './Header.module.css';
 import { frontend_url } from '../../Utils/ConstUtils';
+import { useCart } from '../../context/CarritoProvider';
+import { employeeRoles } from '../../Utils/Constants/UserRoles';
 
 export const Header = () => {
-  const { userRoles } = useUser();
+  const { userRole } = useUser();
+  const { cart } = useCart();
   const { isDarkMode, toggleTheme } = useTheme();
   const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
-  const navigation = userRoles.includes('employee') ? EmployeeStaticRoutes : ClientStaticRoutes;
+  useEffect(() => {
+  }, [cart.length, userRole]);
+  
+  const navigation = Object.values(employeeRoles).includes(userRole)
+    ? EmployeeStaticRoutes
+    : ClientStaticRoutes;
   return (
     <Disclosure as="nav" className="bg-neutral-900">
       {({ open }) => (
@@ -44,11 +52,15 @@ export const Header = () => {
               </div>
               <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
                 <Link
-                  to={!userRoles.includes('employee') ? '/' : '/employee'}
+                  to={!userRole.includes('administrador') ? '/' : '/employee'}
                   className="inline-flex items-center gap-2.5 text-lg font-bold uppercase text-amber-400 md:text-3xl"
                   aria-label="logo"
                 >
-                  <img src={'/logo5.png'} alt="logo" className="max-w-100 object-contain " />
+                  <img
+                    src={'/logoWhite.png'}
+                    alt="logo"
+                    className="hidden w-12 object-contain  sm:block sm:max-w-100 "
+                  />
                 </Link>
                 <div className="hidden md:ml-6 md:flex md:items-center">
                   <div className="flex items-center gap-2.5">
@@ -56,21 +68,31 @@ export const Header = () => {
                       <Link
                         key={item.path}
                         to={item.path}
-                        className="flex items-center rounded-md p-1 text-sm text-amber-400 hover:bg-neutral-800 hover:text-amber-500 active:text-amber-500 lg:text-lg xl:px-3 xl:py-2"
+                        className="flex items-center rounded-md p-1 text-sm text-amber-400  hover:border-b-4 hover:border-b-neutral-700 hover:bg-neutral-800 hover:text-amber-500 hover:duration-300 hover:ease-in-out active:text-amber-500 lg:text-lg xl:px-3 xl:py-2"
                       >
                         {item.name}
                       </Link>
                     ))}
-                    {userRoles.includes('employee') && <DropdownHeader routes={EmployeeRoutes} />}
+                    {[employeeRoles.ADMINISTRADOR, employeeRoles.LOGISTICA]
+                      .toLocaleString()
+                      .toLowerCase()
+                      .includes(userRole.toLowerCase()) && (
+                      <DropdownHeader routes={EmployeeRoutes} />
+                    )}
                   </div>
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center gap-3 pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
                 <Link
                   to={'/Carrito'}
-                  className="rounded-full bg-neutral-800 p-1 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800"
+                  className="group relative rounded-full bg-neutral-800 p-1 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800"
                 >
                   <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
+                  {
+                    <span className="absolute  -top-4 -right-1 rounded-md bg-neutral-700 p-1 px-1.5 text-neutral-400 group-hover:text-amber-500">
+                      {cart.length}
+                    </span>
+                  }
                 </Link>{' '}
                 <button
                   onClick={toggleTheme}
@@ -100,7 +122,7 @@ export const Header = () => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right overflow-hidden rounded-md bg-neutral-100 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {isAuthenticated ? (
                         <Menu.Item>
                           <Link
@@ -189,7 +211,10 @@ export const Header = () => {
                 </Disclosure.Button>
               ))}
               <Disclosure.Button>
-                {userRoles.includes('employee') && <DropdownHeader routes={EmployeeRoutes} />}
+                {[employeeRoles.ADMINISTRADOR, employeeRoles.LOGISTICA]
+                  .toLocaleString()
+                  .toLowerCase()
+                  .includes(userRole.toLowerCase()) && <DropdownHeader routes={EmployeeRoutes} />}
               </Disclosure.Button>
             </div>
           </Disclosure.Panel>

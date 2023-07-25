@@ -1,36 +1,31 @@
 import CartConstants from '../../Utils/Constants/CartConstants';
-import { Carrito } from '../Carrito';
-import { Domicilio } from '../Domicilio';
-import { Pedido } from '../Pedido';
-import { Categoria } from './Categoria';
+import { Domicilio } from '../ClientSide/Domicilio';
+import { Pedido } from '../ClientSide/Pedido';
+import { RubroArticulo } from './RubroArticulo';
 import { DetalleProducto } from './DetalleProducto';
-import { Ingrediente } from './Ingrediente';
-import { Producto } from './Producto';
+import { ArticuloInsumo } from './ArticuloInsumo';
+import { ArticuloManufacturado } from './ArticuloManufacturado';
 import { UnidadDeMedida } from './UnidadDeMedida';
 
-export const base_category: Categoria = {
-  id: null,
+export const base_category: RubroArticulo = {
   denominacion: null,
-  RubroPadre: null,
+  rubroPadre: null,
   idRubroPadre: null,
   subRubros: null,
 };
 
 export const base_unidad: UnidadDeMedida = {
-  id: null,
   denominacion: null,
   abreviatura: null,
 };
 
 export const base_detalle_producto: DetalleProducto = {
-  id: null,
   cantidad: null,
   idArticuloInsumo: null,
   idArticuloManufacturado: null,
 };
 
-export const base_product: Producto = {
-  id: null,
+export const base_product: ArticuloManufacturado = {
   denominacion: null,
   descripcion: null,
   urlImagen: null,
@@ -38,12 +33,10 @@ export const base_product: Producto = {
   tiempoEstimadoCocina: null,
 };
 
-export const base_ingredient: Ingrediente = {
-  id: null,
+export const base_ingredient: ArticuloInsumo = {
   denominacion: null,
   urlImagen: null,
   precioCompra: null,
-  precioVenta: null,
   stockActual: null,
   stockMinimo: null,
   unidadMedida: null,
@@ -60,9 +53,10 @@ export const base_domicilio: Domicilio = {
   codigoPostal: null,
 };
 export const base_pedido: Pedido = {
+  id: null,
   total: 0,
   tipoEnvio: CartConstants.RETIRO_EN_LOCAL,
-  medioDePago:CartConstants.EFECTIVO,
+  idDomicilioEntrega: 0,
   auth0Id: undefined,
   tiempoEstimadoFinalizacion: 0,
   productos: null,

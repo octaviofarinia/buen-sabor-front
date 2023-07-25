@@ -1,14 +1,14 @@
 import { AuthenticationGuard } from '../components/Auth0/AuthenticationGuard';
-import CargaDomicilioView from '../views/CargaDomicilioView';
-import { CarritoView } from '../views/CarritoView';
-import { ClientMain } from '../views/ClientMain';
-import { PreguntasView } from '../views/PreguntasView';
-import { ProductDetailView } from '../views/ProductDetail';
-import { ProductsView } from '../views/ProductsView';
-import PlanillaPedido from '../views/websocket/PlanillaPedido';
-import { TeamView } from '../views/TeamView';
-import FakeCartView from '../views/mp/FakeCartView';
-import { MP_PostPagoView } from '../views/MP_PostPagoView';
+import CargaDomicilioView from '../views/generalViews/CargaDomicilioView';
+import { CarritoView } from '../views/generalViews/CarritoView';
+import { ClientMain } from '../views/generalViews/ClientMain';
+import { PreguntasView } from '../views/staticViews/PreguntasView';
+import { ProductDetailView } from '../views/generalViews/ProductDetail';
+import { ProductsView } from '../views/generalViews/ProductsView';
+import { TeamView } from '../views/staticViews/TeamView';
+import { MP_PostPagoView } from '../views/generalViews/MP_PostPagoView';
+import { PostPagoView } from '../views/generalViews/PostPagoView';
+import { PerfilView } from '../views/generalViews/PerfilView';
 
 const ClientDinamicRoutes = [
   { path: 'Productos/:categoria', element: '' },
@@ -16,8 +16,8 @@ const ClientDinamicRoutes = [
   { path: '/Carrito', element: <AuthenticationGuard component={CarritoView} /> },
   { path: '/Domicilio', element: <AuthenticationGuard component={CargaDomicilioView} /> },
   { path: '/MP_PostPayment', element: <AuthenticationGuard component={MP_PostPagoView} /> },
-  { name: 'PEDIDOS', path: '/Pedidos', element: <PlanillaPedido /> },
-  { name: 'FAKE CART', path: '/FakeCart', element: <FakeCartView /> },
+  { path: '/PostPayment', element: <AuthenticationGuard component={PostPagoView} /> },
+  { name: '/Perfil', path: '/perfil', element: <AuthenticationGuard component={PerfilView} /> },
 ];
 
 export const ClientStaticRoutes = [
@@ -27,4 +27,5 @@ export const ClientStaticRoutes = [
   { name: 'Preguntas', path: '/Preguntas', element: <PreguntasView /> },
 ];
 
+export const AllClientRoutes = [...ClientDinamicRoutes, ...ClientStaticRoutes];
 export default ClientDinamicRoutes;

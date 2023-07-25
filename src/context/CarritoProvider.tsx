@@ -1,9 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { DetallePedido } from '../Interfaces/DetallePedido';
-
+import { DetallePedido } from '../Interfaces/ClientSide/DetallePedido';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface CartContextProps {
   cart: DetallePedido[];
+  resetCart: () => void;
   addToCart: (detalle: DetallePedido) => void;
   removeFromCart: (detalle: DetallePedido) => void;
   reduceAmountFromCart: (detalle: DetallePedido) => void;
@@ -17,61 +18,108 @@ const CartContext = createContext<CartContextProps>({} as CartContextProps);
 
 const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<DetallePedido[]>([]);
-
+  const { user, loginWithRedirect } = useAuth0();
   useEffect(() => {
-    const storedCart = localStorage.getItem('buenSaborCart');
-    if (storedCart === null) {
-      localStorage.setItem('buenSaborCart', JSON.stringify(cart));
-    } else {
-      setCart(JSON.parse(storedCart));
+    if (user?.sub !== undefined) {
+      const storedCart = localStorage.getItem('buenSaborCart' + user?.sub);
+      if (storedCart === null) {
+        localStorage.setItem('buenSaborCart' + user.sub, JSON.stringify(cart));
+      } else {
+        setCart(JSON.parse(storedCart));
+      }
     }
-  }, []);
 
+    return () => {};
+  }, [user?.sub]);
+
+  const resetCart = () => {
+    setCart([]);
+    localStorage.setItem('buenSaborCart' + user?.sub, JSON.stringify([]));
+  };
   const addToCart = async (detalle: DetallePedido) => {
-    let addProduct = false;
-    for (const detallePedido of cart) {
-      if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
-        detalle.cantidad = detallePedido.cantidad++;
-        const newCart = [...cart];
-        setCart([...cart]);
-        localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
-        addProduct = true;
-        break;
-      }
+    if (user?.sub === undefined) {
+      await loginWithRedirect({
+        appState: {
+          returnTo: `/Productos`,
+        },
+        authorizationParams: {
+          screen_hint: 'signup',
+        },
+      });
     }
+    if (user?.sub !== undefined) {
+      const existingProduct = cart.find(
+        (detallePedido) => detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado
+      );
 
-    if (addProduct === false) {
-      const newCart = [...cart, detalle];
-      setCart([...cart, detalle]);
-      localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
+      if (existingProduct) {
+        existingProduct.cantidad += 1;
+      } else {
+        const newDetalle = { ...detalle, cantidad: 1 };
+        cart.push(newDetalle);
+      }
+      localStorage.setItem('buenSaborCart' + user?.sub, JSON.stringify(cart));
+
+      setCart([...cart]);
     }
   };
 
-  const removeFromCart = (detalle: DetallePedido) => {
-    for (const detallePedido of cart) {
-      if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
-        cart.splice(cart.indexOf(detallePedido), 1);
-        const newCart = [...cart];
-        localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
-        setCart([...cart]);
-        break;
+  const removeFromCart = async (detalle: DetallePedido) => {
+    if (user?.sub === undefined) {
+      await loginWithRedirect({
+        appState: {
+          returnTo: `/Productos`,
+        },
+        authorizationParams: {
+          screen_hint: 'signup',
+        },
+      });
+    }
+    if (user?.sub !== undefined) {
+      const updatedCart = cart.filter(
+        (detallePedido) => detallePedido.idArticuloManufacturado !== detalle.idArticuloManufacturado
+      );
+      localStorage.setItem('buenSaborCart' + user?.sub, JSON.stringify(updatedCart));
+        setCart(updatedCart);
+    }
+  };
+  
+  const reduceAmountFromCart = async (detalle: DetallePedido) => {
+    if (user?.sub === undefined) {
+      await loginWithRedirect({
+        appState: {
+          returnTo: `/Carrito`,
+        },
+        authorizationParams: {
+          screen_hint: 'signup',
+        },
+      });
+    }
+    if (user?.sub !== undefined) {
+      for (const detallePedido of cart) {
+        if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
+          if (detalle.cantidad === 1) {
+            // Si la cantidad es 1, eliminar el artículo del carrito
+            removeFromCart(detalle);
+          } else {
+            // Reducir la cantidad en 1
+            detallePedido.cantidad--;
+            // Actualizar el carrito con la nueva cantidad
+            const newCart = [...cart];
+            // Guardar el carrito actualizado en el almacenamiento local
+            localStorage.setItem('buenSaborCart' + user.sub, JSON.stringify(newCart));
+            // Actualizar el estado del carrito en el componente
+            setCart(newCart);
+          }
+          break;
+        }
       }
     }
   };
-  const reduceAmountFromCart = (detalle: DetallePedido) => {
-    for (const detallePedido of cart) {
-      if (detallePedido.idArticuloManufacturado === detalle.idArticuloManufacturado) {
-        detalle.cantidad = detalle.cantidad--;
-        const newCart = [...cart];
-        localStorage.setItem('buenSaborCart', JSON.stringify(newCart));
-        setCart([...cart]);
-        break;
-      }
-    }
-  };
+
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, reduceAmountFromCart }}
+      value={{ cart, addToCart, removeFromCart, reduceAmountFromCart, resetCart }}
     >
       {children}
     </CartContext.Provider>
