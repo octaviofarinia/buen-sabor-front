@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { save, update } from '../../../API/Requests/BaseRequests';
+import { save, update, updateThrottled } from '../../../API/Requests/BaseRequests';
 import { RubroArticulo } from '../../../Interfaces/ABM/RubroArticulo';
 import { base_category } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { CategoryModal } from './Modal/CategoriaModal';
@@ -26,12 +26,12 @@ export const RubroArticuloAddOrUpdate = () => {
     if (id) {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
-          await update({
+          await updateThrottled({
             endpoint: 'rubros-articulos',
             object: categoria,
             id: Number(id),
             token: accessToken,
-          }).then(() => (status = true));
+          })!.then(() => (status = true));
         })
         .catch((err) => {
           const error = err as AxiosError;
@@ -44,7 +44,7 @@ export const RubroArticuloAddOrUpdate = () => {
             endpoint: 'rubros-articulos',
             object: categoria,
             token: accessToken,
-          }).then(() => (status = true));
+          })!.then(() => (status = true));
         })
         .catch((err) => {
           const error = err as AxiosError;

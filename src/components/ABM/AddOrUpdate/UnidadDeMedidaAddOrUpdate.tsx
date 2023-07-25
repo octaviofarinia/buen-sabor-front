@@ -1,6 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { getOne, save, update } from '../../../API/Requests/BaseRequests';
+import {
+  getOne,
+  save,
+  saveThrottled,
+  update,
+  updateThrottled,
+} from '../../../API/Requests/BaseRequests';
 import { UnidadDeMedida } from '../../../Interfaces/ABM/UnidadDeMedida';
 import { base_unidad } from '../../../Interfaces/ABM/InterfaceDelivery';
 import { HardDeleteButton } from '../../Botones/HardDeleteButton';
@@ -26,12 +32,12 @@ export const UnidadDeMedidaAddOrUpdate = () => {
     if (id) {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
-          await update({
+          await updateThrottled({
             endpoint: 'unidades-medida',
             object: unidadDeMedida,
             id: Number(id),
             token: accessToken,
-          }).then(() => (status = true));
+          })!.then(() => (status = true));
         })
         .catch((err) => {
           const error = err as AxiosError;
@@ -40,11 +46,11 @@ export const UnidadDeMedidaAddOrUpdate = () => {
     } else {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
-          await save({
+          await saveThrottled({
             endpoint: 'unidades-medida',
             object: unidadDeMedida,
             token: accessToken,
-          }).then(() => (status = true));
+          })!.then(() => (status = true));
         })
         .catch((err) => {
           const error = err as AxiosError;

@@ -3,6 +3,8 @@ import { ArticuloManufacturado } from '../../../Interfaces/ABM/ArticuloManufactu
 import { createDetalle, updateDetalle } from './DetalleProductoRequests';
 import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto';
 import { backend_url } from '../../../Utils/ConstUtils';
+import { debounce, throttle } from 'lodash';
+import { THROTTLE_DELAY_SAVE_UPDATE, throttleConfig } from '../BaseRequests';
 
 interface ProductoRequestProps {
   producto: ArticuloManufacturado;
@@ -107,3 +109,6 @@ export const updateProducto = async ({
     throw err;
   }
 };
+
+export const updateProductoThrottled=throttle(updateProducto,THROTTLE_DELAY_SAVE_UPDATE,throttleConfig)
+export const createProductoThrottled=throttle(createProducto,THROTTLE_DELAY_SAVE_UPDATE,throttleConfig)

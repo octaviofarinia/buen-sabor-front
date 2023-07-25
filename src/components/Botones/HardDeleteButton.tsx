@@ -6,24 +6,31 @@ import { useNavigate } from 'react-router-dom';
 import { notify } from '../Toast/ToastAlert';
 import { AxiosError } from 'axios';
 import { Button } from './Button';
+import { useAuth0 } from '@auth0/auth0-react';
+import { DELAYED_REDIRECT_COMMON_TIME } from '../../Utils/NavigationUtils';
 
 export const HardDeleteButton = ({ id, endpoint: endpoint }: { id: number; endpoint: string }) => {
   const [visible, toggleVisible] = useState(false);
   const navigate = useNavigate();
+  const { getAccessTokenSilently } = useAuth0();
   const handleDelete = async () => {
-    try {
-      const response = await hardDelete({ id: id, endpoint: endpoint });
-      notify('Se elimino el registro. Status: ' + response.status, 'success');
-    } catch (err) {
-      const axiosError = err as AxiosError;
-      console.log(axiosError);
+    let status = false;
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        await hardDelete({ id: id, endpoint: endpoint, token: accessToken }).then(
+          () => (status = true)
+        );
+      })
+      .catch((err) => {
+        const axiosError = err as AxiosError;
+        console.log(axiosError);
 
-      notify('No es posible eliminar el registro. ' + axiosError.response?.status, 'error');
-    }
-
+        notify('No es posible eliminar el registro. ' + axiosError.response?.status, 'error');
+      });
+    status && notify('Se elimino el registro', 'success');
     setTimeout(() => {
       navigate(`/employee`);
-    }, 5000);
+    }, DELAYED_REDIRECT_COMMON_TIME);
   };
 
   return (

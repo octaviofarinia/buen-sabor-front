@@ -11,8 +11,8 @@ import { UnidadDeMedidaModal } from './Modal/UnidadDeMedidaModal';
 import { UnidadDeMedida } from '../../../Interfaces/ABM/UnidadDeMedida';
 import { CategoryModal } from './Modal/CategoriaModal';
 import {
-  createIngredienteRegister,
-  updateIngredienteRegister,
+  createIngrediente,
+  updateIngrediente,
 } from '../../../API/Requests/IngredienteRequests/IngredienteRequests';
 import { handleChange, handleImageChange } from '../../../Utils/FormUtils';
 import { Button } from '../../Botones/Button';
@@ -45,12 +45,12 @@ export const IngredienteAddOrUpdate = () => {
     if (id) {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
-          await updateIngredienteRegister({
+          await updateIngrediente({
             id: id,
             imagen: imagen,
             token: accessToken,
             ingrediente: ingrediente,
-          }).then(() => (status = true));
+          })!.then(() => (status = true));
         })
         .catch((err) => {
           const axiosError = err as AxiosError;
@@ -59,7 +59,7 @@ export const IngredienteAddOrUpdate = () => {
     } else {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
-          await createIngredienteRegister({
+          await createIngrediente({
             id: null,
             imagen: imagen,
             token: accessToken,

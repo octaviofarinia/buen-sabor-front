@@ -4,6 +4,7 @@ import {
   faEye,
   faPenToSquare,
   faPlus,
+  faRuler,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
@@ -28,7 +29,7 @@ export const ABMUnidadDeMedida = () => {
           setUmedida(data);
         })
         .catch((err) => {
-          const error=err as AxiosError;
+          const error = err as AxiosError;
           notify(error.response?.data as string, 'error');
         });
     } catch (err) {
@@ -49,7 +50,7 @@ export const ABMUnidadDeMedida = () => {
         getUnidadesDeMedida();
       })
       .catch((err) => {
-        const error=err as AxiosError;
+        const error = err as AxiosError;
         notify(error.response?.data as string, 'error');
       });
   };
@@ -70,8 +71,8 @@ export const ABMUnidadDeMedida = () => {
         <>
           <div className="flex items-center justify-between">
             <h1 className="flex items-center gap-3 text-3xl font-extrabold uppercase text-black dark:text-neutral-100">
-              <FontAwesomeIcon icon={faBarcode} />
-              Rubros de los Artículos | Categorías
+              <FontAwesomeIcon icon={faRuler} />
+              Unidades de Medida
             </h1>
             <Link
               to={`/employee/ABM/UnidadDeMedida/newRegister`}

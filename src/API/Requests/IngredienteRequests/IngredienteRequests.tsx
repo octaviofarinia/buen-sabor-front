@@ -2,6 +2,8 @@ import axios, { AxiosError } from 'axios';
 import { ArticuloInsumo } from '../../../Interfaces/ABM/ArticuloInsumo';
 import { backend_url } from '../../../Utils/ConstUtils';
 import { notify } from '../../../components/Toast/ToastAlert';
+import { debounce, throttle } from 'lodash';
+import { THROTTLE_DELAY_SAVE_UPDATE, throttleConfig } from '../BaseRequests';
 interface IngredienteAddOrUpdateProps {
   ingrediente: ArticuloInsumo;
   imagen: File | null;
@@ -9,7 +11,7 @@ interface IngredienteAddOrUpdateProps {
   token: string;
 }
 
-export const createIngredienteRegister = async ({
+export const createIngrediente = async ({
   ingrediente: ingrediente,
   imagen,
   token,
@@ -39,7 +41,7 @@ export const createIngredienteRegister = async ({
   }
 };
 
-export const updateIngredienteRegister = async ({
+export const updateIngrediente = async ({
   ingrediente: ingrediente,
   id,
   imagen,
@@ -93,3 +95,14 @@ export const updateStock = async (id: number, precio: number, cantidad: number, 
     notify(error.response?.data as string, 'error');
   }
 };
+
+export const updateIngredienteThrottled = throttle(
+  updateIngrediente,
+  THROTTLE_DELAY_SAVE_UPDATE,
+  throttleConfig
+);
+export const createIngredienteThrottled = throttle(
+  createIngrediente,
+  THROTTLE_DELAY_SAVE_UPDATE,
+  throttleConfig
+);

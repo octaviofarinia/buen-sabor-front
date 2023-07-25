@@ -9,6 +9,8 @@ import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto';
 import {
   updateProducto,
   createProducto,
+  updateProductoThrottled,
+  createProductoThrottled,
 } from '../../../API/Requests/ProductoRequests/ProductoRequests';
 import { getDetalles } from '../../../API/Requests/ProductoRequests/DetalleProductoRequests';
 import { handleChange, handleImageChange } from '../../../Utils/FormUtils';
@@ -40,13 +42,13 @@ export const ProductoAddOrUpdate = () => {
     if (id) {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
-          await updateProducto({
+          await updateProductoThrottled({
             producto: producto,
             detalles: detalle,
             imagen: imagen,
             token: accessToken,
             id: Number(id),
-          }).then(() => (status = true));
+          })!.then(() => (status = true));
         })
         .catch((err) => {
           const error = err as AxiosError;
@@ -55,12 +57,12 @@ export const ProductoAddOrUpdate = () => {
     } else {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
-          await createProducto({
+          await createProductoThrottled({
             producto: producto,
             detalles: detalle,
             imagen: imagen,
             token: accessToken,
-          }).then(() => (status = true));
+          })!.then(() => (status = true));
         })
         .catch((err) => {
           const error = err as AxiosError;
