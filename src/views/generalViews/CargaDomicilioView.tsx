@@ -11,6 +11,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
 import { postDomicilio } from '../../API/Requests/DomicilioRequests/DomicilioRequests';
+import { DELAYED_REDIRECT_COMMON_TIME } from '../../Utils/NavigationUtils';
+import { throttle } from 'lodash';
+import { THROTTLE_DELAY_SAVE_UPDATE, throttleConfig } from '../../API/Requests/BaseRequests';
 
 const CargaDomicilioView: React.FC = () => {
   const location = useLocation();
@@ -25,11 +28,13 @@ const CargaDomicilioView: React.FC = () => {
     e.preventDefault();
     await getAccessTokenSilently()
       .then(async (accessToken) => {
-        postDomicilio({ ...domicilio, auth0Id: user?.sub }, accessToken);
-        notify('Se ha agreado el domicilio', 'success');
-        setTimeout(() => {
-          navigate('/');
-        }, 2000);
+        user?.sub !== undefined &&
+          (await postDomicilio({ ...domicilio, auth0Id: user?.sub }, accessToken).then(() => {
+            notify('Se ha agreado el domicilio', 'success');
+            setTimeout(() => {
+              navigate('/');
+            }, DELAYED_REDIRECT_COMMON_TIME);
+          }));
       })
       .catch((error) => {
         const err = error as AxiosError;
@@ -37,25 +42,34 @@ const CargaDomicilioView: React.FC = () => {
       });
   };
 
-  useEffect(() => {
-    if (isNew) {
-      const sendUserData = async () => {
-        if (user) {
-          try {
-            await axios.post(`${backend_url}/usuarios/post_register_save`, {
-              auth0Id: user.sub,
+  const submitDomicilioThrottled = throttle(
+    handleSubmitDomicilio,
+    THROTTLE_DELAY_SAVE_UPDATE,
+    throttleConfig
+  );
+  const sendUserData = async () => {
+    if (user) {
+      await getAccessTokenSilently()
+        .then(async (accessToken) => {
+          await axios.post(
+            `${backend_url}/usuarios/post_register_save`,
+            {
+              auth0Id: user?.sub,
               username: user.name,
               email: user.email,
-            });
-          } catch (error) {
-            console.log(error);
-          }
-        }
-      };
-
+            },
+            { headers: { Authorization: 'Bearer ' + accessToken } }
+          );
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+  useEffect(() => {
+    if (isNew) {
       sendUserData();
     }
-    return () => {};
   }, [user]);
 
   return (
@@ -67,7 +81,7 @@ const CargaDomicilioView: React.FC = () => {
             <h2 className="m-0 self-end p-0 text-2xl">Tu ubicación</h2>
           </div>
 
-          <form className="w-full max-w-lg" onSubmit={(e) => handleSubmitDomicilio(e)}>
+          <form className="w-full max-w-lg" onSubmit={(e) => submitDomicilioThrottled(e)}>
             <div className="-mx-3 mb-6 flex flex-wrap">
               <div className="mb-6 w-full px-3 md:mb-0 md:w-1/2">
                 <label

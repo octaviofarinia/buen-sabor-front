@@ -17,7 +17,11 @@ import { Domicilio } from '../../Interfaces/ClientSide/Domicilio';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getDomicilios } from '../../API/Requests/DomicilioRequests/DomicilioRequests';
 import { useNavigate } from 'react-router-dom';
-import { calcularCostoEstimado, calcularTiempoEspera } from '../../Utils/CalculosUtils';
+import {
+  calcularCostoEstimado,
+  calcularSubtotal,
+  calcularTiempoEspera,
+} from '../../Utils/CalculosUtils';
 import { useCart } from '../../context/CarritoProvider';
 import axios, { AxiosError } from 'axios';
 import { backend_url } from '../../Utils/ConstUtils';
@@ -58,11 +62,9 @@ export const CarritoView = () => {
   const getDomiciliosUsuario = async () => {
     await getAccessTokenSilently()
       .then(async (accessToken) => {
-        if (user?.sub !== undefined && user.sub) {
-          const response = await getDomicilios(user?.sub, accessToken);
-          setDomicilios(response.data);
-          informacionPedido.idDomicilioEntrega = response.data[0].id;
-        }
+        const response = await getDomicilios(user?.sub!, accessToken);
+        setDomicilios(response.data);
+        informacionPedido.idDomicilioEntrega = response.data[0].id;
       })
       .catch((err) => {
         const error = err as AxiosError;
@@ -165,7 +167,7 @@ export const CarritoView = () => {
                 </div>
                 <div className="flex-grow pl-4 xl:grid xl:grid-cols-6">
                   <div className="flex flex-col xl:col-span-4">
-                    <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 lg:text-3xl ">
+                    <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 dark:text-neutral-100 lg:text-3xl ">
                       Tus productos
                     </h2>
                     {cartItems.map((item, index) => (
@@ -262,7 +264,7 @@ export const CarritoView = () => {
                   <FontAwesomeIcon icon={faCreditCard} />
                 </div>
                 <div className="flex-grow pl-4">
-                  <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 lg:text-3xl">
+                  <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 dark:text-neutral-100 lg:text-3xl">
                     Medio de pago
                   </h2>
                   <div className=" flex flex-col gap-3 py-5">
@@ -325,7 +327,7 @@ export const CarritoView = () => {
                 <FontAwesomeIcon icon={faMotorcycle} />
               </div>
               <div className="flex-grow pl-4">
-                <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 lg:text-3xl">
+                <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 dark:text-neutral-100 lg:text-3xl">
                   ¿Lo retirás o te lo enviamos? <FontAwesomeIcon icon={faFaceSmileWink} />
                 </h2>
                 <div className=" flex flex-col gap-3 py-4">
@@ -364,13 +366,17 @@ export const CarritoView = () => {
                         <select
                           name="domicilio"
                           required
-                          className="focus:shadow-outline block w-full appearance-none rounded border border-neutral-400 bg-neutral-100 px-4 py-2 pr-8 leading-tight shadow hover:border-neutral-500 focus:outline-none"
+                          className="focus:shadow-outline block w-full appearance-none rounded border border-neutral-400 bg-neutral-100 px-4 py-2 pr-8 leading-tight text-neutral-900 shadow hover:border-neutral-500 focus:outline-none"
                           onChange={(e) => {
                             informacionPedido.idDomicilioEntrega = Number(e.target.value);
                           }}
                         >
                           {domicilios.map((domicilio) => (
-                            <option key={domicilio.id} value={domicilio.id?.toString()}>
+                            <option
+                              key={domicilio.id}
+                              value={domicilio.id?.toString()}
+                              className="text-neutral-900 "
+                            >
                               {domicilio.calle + ' ' + domicilio.numero}
                             </option>
                           ))}
@@ -399,7 +405,7 @@ export const CarritoView = () => {
                 <FontAwesomeIcon icon={faListCheck} />
               </div>
               <div className="flex-grow pl-4 ">
-                <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 lg:text-3xl ">
+                <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 dark:text-neutral-100 lg:text-3xl ">
                   Resumen
                 </h2>
                 <div className="w-full ">
@@ -417,7 +423,7 @@ export const CarritoView = () => {
                   <div className="flex border-t border-neutral-200 py-2">
                     <span className="text-neutral-500 dark:text-neutral-200">Subtotal</span>
                     <span className="ml-auto text-center text-neutral-900 dark:text-neutral-300">
-                      ${calcularCostoEstimado(cart)}
+                      ${calcularSubtotal(cartItems, cart)}
                     </span>
                   </div>
                 </div>

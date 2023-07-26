@@ -1,7 +1,12 @@
-import { ABMRoutes } from '../../Interfaces/NavigationInterfaces/ABMRoutes';
+import { ABMRoutes } from '../../Interfaces/NavigationInterfaces/Routes';
 import { useUser } from '../../context/UserProvider';
 import { ImageLink } from '../../components/ImageLink/ImageLink';
-import { ABMRoles, facturaRoles, pedidoRoles } from '../../Utils/Constants/UserRoles';
+import {
+  ABMRoles,
+  employeeRoles,
+  facturaRoles,
+  pedidoRoles,
+} from '../../Utils/Constants/UserRoles';
 
 export const EmployeeMain = () => {
   const { userRole } = useUser();
@@ -38,6 +43,16 @@ export const EmployeeMain = () => {
               name={'Facturas'}
               type={'Planilla'}
               route={'Facturas'}
+            />
+          )}
+          {userRole === employeeRoles.ADMINISTRADOR && (
+            <ImageLink
+              key={'ranking'}
+              dropdown={'Ranking Productos'}
+              imagen={'/ranking.jpg'}
+              name={'Ranking Productos'}
+              type={'Ranking'}
+              route={'Productos'}
             />
           )}
         </div>

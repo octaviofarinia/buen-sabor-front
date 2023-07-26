@@ -13,7 +13,10 @@ import { useUser } from '../../context/UserProvider';
 import { EmployeeStaticRoutes } from '../../routes/EmployeeRoutesConfigs';
 import { ClientStaticRoutes } from '../../routes/ClientRoutesConfigs';
 import { DropdownHeader } from './HeaderComponents/DropdownHeader';
-import EmployeeRoutes from '../../Interfaces/NavigationInterfaces/ABMRoutes';
+import EmployeeRoutes, {
+  ABMRoutes,
+  PlanillaRoutes,
+} from '../../Interfaces/NavigationInterfaces/Routes';
 import { useTheme } from '../../context/ThemeProvider';
 import { useAuth0 } from '@auth0/auth0-react';
 import styles from './Header.module.css';
@@ -27,9 +30,8 @@ export const Header = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
-  useEffect(() => {
-  }, [cart.length, userRole]);
-  
+  useEffect(() => {}, [cart.length, userRole]);
+
   const navigation = Object.values(employeeRoles).includes(userRole)
     ? EmployeeStaticRoutes
     : ClientStaticRoutes;
@@ -77,7 +79,13 @@ export const Header = () => {
                       .toLocaleString()
                       .toLowerCase()
                       .includes(userRole.toLowerCase()) && (
-                      <DropdownHeader routes={EmployeeRoutes} />
+                      <DropdownHeader
+                        routes={
+                          employeeRoles.ADMINISTRADOR
+                            ? [...ABMRoutes, ...PlanillaRoutes]
+                            : [...ABMRoutes]
+                        }
+                      />
                     )}
                   </div>
                 </div>
@@ -214,7 +222,15 @@ export const Header = () => {
                 {[employeeRoles.ADMINISTRADOR, employeeRoles.LOGISTICA]
                   .toLocaleString()
                   .toLowerCase()
-                  .includes(userRole.toLowerCase()) && <DropdownHeader routes={EmployeeRoutes} />}
+                  .includes(userRole.toLowerCase()) && (
+                  <DropdownHeader
+                    routes={
+                      employeeRoles.ADMINISTRADOR
+                        ? [...ABMRoutes, ...PlanillaRoutes]
+                        : [...ABMRoutes]
+                    }
+                  />
+                )}
               </Disclosure.Button>
             </div>
           </Disclosure.Panel>

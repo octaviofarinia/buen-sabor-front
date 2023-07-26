@@ -2,7 +2,7 @@ import { EmployeeMain } from '../views/EmployeeViews/EmployeeMain';
 import ClientDinamicRoutes, { ClientStaticRoutes } from './ClientRoutesConfigs';
 import { AuthenticationGuard } from '../components/Auth0/AuthenticationGuard';
 import { IngredienteABMRoutes } from './ABMRoutes/IngredienteRoutes';
-import { ProductoRoutes } from './ABMRoutes/ProductoRoutes';
+import { ProductoRoutes, RankingRoutes } from './ABMRoutes/ProductoRoutes';
 import { RubroArticuloRoutes } from './ABMRoutes/RubroArticuloRoutes';
 import { UnidadDeMedidaRoutes } from './ABMRoutes/UnidadDeMedidaRoutes';
 import { PedidoFacturaRoutes } from './ABMRoutes/PedidoAndFacturaRoutes';
@@ -15,6 +15,7 @@ const AllEmployeeDinamicRoutes = [
   ...RubroArticuloRoutes,
   ...UnidadDeMedidaRoutes,
   ...PedidoFacturaRoutes,
+  ...RankingRoutes,
 ];
 
 const LogisticaDinamicRoutes = [

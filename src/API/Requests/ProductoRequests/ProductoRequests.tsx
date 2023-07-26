@@ -1,10 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ArticuloManufacturado } from '../../../Interfaces/ABM/ArticuloManufacturado';
 import { createDetalle, updateDetalle } from './DetalleProductoRequests';
 import { DetalleProducto } from '../../../Interfaces/ABM/DetalleProducto';
 import { backend_url } from '../../../Utils/ConstUtils';
 import { debounce, throttle } from 'lodash';
 import { THROTTLE_DELAY_SAVE_UPDATE, throttleConfig } from '../BaseRequests';
+import { notify } from '../../../components/Toast/ToastAlert';
 
 interface ProductoRequestProps {
   producto: ArticuloManufacturado;
@@ -50,7 +51,7 @@ export const createProducto = async ({
         throw err;
       }
     }
-
+    notify('Exito', 'success');
     return response.status;
   } catch (err) {
     console.error(err);
@@ -102,6 +103,7 @@ export const updateProducto = async ({
         throw err;
       }
     }
+    notify('Exito', 'success');
 
     return response.status;
   } catch (err) {
@@ -110,5 +112,30 @@ export const updateProducto = async ({
   }
 };
 
-export const updateProductoThrottled=throttle(updateProducto,THROTTLE_DELAY_SAVE_UPDATE,throttleConfig)
-export const createProductoThrottled=throttle(createProducto,THROTTLE_DELAY_SAVE_UPDATE,throttleConfig)
+export const getRankedProductos = async (token: string, fechas: [string, string]) => {
+  try {
+    const response = await axios.get(
+      `${backend_url}/articulos-manufacturados/ranking?desde=${fechas[0]}&hasta=${fechas[1]}`,
+      {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    const error = err as AxiosError;
+    notify(error.message, 'error');
+  }
+};
+
+export const updateProductoThrottled = throttle(
+  updateProducto,
+  THROTTLE_DELAY_SAVE_UPDATE,
+  throttleConfig
+);
+export const createProductoThrottled = throttle(
+  createProducto,
+  THROTTLE_DELAY_SAVE_UPDATE,
+  throttleConfig
+);

@@ -32,31 +32,34 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
       defaultValue={pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
       onChange={(e) => callback(e)}
     >
+      <option disabled value={pedido?.estado && pedido !== null ? pedido.estado.toString() : ''}>
+        {pedido?.estado}
+      </option>
       {userRole === employeeRoles.ADMINISTRADOR && (
         <>
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
-            PAGADO
+            {PedidoStatus.PAGADO}
           </option>
           <option className="text-xl font-bold text-green-400" value={PedidoStatus.COMPLETADO}>
-            COMPLETADO
+            {PedidoStatus.COMPLETADO}
           </option>
           <option className="text-xl font-bold text-amber-500" value={PedidoStatus.PENDIENTE_PAGO}>
-            PENDIENTE PAGO
+            {PedidoStatus.PENDIENTE_PAGO}
           </option>
           <option className="text-xl font-bold text-violet-700" value={PedidoStatus.PREPARACION}>
-            EN PREPARACION
+            {PedidoStatus.PREPARACION}
           </option>
           <option className="text-xl font-bold text-blue-700" value={PedidoStatus.EN_CAMINO}>
-            EN CAMINO
+            {PedidoStatus.EN_CAMINO}
           </option>
           <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENVIO}>
-            PENDIENTE DE ENVIO
+            {PedidoStatus.PENDIENTE_ENVIO}
           </option>
           <option className="text-xl font-bold text-rose-700" value={PedidoStatus.CANCELADO}>
-            CANCELADO
+            {PedidoStatus.CANCELADO}
           </option>
           <option className="text-xl font-bold text-rose-700" value={PedidoStatus.NOTA_CREDITO}>
-            NOTA DE CRÉDITO
+            {PedidoStatus.NOTA_CREDITO}
           </option>
         </>
       )}
@@ -64,10 +67,10 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
       {userRole === employeeRoles.COCINERO && (
         <>
           <option className="text-xl font-bold text-violet-700" value={PedidoStatus.PREPARACION}>
-            EN PREPARACION
+            {PedidoStatus.PREPARACION}
           </option>
           <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENVIO}>
-            PENDIENTE DE ENVIO
+            {PedidoStatus.PENDIENTE_ENVIO}
           </option>
         </>
       )}
@@ -75,10 +78,10 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
       {userRole === employeeRoles.DELIVERY && (
         <>
           <option className="text-xl font-bold text-blue-700" value={PedidoStatus.EN_CAMINO}>
-            EN_CAMINO
+            {PedidoStatus.EN_CAMINO}
           </option>
           <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENVIO}>
-            PENDIENTE DE ENVIO
+            {PedidoStatus.PENDIENTE_ENVIO}
           </option>
         </>
       )}
@@ -86,7 +89,7 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
       {userRole === employeeRoles.CAJERO && (
         <>
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
-            PAGADO
+            {PedidoStatus.PAGADO}
           </option>
         </>
       )}
@@ -103,9 +106,8 @@ export const EstadosSelectFiltro = ({ pedido, callback }: EstadoSelect) => {
     <select
       className="rounded-md py-2 pr-8 text-xl font-bold text-neutral-900"
       defaultValue={pedido?.estado || 'SELECCIONE'} // Use `defaultValue` on the <select> element
-      onChange={(e) => callback(e) }
+      onChange={(e) => callback(e)}
     >
-     
       {userRole === employeeRoles.ADMINISTRADOR && (
         <>
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
@@ -166,21 +168,4 @@ export const EstadosSelectFiltro = ({ pedido, callback }: EstadoSelect) => {
       )}
     </select>
   );
-};
-
-export const setEstadoDePedido = async (estado: string | null, id?: number) => {
-  await axios
-    .put(backend_url + '/pedidos/cambiar-estado', null, {
-      params: {
-        id: id,
-        estado: estado,
-      },
-    })
-    .then(() => {
-      notify('Se cambio el estado a: ' + estado, 'success');
-    })
-    .catch((err) => {
-      const error = err as AxiosError;
-      notify(error.response?.data as string, 'error');
-    });
 };
