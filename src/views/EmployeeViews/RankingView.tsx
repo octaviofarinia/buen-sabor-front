@@ -66,6 +66,7 @@ export const RankingView = () => {
           parseDate(startDate!),
           parseDate(endDate!),
         ]);
+        console.log(response);
         setRankedArticles(response);
       })
       .catch((err) => {

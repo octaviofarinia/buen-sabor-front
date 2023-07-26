@@ -11,6 +11,7 @@ export interface Pedido {
   tiempoEstimadoFinalizacion: number;
   productos: DetallePedido[] | null;
   validated?: boolean;
+  medioDePago: string;
 }
 
 export interface Factura {

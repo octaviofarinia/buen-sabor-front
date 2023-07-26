@@ -34,18 +34,15 @@ import { Pedido } from '../../Interfaces/ClientSide/Pedido';
 import { useTheme } from '../../context/ThemeProvider';
 import { faFaceSmileWink } from '@fortawesome/free-regular-svg-icons';
 import { Banner } from '../../components/Banner/Banner';
-import { throttle } from 'lodash';
-import { throttleConfig } from '../../API/Requests/BaseRequests';
 
 export const CarritoView = () => {
+  const navigate = useNavigate();
   const { cart, removeFromCart, addToCart, reduceAmountFromCart } = useCart();
   const { user } = useAuth0();
   const { isDarkMode } = useTheme();
   const { getAccessTokenSilently } = useAuth0();
-  const navigate = useNavigate();
-  const [medioDePago, setMedioDePago] = useState<string>(CartConstants.EFECTIVO);
   const [domicilios, setDomicilios] = useState<Domicilio[]>([]);
-  const [preferenceId, setPreferenceId] = useState<string>('');
+  const [preferenceId, setPreferenceId] = useState<string | null>(null);
   const [informacionPedido, setInformacionPedido] = useState<Pedido>(base_pedido);
   const [cartItems, setCartItems] = useState<ArticuloManufacturado[]>([]);
 
@@ -121,6 +118,8 @@ export const CarritoView = () => {
                 ...prevInformacionPedido,
                 validated: true,
               }));
+              setPreferenceId(null);
+              mercadoPagoPayment();
               notify('Stock suficiente para el pedido', 'success');
             }
           })
@@ -150,7 +149,9 @@ export const CarritoView = () => {
         <ToastAlert />
 
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault(), savePedidoData();
+          }}
           className="container mx-auto flex flex-wrap px-5 py-10"
           onChange={() => {
             savePedidoData();
@@ -275,7 +276,12 @@ export const CarritoView = () => {
                         name="medioDePago"
                         required
                         defaultChecked={true}
-                        onChange={(e) => setMedioDePago(CartConstants.EFECTIVO)}
+                        onChange={(e) =>
+                          setInformacionPedido((prevInfo) => ({
+                            ...prevInfo, // Copy the previous state
+                            medioDePago: CartConstants.EFECTIVO, // Update the medioDePago property
+                          }))
+                        }
                         className="h-4 w-4 border-neutral-300 bg-neutral-100 text-amber-400 focus:rounded-full focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-amber-400"
                       />
                       <p>Efectivo</p>
@@ -289,14 +295,17 @@ export const CarritoView = () => {
                         name="medioDePago"
                         className="h-4 w-4 border-neutral-300 bg-neutral-100 text-amber-400 focus:rounded-full focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-amber-400"
                         onChange={(e) => {
-                          setMedioDePago(CartConstants.MERCADO_PAGO), mercadoPagoPayment();
+                          setInformacionPedido((prevInfo) => ({
+                            ...prevInfo, // Copy the previous state
+                            medioDePago: CartConstants.MERCADO_PAGO, // Update the medioDePago property
+                          }));
                         }}
                       />
                       <p>Mercado Pago</p>
                     </label>
                   </div>
 
-                  {medioDePago === 'MERCADO_PAGO' && (
+                  {informacionPedido.medioDePago === CartConstants.MERCADO_PAGO && (
                     <div className="pt-3">
                       <img
                         src="https://imgmp.mlstatic.com/org-img/banners/ar/medios/785X40.jpg"
@@ -431,7 +440,7 @@ export const CarritoView = () => {
             </div>
             {informacionPedido.validated ? (
               <div className="flex w-full flex-col py-2  transition-all duration-300 ease-in-out ">
-                {medioDePago !== CartConstants.MERCADO_PAGO ? (
+                {informacionPedido.medioDePago !== CartConstants.MERCADO_PAGO ? (
                   <Button
                     color="rojo"
                     fullsize={true}
@@ -443,7 +452,7 @@ export const CarritoView = () => {
                       navigate('/PostPayment');
                     }}
                   />
-                ) : preferenceId !== '' ? (
+                ) : preferenceId !== null ? (
                   <Wallet
                     initialization={{ preferenceId: preferenceId }}
                     customization={{ texts: { action: 'pay' } }}
