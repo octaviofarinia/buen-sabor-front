@@ -8,8 +8,9 @@ import { useCart } from '../../context/CarritoProvider';
 import { delayedRedirect } from '../../Utils/NavigationUtils';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getOne } from '../../API/Requests/BaseRequests';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Loader } from '../../components/Loader/Loader';
+import { backend_url } from '../../Utils/ConstUtils';
 
 export const ProductDetailView = () => {
   const { id } = useParams();
@@ -19,19 +20,14 @@ export const ProductDetailView = () => {
   const [loading, isLoading] = useState<boolean>(false);
   const getProducto = async () => {
     isLoading(true);
-    await getAccessTokenSilently()
-      .then(async (accessToken) => {
-        const response = await getOne({
-          endpoint: 'articulos-manufacturados',
-          id: Number(id),
-          token: accessToken,
-        });
-        setProducto(response);
-      })
-      .catch((err) => {
-        const error = err as AxiosError;
-        notify(error.response?.data as string, 'error');
-      });
+    try {
+      const response = await axios.get(`${backend_url}/articulos-manufacturados/${id}`, {});
+      setProducto(response.data);
+    } catch (err) {
+      const error = err as AxiosError;
+      notify(error.response?.data as string, 'error');
+    }
+
     isLoading(false);
   };
 
