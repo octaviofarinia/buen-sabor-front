@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
@@ -22,8 +22,6 @@ import {
   Title,
 } from 'chart.js';
 import {
-  defineMultiDatasetChart,
-  defineOnlyDatasetChart,
   generatePieChart,
   generatePolarChart,
   generateVerticalBarChart,
@@ -60,6 +58,7 @@ export const RankingView = () => {
   const [lineChartData, setLineChartData] = useState<ChartData<'line'> | null>(null);
   const [pieChartData, setPieChartData] = useState<ChartData<'pie'> | null>(null);
   const [polarChartData, setPolarChartData] = useState<ChartData<'polarArea'> | null>(null);
+  const [typeOfGraph, setTypeOfGraph] = useState<number|null>(null);
   const handleChange = (range: [Date, Date]) => {
     const [startDate, endDate] = range;
     setStartDate(startDate);
@@ -69,13 +68,31 @@ export const RankingView = () => {
 
   const getRankedArticles = async () => {
     setLoading(true);
+    setTypeOfGraph(0);
+    switch (typeOfGraph) {
+      case 1:
+        console.log('Generando');
+
+        generateGraph(['costoTotal', 'ventaTotal'], 'Costo Total');
+        break;
+      case 2:
+        console.log('Generando');
+
+        generateGraph(['utilidadTotal', 'ventaTotal'], 'Utilidad Total');
+        break;
+      case 3:
+        console.log('Generando');
+
+        generateGraph(['ventaTotal', 'costoTotal'], 'Venta Total');
+        break;
+    }
+
     await getAccessTokenSilently()
       .then(async (accessToken) => {
         const response = await getRankedProductos(accessToken, [
           parseDate(startDate!),
           parseDate(endDate!),
         ]);
-        console.log(response);
         setRankedArticles(response);
       })
       .catch((err) => {
@@ -119,7 +136,7 @@ export const RankingView = () => {
       labelToGraph: labelToGraph,
     });
   };
-  useEffect(() => {}, []);
+  useEffect(() => {}, [pieChartData, polarChartData, lineChartData]);
   return (
     <div className=" relative flex w-full flex-col gap-5 bg-neutral-100 px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">
       {loading ? (
@@ -155,7 +172,7 @@ export const RankingView = () => {
                   maxDate={new Date(Date.now())}
                 />
                 {endDate && startDate && (
-                  <h2 className="lg:texl-2xl gap-3 flex flex-col justify-center rounded-md bg-green-500 p-2 text-center text-lg text-neutral-100 shadow-md md:text-xl">
+                  <h2 className="lg:texl-2xl flex flex-col justify-center gap-3 rounded-md bg-green-500 p-2 text-center text-lg text-neutral-100 shadow-md md:text-xl">
                     Periodo seleccionado
                     <span>{parseDate(startDate) + ' - ' + parseDate(endDate)}</span>
                     <Button
@@ -244,6 +261,7 @@ export const RankingView = () => {
                         <div className="flex gap-5">
                           <Button
                             callback={() => {
+                              setTypeOfGraph(1);
                               generateGraph(['costoTotal', 'ventaTotal'], 'Costo Total');
                             }}
                             color="azul"
@@ -253,6 +271,7 @@ export const RankingView = () => {
 
                           <Button
                             callback={() => {
+                              setTypeOfGraph(2);
                               generateGraph(['utilidadTotal', 'ventaTotal'], 'Utilidad Total');
                             }}
                             color="azul"
@@ -262,6 +281,7 @@ export const RankingView = () => {
 
                           <Button
                             callback={() => {
+                              setTypeOfGraph(3);
                               generateGraph(['ventaTotal', 'costoTotal'], 'Venta Total');
                             }}
                             color="azul"
@@ -276,22 +296,29 @@ export const RankingView = () => {
                     />
 
                     <div className="grid grid-cols-1 gap-10  text-2xl lg:grid-cols-3">
-                      {pieChartData && (
+                      {typeOfGraph !== 0 && (
                         <div className="flex flex-col items-center rounded-lg p-5 shadow-md dark:bg-neutral-100 ">
                           <h3>Gráfico de torta</h3>
-                          <Pie data={pieChartData as ChartData<'pie'>} />
+                          <Pie
+                            data={pieChartData as ChartData<'pie'>}
+                            redraw={true}
+                            updateMode="reset"
+                          />
                         </div>
                       )}
-                      {lineChartData && (
+                      {typeOfGraph !== 0 && (
                         <div className="flex flex-col items-center rounded-lg p-5 shadow-md dark:bg-neutral-100 ">
                           <h3>Gráfico de Líneas</h3>
-                          <Line data={lineChartData as ChartData<'line'>} />
+                          <Line data={lineChartData as ChartData<'line'>} redraw={true} />
                         </div>
                       )}
-                      {polarChartData && (
+                      {typeOfGraph !== 0 && (
                         <div className="flex flex-col items-center rounded-lg p-5 shadow-md dark:bg-neutral-100  ">
                           <h3>Gráfico de Área Polar</h3>
-                          <PolarArea data={polarChartData as ChartData<'polarArea'>} />
+                          <PolarArea
+                            data={polarChartData as ChartData<'polarArea'>}
+                            redraw={true}
+                          />
                         </div>
                       )}
                     </div>
