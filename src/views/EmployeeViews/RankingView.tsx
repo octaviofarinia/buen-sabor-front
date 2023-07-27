@@ -31,7 +31,7 @@ import {
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faFileExcel, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faFaceSadCry, faFileExcel, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../../components/Botones/Button';
 import { parseDate } from '../../Utils/StringUtils';
 import { Banner } from '../../components/Banner/Banner';
@@ -69,6 +69,9 @@ export const RankingView = () => {
 
   const getRankedArticles = async () => {
     setLoading(true);
+    setPieChartData(null);
+    setPolarChartData(null);
+    setLineChartData(null);
     await getAccessTokenSilently()
       .then(async (accessToken) => {
         const response = await getRankedProductos(accessToken, [
@@ -155,7 +158,7 @@ export const RankingView = () => {
                   maxDate={new Date(Date.now())}
                 />
                 {endDate && startDate && (
-                  <h2 className="lg:texl-2xl gap-3 flex flex-col justify-center rounded-md bg-green-500 p-2 text-center text-lg text-neutral-100 shadow-md md:text-xl">
+                  <h2 className="lg:texl-2xl flex flex-col justify-center gap-3 rounded-md bg-green-500 p-2 text-center text-lg text-neutral-100 shadow-md md:text-xl">
                     Periodo seleccionado
                     <span>{parseDate(startDate) + ' - ' + parseDate(endDate)}</span>
                     <Button
@@ -167,7 +170,7 @@ export const RankingView = () => {
                         getRankedArticles();
                       }}
                     />
-                    {rankedArticles != null && (
+                    {rankedArticles != null && rankedArticles.length > 0 && (
                       <Button
                         type="button"
                         content={
@@ -185,7 +188,7 @@ export const RankingView = () => {
                   </h2>
                 )}
               </div>
-              {rankedArticles !== null && (
+              {rankedArticles !== null && rankedArticles.length > 0 ? (
                 <>
                   <div className="col-span-1 xl:col-span-6 ">
                     <div className=" mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-neutral-800">
@@ -297,6 +300,14 @@ export const RankingView = () => {
                     </div>
                   </div>
                 </>
+              ) : (
+                <div className="col-span-1 xl:col-span-6">
+                  <Banner
+                    color="red"
+                    icon={<FontAwesomeIcon icon={faFaceSadCry} size="lg" />}
+                    text="No hay datos"
+                  />
+                </div>
               )}
             </div>
           </div>
