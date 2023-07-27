@@ -34,6 +34,7 @@ export const createIngrediente = async ({
         Authorization: 'Bearer ' + token,
       },
     });
+    notify('Exito', 'success');
     return response.status;
   } catch (err) {
     console.error(err);
@@ -66,6 +67,8 @@ export const updateIngrediente = async ({
       },
     });
     console.log('Response', response.data);
+    notify('Exito', 'success');
+
     return response.status;
   } catch (err) {
     console.error(err);

@@ -60,4 +60,5 @@ export const base_pedido: Pedido = {
   auth0Id: undefined,
   tiempoEstimadoFinalizacion: 0,
   productos: null,
+  medioDePago: CartConstants.EFECTIVO,
 };

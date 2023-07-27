@@ -147,7 +147,7 @@ export const ProductoAddOrUpdate = () => {
                 Producto | Artículo - Manufacturado
               </h3>
             </div>
-            {id !== undefined && <HardDeleteButton id={Number(id)} endpoint={'unidades-medida'} />}
+            {id !== undefined && <HardDeleteButton id={Number(id)} endpoint={'articulos-manufacturados'} />}
           </div>
 
           <form

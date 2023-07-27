@@ -9,7 +9,7 @@ export interface Factura extends Base {
   mpPaymentType: string | null;
   formaPago: string;
   totalVenta: number;
-  pedido: Pedido[];
+  pedido: Pedido;
   numeroFactura: number | null;
   medioDePago: string | null;
   fechaAlta: string;

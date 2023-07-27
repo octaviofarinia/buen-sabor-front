@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Banner } from '../../components/Banner/Banner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faClock, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faClock, faFaceDizzy, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { backend_url } from '../../Utils/ConstUtils';
@@ -57,37 +57,55 @@ export const MP_PostPagoView = () => {
             homeButton={false}
           />
         );
+      default:
+        return (
+          <Banner
+            color={'red'}
+            icon={<FontAwesomeIcon icon={faFaceDizzy} size="lg" />}
+            text={`Ups. Ocurrio un error. De otra manera, no hay información de tu pedido aquí. Serás redirigido en ${timer} segundos`}
+            homeButton={true}
+            callback={() => {
+              navigate('/');
+            }}
+          />
+        );
     }
   };
 
   const generarPedido = async () => {
-    let informacionPedidoString = localStorage.getItem('informacionPedido');
-    let factura: Factura = {
-      mpPaymentId: Number(queryParams.get('collection_id')),
-      mpMerchantOrderId: Number(queryParams.get('merchant_order_id')),
-      mpPreferenceId: queryParams.get('preference_id'),
-      mpPaymentType: queryParams.get('payment_type'),
-      formaPago: CartConstants.MERCADO_PAGO,
-    };
+    if (localStorage.getItem('informacionPedido') !== null) {
+      let informacionPedidoString = localStorage.getItem('informacionPedido');
+      localStorage.removeItem('informacionPedido');
 
-    if (informacionPedidoString !== null) {
-      let pedido: Pedido = JSON.parse(informacionPedidoString);
-      pedido.factura = factura;
+      let factura: Factura = {
+        mpPaymentId: Number(queryParams.get('collection_id')),
+        mpMerchantOrderId: Number(queryParams.get('merchant_order_id')),
+        mpPreferenceId: queryParams.get('preference_id'),
+        mpPaymentType: queryParams.get('payment_type'),
+        formaPago: CartConstants.MERCADO_PAGO,
+      };
 
-      if (mpstatus === 'approved') {
-        await getAccessTokenSilently()
-          .then(async (accessToken) => {
-            await axios.post(`${backend_url}/pedidos`, pedido, {
-              headers: { Authorization: 'Bearer ' + accessToken },
+      if (informacionPedidoString !== null) {
+        let pedido: Pedido = JSON.parse(informacionPedidoString);
+        pedido.factura = factura;
+
+        console.log(informacionPedidoString);
+        if (mpstatus === 'approved') {
+          await getAccessTokenSilently()
+            .then(async (accessToken) => {
+              const response = await axios.post(`${backend_url}/pedidos`, pedido, {
+                headers: { Authorization: 'Bearer ' + accessToken },
+              });
+              resetCart();
+              if (response.status !== 200) {
+                notify('Se genero tu pedido, pero algo salio mal. Por favor, contactanos', 'error');
+              }
+            })
+            .catch((err) => {
+              const error = err as AxiosError;
+              notify(error.message, 'error');
             });
-            resetCart();
-
-            localStorage.removeItem('informacionPedido');
-          })
-          .catch((err) => {
-            const error = err as AxiosError;
-            notify(error.message, 'error');
-          });
+        }
       }
     }
   };

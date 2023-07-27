@@ -17,7 +17,11 @@ import { Domicilio } from '../../Interfaces/ClientSide/Domicilio';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getDomicilios } from '../../API/Requests/DomicilioRequests/DomicilioRequests';
 import { useNavigate } from 'react-router-dom';
-import { calcularCostoEstimado, calcularTiempoEspera } from '../../Utils/CalculosUtils';
+import {
+  calcularCostoEstimado,
+  calcularSubtotal,
+  calcularTiempoEspera,
+} from '../../Utils/CalculosUtils';
 import { useCart } from '../../context/CarritoProvider';
 import axios, { AxiosError } from 'axios';
 import { backend_url } from '../../Utils/ConstUtils';
@@ -30,18 +34,15 @@ import { Pedido } from '../../Interfaces/ClientSide/Pedido';
 import { useTheme } from '../../context/ThemeProvider';
 import { faFaceSmileWink } from '@fortawesome/free-regular-svg-icons';
 import { Banner } from '../../components/Banner/Banner';
-import { throttle } from 'lodash';
-import { throttleConfig } from '../../API/Requests/BaseRequests';
 
 export const CarritoView = () => {
+  const navigate = useNavigate();
   const { cart, removeFromCart, addToCart, reduceAmountFromCart } = useCart();
   const { user } = useAuth0();
   const { isDarkMode } = useTheme();
   const { getAccessTokenSilently } = useAuth0();
-  const navigate = useNavigate();
-  const [medioDePago, setMedioDePago] = useState<string>(CartConstants.EFECTIVO);
   const [domicilios, setDomicilios] = useState<Domicilio[]>([]);
-  const [preferenceId, setPreferenceId] = useState<string>('');
+  const [preferenceId, setPreferenceId] = useState<string | null>(null);
   const [informacionPedido, setInformacionPedido] = useState<Pedido>(base_pedido);
   const [cartItems, setCartItems] = useState<ArticuloManufacturado[]>([]);
 
@@ -58,11 +59,9 @@ export const CarritoView = () => {
   const getDomiciliosUsuario = async () => {
     await getAccessTokenSilently()
       .then(async (accessToken) => {
-        if (user?.sub !== undefined && user.sub) {
-          const response = await getDomicilios(user?.sub, accessToken);
-          setDomicilios(response.data);
-          informacionPedido.idDomicilioEntrega = response.data[0].id;
-        }
+        const response = await getDomicilios(user?.sub!, accessToken);
+        setDomicilios(response.data);
+        informacionPedido.idDomicilioEntrega = response.data[0].id;
       })
       .catch((err) => {
         const error = err as AxiosError;
@@ -119,6 +118,8 @@ export const CarritoView = () => {
                 ...prevInformacionPedido,
                 validated: true,
               }));
+              setPreferenceId(null);
+              mercadoPagoPayment();
               notify('Stock suficiente para el pedido', 'success');
             }
           })
@@ -148,7 +149,9 @@ export const CarritoView = () => {
         <ToastAlert />
 
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault(), savePedidoData();
+          }}
           className="container mx-auto flex flex-wrap px-5 py-10"
           onChange={() => {
             savePedidoData();
@@ -165,7 +168,7 @@ export const CarritoView = () => {
                 </div>
                 <div className="flex-grow pl-4 xl:grid xl:grid-cols-6">
                   <div className="flex flex-col xl:col-span-4">
-                    <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 lg:text-3xl ">
+                    <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 dark:text-neutral-100 lg:text-3xl ">
                       Tus productos
                     </h2>
                     {cartItems.map((item, index) => (
@@ -262,7 +265,7 @@ export const CarritoView = () => {
                   <FontAwesomeIcon icon={faCreditCard} />
                 </div>
                 <div className="flex-grow pl-4">
-                  <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 lg:text-3xl">
+                  <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 dark:text-neutral-100 lg:text-3xl">
                     Medio de pago
                   </h2>
                   <div className=" flex flex-col gap-3 py-5">
@@ -273,7 +276,12 @@ export const CarritoView = () => {
                         name="medioDePago"
                         required
                         defaultChecked={true}
-                        onChange={(e) => setMedioDePago(CartConstants.EFECTIVO)}
+                        onChange={(e) =>
+                          setInformacionPedido((prevInfo) => ({
+                            ...prevInfo, // Copy the previous state
+                            medioDePago: CartConstants.EFECTIVO, // Update the medioDePago property
+                          }))
+                        }
                         className="h-4 w-4 border-neutral-300 bg-neutral-100 text-amber-400 focus:rounded-full focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-amber-400"
                       />
                       <p>Efectivo</p>
@@ -287,14 +295,17 @@ export const CarritoView = () => {
                         name="medioDePago"
                         className="h-4 w-4 border-neutral-300 bg-neutral-100 text-amber-400 focus:rounded-full focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-amber-400"
                         onChange={(e) => {
-                          setMedioDePago(CartConstants.MERCADO_PAGO), mercadoPagoPayment();
+                          setInformacionPedido((prevInfo) => ({
+                            ...prevInfo, // Copy the previous state
+                            medioDePago: CartConstants.MERCADO_PAGO, // Update the medioDePago property
+                          }));
                         }}
                       />
                       <p>Mercado Pago</p>
                     </label>
                   </div>
 
-                  {medioDePago === 'MERCADO_PAGO' && (
+                  {informacionPedido.medioDePago === CartConstants.MERCADO_PAGO && (
                     <div className="pt-3">
                       <img
                         src="https://imgmp.mlstatic.com/org-img/banners/ar/medios/785X40.jpg"
@@ -325,7 +336,7 @@ export const CarritoView = () => {
                 <FontAwesomeIcon icon={faMotorcycle} />
               </div>
               <div className="flex-grow pl-4">
-                <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 lg:text-3xl">
+                <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 dark:text-neutral-100 lg:text-3xl">
                   ¿Lo retirás o te lo enviamos? <FontAwesomeIcon icon={faFaceSmileWink} />
                 </h2>
                 <div className=" flex flex-col gap-3 py-4">
@@ -364,13 +375,17 @@ export const CarritoView = () => {
                         <select
                           name="domicilio"
                           required
-                          className="focus:shadow-outline block w-full appearance-none rounded border border-neutral-400 bg-neutral-100 px-4 py-2 pr-8 leading-tight shadow hover:border-neutral-500 focus:outline-none"
+                          className="focus:shadow-outline block w-full appearance-none rounded border border-neutral-400 bg-neutral-100 px-4 py-2 pr-8 leading-tight text-neutral-900 shadow hover:border-neutral-500 focus:outline-none"
                           onChange={(e) => {
                             informacionPedido.idDomicilioEntrega = Number(e.target.value);
                           }}
                         >
                           {domicilios.map((domicilio) => (
-                            <option key={domicilio.id} value={domicilio.id?.toString()}>
+                            <option
+                              key={domicilio.id}
+                              value={domicilio.id?.toString()}
+                              className="text-neutral-900 "
+                            >
                               {domicilio.calle + ' ' + domicilio.numero}
                             </option>
                           ))}
@@ -399,7 +414,7 @@ export const CarritoView = () => {
                 <FontAwesomeIcon icon={faListCheck} />
               </div>
               <div className="flex-grow pl-4 ">
-                <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 lg:text-3xl ">
+                <h2 className="title-font md:texl-2xl mb-1 text-xl font-bold tracking-wider text-neutral-900 dark:text-neutral-100 lg:text-3xl ">
                   Resumen
                 </h2>
                 <div className="w-full ">
@@ -417,7 +432,7 @@ export const CarritoView = () => {
                   <div className="flex border-t border-neutral-200 py-2">
                     <span className="text-neutral-500 dark:text-neutral-200">Subtotal</span>
                     <span className="ml-auto text-center text-neutral-900 dark:text-neutral-300">
-                      ${calcularCostoEstimado(cart)}
+                      ${calcularSubtotal(cartItems, cart)}
                     </span>
                   </div>
                 </div>
@@ -425,7 +440,7 @@ export const CarritoView = () => {
             </div>
             {informacionPedido.validated ? (
               <div className="flex w-full flex-col py-2  transition-all duration-300 ease-in-out ">
-                {medioDePago !== CartConstants.MERCADO_PAGO ? (
+                {informacionPedido.medioDePago !== CartConstants.MERCADO_PAGO ? (
                   <Button
                     color="rojo"
                     fullsize={true}
@@ -437,7 +452,7 @@ export const CarritoView = () => {
                       navigate('/PostPayment');
                     }}
                   />
-                ) : preferenceId !== '' ? (
+                ) : preferenceId !== null ? (
                   <Wallet
                     initialization={{ preferenceId: preferenceId }}
                     customization={{ texts: { action: 'pay' } }}

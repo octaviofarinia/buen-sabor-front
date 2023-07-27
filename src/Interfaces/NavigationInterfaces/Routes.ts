@@ -31,6 +31,28 @@ export const ABMRoutes: Route[] = [
   },
 ];
 
-
+export const PlanillaRoutes: Route[] = [
+  {
+    name: 'Pedidos',
+    imagen: '/pedido.jpg',
+    route: 'Pedidos',
+    dropdown: 'Pedidos',
+    type: 'Planilla',
+  },
+  {
+    name: 'Facturas',
+    imagen: '/facturas.jpg',
+    route: 'Facturas',
+    dropdown: 'Facturas',
+    type: 'Planilla',
+  },
+  {
+    name: 'Ranking Productos',
+    imagen: '/ranks.jpg',
+    route: 'Productos',
+    dropdown: 'Ranking Productos',
+    type: 'Ranking',
+  },
+];
 
 export default ABMRoutes;

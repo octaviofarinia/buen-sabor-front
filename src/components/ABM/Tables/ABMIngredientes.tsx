@@ -71,11 +71,12 @@ export const ABMIngredientes = () => {
               <FontAwesomeIcon icon={faBowlFood} />
               Artículo Insumo | Ingredientes
             </h1>
-            <Link
-              to={`/employee/ABM/Ingredientes/newRegister`}
-              className="inline-block rounded bg-sky-700 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-sky-800 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-sky-800 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-sky-800 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] dark:bg-cyan-600  dark:shadow-[0_4px_9px_-4px_rgba(84,180,211,0.5)] dark:hover:bg-cyan-700 dark:hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.2),0_4px_18px_0_rgba(84,180,211,0.1)]"
-            >
-              <FontAwesomeIcon icon={faPlus} size="lg" style={{ color: '#ffffff' }} />
+            <Link to={`/employee/ABM/Ingredientes/newRegister`}>
+              <Button
+                content={<FontAwesomeIcon icon={faPlus} size="sm" />}
+                type="button"
+                color="violeta"
+              />{' '}
             </Link>
           </div>
 
@@ -102,7 +103,7 @@ export const ABMIngredientes = () => {
                       <tbody>
                         {insumos.map((ingrediente) => (
                           <tr
-                            className="border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-white dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
+                            className="border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-white dark:odd:bg-neutral-600 dark:even:bg-neutral-700 dark:hover:bg-neutral-700"
                             key={ingrediente.id}
                           >
                             <td className="px-6 py-4 font-bold">{ingrediente.id}</td>
@@ -155,42 +156,45 @@ export const ABMIngredientes = () => {
                                   />
                                 </Link>
                                 <Link to={`/employee/ABM/Ingredientes/edit/${ingrediente.id}`}>
-                                  <button
+                                  <Button
+                                    color="azul"
                                     type="button"
-                                    className="inline-block rounded bg-cyan-400 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out hover:bg-cyan-600 hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-cyan-600 focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-cyan-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] dark:bg-blue-600 dark:shadow-[0_4px_9px_-4px_rgba(84,180,211,0.3)] dark:hover:bg-blue-700 dark:hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.1),0_4px_18px_0_rgba(84,180,211,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.1),0_4px_18px_0_rgba(84,180,211,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.1),0_4px_18px_0_rgba(84,180,211,0.1)]"
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faPenToSquare}
-                                      size="lg"
-                                      style={{ color: '#ffffff' }}
-                                    />
-                                  </button>
+                                    content={
+                                      <FontAwesomeIcon
+                                        icon={faPenToSquare}
+                                        size="sm"
+                                        style={{ color: '#ffffff' }}
+                                      />
+                                    }
+                                  />
                                 </Link>
                                 <Link to={`/employee/ABM/Ingredientes/${ingrediente.id}`}>
-                                  <button
+                                  <Button
+                                    color="verde"
                                     type="button"
-                                    className="inline-block rounded bg-green-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#14a44d] transition duration-150 ease-in-out hover:bg-green-800 hover:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.3),0_4px_18px_0_rgba(20,164,77,0.2)] focus:bg-green-800 focus:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.3),0_4px_18px_0_rgba(20,164,77,0.2)] focus:outline-none focus:ring-0 active:bg-green-900 active:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.3),0_4px_18px_0_rgba(20,164,77,0.2)] dark:bg-emerald-600 dark:shadow-[0_4px_9px_-4px_rgba(20,164,77,0.5)] dark:hover:bg-emerald-700 dark:hover:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.2),0_4px_18px_0_rgba(20,164,77,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.2),0_4px_18px_0_rgba(20,164,77,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(20,164,77,0.2),0_4px_18px_0_rgba(20,164,77,0.1)]"
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faEye}
-                                      size="lg"
-                                      style={{ color: '#ffffff' }}
-                                    />
-                                  </button>
+                                    content={
+                                      <FontAwesomeIcon
+                                        icon={faEye}
+                                        size="sm"
+                                        style={{ color: '#ffffff' }}
+                                      />
+                                    }
+                                  />
                                 </Link>
-                                <button
+                                <Button
                                   type="button"
-                                  className="inline-block rounded bg-red-600 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-red-800 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-red-800 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-red-900 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] dark:bg-rose-600 dark:shadow-[0_4px_9px_-4px_rgba(220,76,100,0.5)] dark:hover:bg-red-700 dark:hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)]"
-                                  onClick={() => {
+                                  color="rojo"
+                                  callback={() => {
                                     handleDeleteRegister(ingrediente.id);
                                   }}
-                                >
-                                  <FontAwesomeIcon
-                                    icon={faTrashCan}
-                                    size="lg"
-                                    style={{ color: '#ffffff' }}
-                                  />
-                                </button>
+                                  content={
+                                    <FontAwesomeIcon
+                                      icon={faTrashCan}
+                                      size="sm"
+                                      style={{ color: '#ffffff' }}
+                                    />
+                                  }
+                                />
                               </div>
                             </td>
                           </tr>

@@ -24,15 +24,14 @@ import {
 import { useUser } from '../../context/UserProvider';
 import { employeeRoles } from '../../Utils/Constants/UserRoles';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Axios, AxiosError } from 'axios';
+import axios, { Axios, AxiosError } from 'axios';
 
 export const PedidosView = () => {
   const { userRole } = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const [pedidos, setPedidos] = useState<PedidoPlanilla[]>([]);
   const [conectado, setConectado] = useState<boolean>(false);
-  const [estadoPedidos, setEstadoPedidos] = useState<string>('');
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently,user } = useAuth0();
   var stompClient: any = null;
 
   const setDataByRole = async () => {
@@ -64,6 +63,29 @@ export const PedidosView = () => {
       .catch(() => {});
 
     setIsLoading(false);
+  };
+
+  const setEstadoDePedido = async (estado: string | null, id?: number) => {
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        await axios
+          .put(backend_url + '/pedidos/cambiar-estado', null, {
+            params: {
+              id: id,
+              estado: estado,
+            },
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+            },
+          })
+          .then(() => {
+            notify('Se cambio de Estado', 'info');
+          })
+      })
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.response?.data as string, 'error');
+      });
   };
 
   const getFiltered = async (estado: string) => {

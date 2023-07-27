@@ -6,11 +6,12 @@ interface Banner {
   color: string;
   text: string;
   icon: JSX.Element;
+  content?: JSX.Element;
   homeButton?: boolean;
   callback?: () => void;
 }
 
-export const Banner = ({ color, text, icon, callback, homeButton }: Banner) => {
+export const Banner = ({ color, text, icon, callback, homeButton, content }: Banner) => {
   return (
     <div className="bg-normal-50 pt-6 sm:pt-8 lg:pt-12">
       <div className="mx-auto max-w-screen-2xl p-4 md:px-8">
@@ -20,7 +21,7 @@ export const Banner = ({ color, text, icon, callback, homeButton }: Banner) => {
           <h2 className="text-xl text-neutral-100 md:text-2xl">
             {icon} {text}
           </h2>
-
+          {content}
           {homeButton && (
             <Button
               content={

@@ -123,7 +123,7 @@ export const FacturasView = () => {
                               callback={() => {
                                 getAccessTokenSilently()
                                   .then(async (accessToken) => {
-                                    anularFactura(accessToken, factura.id);
+                                    anularFactura(accessToken, factura.pedido.id);
                                   })
                                   .catch((err) => {
                                     const error = err as AxiosError;

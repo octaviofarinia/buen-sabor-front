@@ -5,6 +5,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 interface CartContextProps {
   cart: DetallePedido[];
   resetCart: () => void;
+
   addToCart: (detalle: DetallePedido) => void;
   removeFromCart: (detalle: DetallePedido) => void;
   reduceAmountFromCart: (detalle: DetallePedido) => void;
@@ -30,7 +31,7 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     }
 
     return () => {};
-  }, [user?.sub]);
+  }, [user?.sub, cart.length]);
 
   const resetCart = () => {
     setCart([]);
@@ -80,10 +81,10 @@ const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         (detallePedido) => detallePedido.idArticuloManufacturado !== detalle.idArticuloManufacturado
       );
       localStorage.setItem('buenSaborCart' + user?.sub, JSON.stringify(updatedCart));
-        setCart(updatedCart);
+      setCart(updatedCart);
     }
   };
-  
+
   const reduceAmountFromCart = async (detalle: DetallePedido) => {
     if (user?.sub === undefined) {
       await loginWithRedirect({
