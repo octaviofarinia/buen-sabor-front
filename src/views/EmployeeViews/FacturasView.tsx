@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFaceSadCry, faMoneyBills, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faC, faFaceSadCry, faMoneyBills, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Loader } from '../../components/Loader/Loader';
 import { Factura } from '../../Interfaces/ABM/Factura';
 import { AxiosError } from 'axios';
@@ -9,6 +9,7 @@ import { getAll } from '../../API/Requests/BaseRequests';
 import { ConfirmationModal } from '../../components/Modal/ConfirmationModal';
 import { anularFactura } from '../../API/Requests/PlanillaRequests/FacturaRequests';
 import { useAuth0 } from '@auth0/auth0-react';
+import CartConstants from '../../Utils/Constants/CartConstants';
 export const FacturasView = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [facturas, setFacturas] = useState<Factura[]>([]);
@@ -29,10 +30,25 @@ export const FacturasView = () => {
     setIsLoading(false);
   };
 
+  const cancelaFacturas = async (factura: Factura) => {
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        await anularFactura(accessToken, factura.pedido.id);
+      })
+      .then(() => {
+        getFacturas();
+      })
+
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.message, 'error');
+      });
+  };
   useEffect(() => {
     getFacturas();
     return () => {};
   }, []);
+
   return (
     <div className="relative flex w-full flex-col gap-5 bg-neutral-100 px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16">
       {isLoading ? (
@@ -118,25 +134,21 @@ export const FacturasView = () => {
                         </td>
                         <td className="px-6 py-4">{factura.fechaBaja}</td>
                         <td className="px-6 py-4">
-                          {factura.fechaBaja === null ? (
+                          {factura.fechaBaja === null && (
                             <ConfirmationModal
-                              callback={() => {
-                                getAccessTokenSilently()
-                                  .then(async (accessToken) => {
-                                    anularFactura(accessToken, factura.pedido.id);
-                                  })
-                                  .catch((err) => {
-                                    const error = err as AxiosError;
-                                    notify(error.message, 'error');
-                                  });
-                              }}
+                              callback={() => cancelaFacturas(factura)}
                               alertText={'Se emitio la nota de crédito'}
                               contentText="¿Estás seguro de querer emitir una nota de crédito?"
                               confirmationText="Si, emitir nota de crédito"
                               aditionalInfo={
                                 <div>
                                   <p className="fontBebas">Factura ID: {factura.id}</p>
-                                  <p className="fontBebas">Medio de Pago: {factura.medioDePago}</p>
+                                  <p className="fontBebas">
+                                    Medio de Pago:{' '}
+                                    {factura.formaPago === CartConstants.EFECTIVO
+                                      ? CartConstants.EFECTIVO
+                                      : factura.mpPaymentType}
+                                  </p>
                                   <p className="fontBebas">Monto: {factura.totalVenta}</p>
                                   <p className="fontBebas">
                                     Fecha facturacion: {factura.fechaFacturacion}
@@ -144,7 +156,8 @@ export const FacturasView = () => {
                                 </div>
                               }
                             />
-                          ) : (
+                          )}
+                          {factura.fechaBaja !== null && (
                             <h2 className="flex gap-3 py-2 pr-8 text-xl font-bold">
                               <FontAwesomeIcon icon={faXmark} size="lg" /> Se emitio nota de crédito
                             </h2>

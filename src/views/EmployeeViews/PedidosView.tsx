@@ -11,7 +11,6 @@ import {
   EstadosSelect,
   EstadosSelectFiltro,
   PedidoStatus,
-  setEstadoDePedido,
 } from '../../Utils/PlanillaUtils';
 import { backend_url } from '../../Utils/ConstUtils';
 import {

@@ -16,6 +16,8 @@ export const MP_PostPagoView = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const mpstatus = queryParams.get('status');
+  const [status, setStatus] = useState<boolean>(true);
+
   const { resetCart } = useCart();
   const [timer, setTimer] = useState<number>(15);
   const { getAccessTokenSilently } = useAuth0();
@@ -99,7 +101,10 @@ export const MP_PostPagoView = () => {
               resetCart();
               if (response.status !== 200) {
                 notify('Se genero tu pedido, pero algo salio mal. Por favor, contactanos', 'error');
+              }else{
+                setStatus(true)
               }
+             
             })
             .catch((err) => {
               const error = err as AxiosError;

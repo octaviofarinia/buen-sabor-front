@@ -65,7 +65,7 @@ export const PostPagoView = () => {
   }, []);
   return (
     <div>
-      {localStorage.getItem('informacionPedido') === null ? (
+      {!status ? (
         <Banner
           color={'rose'}
           icon={<FontAwesomeIcon icon={faFaceDizzy} size="lg" />}
