@@ -3,7 +3,10 @@ import { AxiosError } from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
 import { Loader } from '../../components/Loader/Loader';
-import { getRankedProductos } from '../../API/Requests/ProductoRequests/ProductoRequests';
+import {
+  downloadExcelRankedProductos,
+  getRankedProductos,
+} from '../../API/Requests/ProductoRequests/ProductoRequests';
 import { RankedManufacturados } from '../../Interfaces/Ranking/RankedManufacturados';
 import {
   Chart as ChartJS,
@@ -18,11 +21,17 @@ import {
   LineElement,
   Title,
 } from 'chart.js';
-import { defineMultiDatasetChart, defineOnlyDatasetChart } from '../../Utils/ChartUtils';
+import {
+  defineMultiDatasetChart,
+  defineOnlyDatasetChart,
+  generatePieChart,
+  generatePolarChart,
+  generateVerticalBarChart,
+} from '../../Utils/ChartUtils';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faFileExcel, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../../components/Botones/Button';
 import { parseDate } from '../../Utils/StringUtils';
 import { Banner } from '../../components/Banner/Banner';
@@ -76,60 +85,39 @@ export const RankingView = () => {
 
     setLoading(false);
   };
-
-  const generateVerticalBarChart = (dataToGraph: string[], labelToGraph?: string) => {
-    const dataArray = dataToGraph.map((data) => {
-      return rankedArticles ? (rankedArticles.map((a) => a[data]) as number[]) : [];
-    });
-
-    const colorArray = [
-      'rgba(255, 99, 132, 1)',
-      'rgba(54, 162, 235, 1)',
-      'rgba(255, 206, 86, 1)',
-      'rgba(75, 192, 192, 1)',
-      'rgba(153, 102, 255, 1)',
-      'rgba(255, 159, 64, 1)',
-    ];
-    console.log(colorArray[0]);
-    let labels = rankedArticles ? rankedArticles.map((a) => a.denominacion) : [];
-
-    const verticalData = defineMultiDatasetChart({
-      labels: labels,
-      datasets: dataArray.map((data, index) => ({
-        data: data,
-        label: dataToGraph[index],
-        borderRgb: colorArray[index],
-        rgb: colorArray[index],
-      })),
-    });
-
-    setLineChartData(verticalData as any);
+  const getExcel = async () => {
+    await getAccessTokenSilently()
+      .then(async (accessToken) => {
+        await downloadExcelRankedProductos(accessToken, [
+          parseDate(startDate!),
+          parseDate(endDate!),
+        ]);
+      })
+      .catch((err) => {
+        const error = err as AxiosError;
+        notify(error.response?.data as string, 'error');
+      });
   };
 
-  const generatePolarChart = (dataToGraph: string, labelToGraph?: string) => {
-    let data = rankedArticles!.map((a) => a[dataToGraph]) as number[];
-    let labels = rankedArticles!.map((a) => a.denominacion);
-
-    const polarData = defineOnlyDatasetChart({
-      data: data,
-      pointerLabel: labelToGraph!,
-      labels: labels,
+  const generateGraph = (dataToGraph: string[], labelToGraph: string) => {
+    generatePieChart({
+      chartData: rankedArticles!,
+      charDataSeter: setPieChartData,
+      dataToGraph: dataToGraph,
+      labelToGraph: labelToGraph,
     });
-
-    setPolarChartData(polarData as any);
-  };
-
-  const generatePieChart = (dataToGraph: string, labelToGraph?: string) => {
-    let data = rankedArticles!.map((a) => a[dataToGraph]) as number[];
-    let labels = rankedArticles!.map((a) => a.denominacion);
-
-    const pieData = defineOnlyDatasetChart({
-      data: data,
-      pointerLabel: labelToGraph!,
-      labels: labels,
+    generatePolarChart({
+      chartData: rankedArticles!,
+      charDataSeter: setPolarChartData,
+      dataToGraph: dataToGraph,
+      labelToGraph: labelToGraph,
     });
-
-    setPieChartData(pieData as any);
+    generateVerticalBarChart({
+      chartData: rankedArticles!,
+      charDataSeter: setLineChartData,
+      dataToGraph: dataToGraph,
+      labelToGraph: labelToGraph,
+    });
   };
   useEffect(() => {}, []);
   return (
@@ -167,7 +155,7 @@ export const RankingView = () => {
                   maxDate={new Date(Date.now())}
                 />
                 {endDate && startDate && (
-                  <h2 className="lg:texl-2xl flex flex-col justify-center rounded-md bg-green-500 p-2 text-center text-lg text-neutral-100 shadow-md md:text-xl">
+                  <h2 className="lg:texl-2xl gap-3 flex flex-col justify-center rounded-md bg-green-500 p-2 text-center text-lg text-neutral-100 shadow-md md:text-xl">
                     Periodo seleccionado
                     <span>{parseDate(startDate) + ' - ' + parseDate(endDate)}</span>
                     <Button
@@ -179,6 +167,21 @@ export const RankingView = () => {
                         getRankedArticles();
                       }}
                     />
+                    {rankedArticles != null && (
+                      <Button
+                        type="button"
+                        content={
+                          <>
+                            Descargar excel <FontAwesomeIcon icon={faFileExcel} size="lg" />
+                          </>
+                        }
+                        color="verde"
+                        fullsize={true}
+                        callback={() => {
+                          getExcel();
+                        }}
+                      />
+                    )}
                   </h2>
                 )}
               </div>
@@ -241,12 +244,7 @@ export const RankingView = () => {
                         <div className="flex gap-5">
                           <Button
                             callback={() => {
-                              generatePieChart('costoTotal', 'Costo Total');
-                              generatePolarChart('costoTotal', 'Costo Total');
-                              generateVerticalBarChart(
-                                ['costoTotal', 'utilidadTotal'],
-                                'Costo Total'
-                              );
+                              generateGraph(['costoTotal', 'ventaTotal'], 'Costo Total');
                             }}
                             color="azul"
                             content={'Generar graficos en base a costo total'}
@@ -255,9 +253,7 @@ export const RankingView = () => {
 
                           <Button
                             callback={() => {
-                              generatePieChart('utilidadTotal', 'Utilidad');
-                              generatePolarChart('utilidadTotal', 'Utilidad');
-                              generateVerticalBarChart(['utilidadTotal', 'ventaTotal'], 'Utilidad');
+                              generateGraph(['utilidadTotal', 'ventaTotal'], 'Utilidad Total');
                             }}
                             color="azul"
                             content={'Generar graficos en base a la utilidad'}
@@ -266,9 +262,7 @@ export const RankingView = () => {
 
                           <Button
                             callback={() => {
-                              generatePieChart('ventaTotal', 'Ventas');
-                              generatePolarChart('ventaTotal', 'Ventas');
-                              generateVerticalBarChart(['ventaTotal', 'costoTotal'], 'Venta');
+                              generateGraph(['ventaTotal', 'costoTotal'], 'Venta Total');
                             }}
                             color="azul"
                             content={'Generar graficos en base a las ventas'}
@@ -281,21 +275,21 @@ export const RankingView = () => {
                       text="Información lista. Dale al Boton si quieres generar gráficos"
                     />
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3  text-2xl gap-10">
+                    <div className="grid grid-cols-1 gap-10  text-2xl lg:grid-cols-3">
                       {pieChartData && (
-                        <div className="flex flex-col items-center p-5 dark:bg-neutral-100 rounded-lg shadow-md ">
+                        <div className="flex flex-col items-center rounded-lg p-5 shadow-md dark:bg-neutral-100 ">
                           <h3>Gráfico de torta</h3>
-                          <Pie data={pieChartData as ChartData<'pie'>}  />
+                          <Pie data={pieChartData as ChartData<'pie'>} />
                         </div>
                       )}
                       {lineChartData && (
-                        <div className="flex flex-col items-center p-5 dark:bg-neutral-100 rounded-lg shadow-md ">
+                        <div className="flex flex-col items-center rounded-lg p-5 shadow-md dark:bg-neutral-100 ">
                           <h3>Gráfico de Líneas</h3>
                           <Line data={lineChartData as ChartData<'line'>} />
                         </div>
                       )}
                       {polarChartData && (
-                        <div className="flex flex-col items-center p-5 dark:bg-neutral-100 rounded-lg shadow-md  ">
+                        <div className="flex flex-col items-center rounded-lg p-5 shadow-md dark:bg-neutral-100  ">
                           <h3>Gráfico de Área Polar</h3>
                           <PolarArea data={polarChartData as ChartData<'polarArea'>} />
                         </div>

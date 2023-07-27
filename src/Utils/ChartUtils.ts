@@ -1,3 +1,5 @@
+import { ChartData } from 'chart.js/auto';
+import { RankedManufacturados } from '../Interfaces/Ranking/RankedManufacturados';
 export interface BaseChartData {
   pointerLabel: string;
   data: number[];
@@ -17,6 +19,12 @@ interface MultiDataSetChart {
   }[];
 }
 
+interface ChartGenerator {
+  chartData: RankedManufacturados[];
+  dataToGraph: string[];
+  labelToGraph?: string;
+  charDataSeter: React.Dispatch<ChartData<any>>;
+}
 export const defineOnlyDatasetChart = (config: BaseChartData) => {
   const data = {
     labels: config.labels,
@@ -61,3 +69,61 @@ export const defineMultiDatasetChart = (config: MultiDataSetChart) => {
 
   return data;
 };
+
+const generateVerticalBarChart = (config: ChartGenerator) => {
+  const dataArray = config.dataToGraph.map((data) => {
+    return config.chartData ? (config.chartData.map((a) => a[data]) as number[]) : [];
+  });
+
+  const colorArray = [
+    'rgba(255, 99, 132, 1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 206, 86, 1)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(153, 102, 255, 1)',
+    'rgba(255, 159, 64, 1)',
+  ];
+  let labels = config.chartData ? config.chartData.map((a) => a.denominacion) : [];
+
+  const verticalData = defineMultiDatasetChart({
+    labels: labels,
+    datasets: dataArray.map((data, index) => ({
+      data: data,
+      label: config.dataToGraph[index],
+      borderRgb: colorArray[index],
+      rgb: colorArray[index],
+    })),
+  });
+
+  config.charDataSeter(verticalData as any);
+};
+
+const generatePolarChart = (config: ChartGenerator) => {
+  let data = config.chartData!.map((a) => a[config.dataToGraph[0]]) as number[];
+  let labels = config.chartData!.map((a) => a.denominacion);
+
+  const polarData = defineOnlyDatasetChart({
+    data: data,
+    pointerLabel: config.labelToGraph!,
+    labels: labels,
+  });
+
+  config.charDataSeter(polarData as any);
+};
+
+const generatePieChart = (config: ChartGenerator) => {
+  let data = config.chartData!.map((a) => a[config.dataToGraph[0]]) as number[];
+  let labels = config.chartData!.map((a) => a.denominacion);
+
+  const pieData = defineOnlyDatasetChart({
+    data: data,
+    pointerLabel: config.labelToGraph!,
+    labels: labels,
+  });
+
+  config.charDataSeter(pieData as any);
+};
+
+
+
+export { generatePieChart, generatePolarChart, generateVerticalBarChart };

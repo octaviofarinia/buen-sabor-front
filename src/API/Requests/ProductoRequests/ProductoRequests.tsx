@@ -6,6 +6,7 @@ import { backend_url } from '../../../Utils/ConstUtils';
 import { debounce, throttle } from 'lodash';
 import { THROTTLE_DELAY_SAVE_UPDATE, throttleConfig } from '../BaseRequests';
 import { notify } from '../../../components/Toast/ToastAlert';
+import { saveAs } from 'file-saver';
 
 interface ProductoRequestProps {
   producto: ArticuloManufacturado;
@@ -123,6 +124,28 @@ export const getRankedProductos = async (token: string, fechas: [string, string]
       }
     );
     return response.data;
+  } catch (err) {
+    const error = err as AxiosError;
+    notify(error.message, 'error');
+  }
+};
+
+export const downloadExcelRankedProductos = async (token: string, fechas: [string, string]) => {
+  try {
+    const response = await axios.get(
+      `${backend_url}/articulos-manufacturados/ranking/excel?desde=${fechas[0]}&hasta=${fechas[1]}`,
+      {
+        responseType: 'blob',
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      }
+    );
+    const blob = new Blob([response.data], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+    saveAs(blob, 'rankingProductos.xlsx');
+    return response.status;
   } catch (err) {
     const error = err as AxiosError;
     notify(error.message, 'error');
