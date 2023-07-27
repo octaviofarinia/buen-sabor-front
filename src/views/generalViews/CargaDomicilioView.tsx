@@ -20,7 +20,6 @@ const CargaDomicilioView: React.FC = () => {
 
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-  const isNew = queryParams.get('new') === 'true';
   const { user, getAccessTokenSilently } = useAuth0();
   const [domicilio, setDomicilio] = useState<Domicilio>(base_domicilio);
 
@@ -67,9 +66,8 @@ const CargaDomicilioView: React.FC = () => {
     }
   };
   useEffect(() => {
-    if (isNew) {
-      sendUserData();
-    }
+    sendUserData();
+  
   }, [user]);
 
   return (
