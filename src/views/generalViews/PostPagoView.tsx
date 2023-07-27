@@ -46,7 +46,7 @@ export const PostPagoView = () => {
           })
           .catch((err) => {
             const error = err as AxiosError;
-            notify(error.message, 'error');
+            notify(error.response?.data as string , 'error');
           });
       }
     }
