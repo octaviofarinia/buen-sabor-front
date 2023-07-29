@@ -12,3 +12,4 @@ export const parseDate = (date: Date) => {
     year: 'numeric',
   });
 };
+

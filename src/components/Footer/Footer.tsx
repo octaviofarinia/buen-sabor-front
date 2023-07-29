@@ -39,6 +39,13 @@ export const Footer = () => {
             >
               <p>Nuestro Equipo</p>
             </Link>
+            <Link
+              to="/TuPedido"
+              className={`flex flex-wrap px-3  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400   active:bg-amber-500
+              active:text-slate-900 `}
+            >
+              <p>Tu Pedido</p>
+            </Link>
           </div>
           <div className="flex w-full flex-col gap-3 px-4 pt-8  text-neutral-100 sm:w-1/2  lg:w-1/3">
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">Formas de Retiro</h2>
@@ -48,7 +55,7 @@ export const Footer = () => {
             </div>
           </div>
           <div className="flex w-full flex-col justify-center overflow-hidden   lg:w-1/3">
-            <div className="flex gap-5 bg-amber-500 p-5 md:p-12 text-neutral-100 rounded-lg mx-auto">
+            <div className="mx-auto flex gap-5 rounded-lg bg-amber-500 p-5 text-neutral-100 md:p-12">
               <h5 className="text-lg md:text-2xl">Nos encanta que nos visites</h5>
               <FontAwesomeIcon icon={faFaceKissBeam} size="xl" />
             </div>

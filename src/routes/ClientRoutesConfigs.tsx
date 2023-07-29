@@ -9,6 +9,7 @@ import { TeamView } from '../views/staticViews/TeamView';
 import { MP_PostPagoView } from '../views/generalViews/MP_PostPagoView';
 import { PostPagoView } from '../views/generalViews/PostPagoView';
 import { PerfilView } from '../views/generalViews/PerfilView';
+import { PedidoClienteView } from '../views/generalViews/PedidoClienteView';
 
 const ClientDinamicRoutes = [
   { path: 'Productos/:categoria', element: '' },
@@ -25,6 +26,11 @@ export const ClientStaticRoutes = [
   { name: 'Productos', path: '/Productos', element: <ProductsView /> },
   { name: 'Nuestro Equipo', path: '/NuestroEquipo', element: <TeamView /> },
   { name: 'Preguntas', path: '/Preguntas', element: <PreguntasView /> },
+  {
+    name: 'Tu pedido',
+    path: '/TuPedido',
+    element: <AuthenticationGuard component={PedidoClienteView} />,
+  },
 ];
 
 export const AllClientRoutes = [...ClientDinamicRoutes, ...ClientStaticRoutes];

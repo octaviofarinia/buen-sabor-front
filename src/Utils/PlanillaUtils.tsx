@@ -169,3 +169,25 @@ export const EstadosSelectFiltro = ({ pedido, callback }: EstadoSelect) => {
     </select>
   );
 };
+export function getTextColorByPedidoStatus(status: string | null) {
+  switch (status) {
+    case PedidoStatus.PAGADO:
+      return 'text-green-700';
+    case PedidoStatus.COMPLETADO:
+      return 'text-green-400';
+    case PedidoStatus.PENDIENTE_PAGO:
+      return 'text-amber-500';
+    case PedidoStatus.PREPARACION:
+      return 'text-violet-700';
+    case PedidoStatus.EN_CAMINO:
+      return 'text-blue-700';
+    case PedidoStatus.PENDIENTE_ENVIO:
+      return 'text-sky-700';
+    case PedidoStatus.CANCELADO:
+      return 'text-rose-700';
+    case PedidoStatus.NOTA_CREDITO:
+      return 'text-rose-700';
+    default:
+      return ''; // Opcional: devolver un valor predeterminado o vacío si el estado no coincide con ninguna opción.
+  }
+}

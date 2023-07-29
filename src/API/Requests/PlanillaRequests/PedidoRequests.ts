@@ -49,6 +49,19 @@ export const getPedidos = async (estado: string | null, token: string) => {
   }
 };
 
+export const getPedidosByUser = async (userId: string, token: string) => {
+  try {
+    const response = await axios.get(`${backend_url}/pedidos/listar/usuario`, {
+      headers: { auth0Id: userId, Authorization: 'Bearer ' + token },
+    });
+    return response.data;
+  } catch (err) {
+    const error = err as AxiosError;
+    console.log(error);
+    notify('Ocurrio un error: ' + (error.response?.data as string), 'error');
+  }
+};
+
 export const getPedido = async (token: string, id?: number) => {
   try {
     const response = await axios.get(`${backend_url}/pedidos/${id}/detalles`, {
@@ -75,10 +88,9 @@ export const getPedidosCajero = async (token: string) => {
   return [...pendientesPagoCajero, ...pagadosCajero];
 };
 
-export const getPedidosCocinero=async (token: string) => {
+export const getPedidosCocinero = async (token: string) => {
   const pagados = await getPedidos(PedidoStatus.PAGADO, token);
   const pendientesCocinero = await getPedidos(PedidoStatus.PENDIENTE_PAGO, token);
   const preparacion = await getPedidos(PedidoStatus.PREPARACION, token);
-  return [...pagados, ...pendientesCocinero,...preparacion];
-
-}
+  return [...pagados, ...pendientesCocinero, ...preparacion];
+};

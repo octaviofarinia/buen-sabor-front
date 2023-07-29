@@ -8,7 +8,7 @@ export interface PedidoPlanilla extends Base {
   fechaAlta: string | null;
   fechaModificacion: string | null;
   horaEstimadaFinalizacion: string | null;
-  totalCost: number | null;
+  totalCosto: number | null;
   tipoEnvio: string | null;
   formaPago: string | null;
   domicilioEntrega?: Domicilio;
