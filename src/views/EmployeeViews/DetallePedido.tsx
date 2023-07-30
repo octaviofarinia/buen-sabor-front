@@ -100,7 +100,7 @@ export const DetallePedidoView = () => {
         <Loader texto="Cargando registros" closeLoading={setLoading} />
       ) : (
         <>
-          <div className="flex flex-col items-end w-full">
+          <div className="flex w-full flex-col items-end">
             <Link to={`/employee/Planilla/Pedidos`} className="">
               <Button content="Volver a pedidos" color="amarillo" type="button" />
             </Link>
@@ -122,7 +122,7 @@ export const DetallePedidoView = () => {
                         <span className="text-neutral-900 dark:text-white ">Denominación</span>
                         {detalle.articuloManufacturado?.denominacion}
                       </h5>
-                    
+
                       <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-2 border-l-2 border-neutral-300  py-5 px-5  font-semibold leading-none text-neutral-500  shadow-md dark:border-amber-400 dark:bg-neutral-700 dark:text-neutral-500  ">
                         <span className="text-neutral-900 dark:text-white ">Cantidad</span>
                         {detalle.cantidad}
@@ -137,7 +137,8 @@ export const DetallePedidoView = () => {
                           ? pedidos[index]?.domicilioEntrega?.calle +
                               ' ' +
                               pedidos[index]?.domicilioEntrega?.numero +
-                              pedidos[index]?.domicilioEntrega?.esDepartamento &&
+                              pedidos[index]?.domicilioEntrega?.numeroDpto !=
+                              null &&
                             'Departamento ' +
                               pedidos[index]?.domicilioEntrega?.numeroDpto +
                               ' ' +
