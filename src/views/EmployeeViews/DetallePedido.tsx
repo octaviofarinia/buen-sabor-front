@@ -129,6 +129,7 @@ export const DetallePedidoView = () => {
                       </h5>
                       <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-2 border-l-2 border-neutral-300  py-5 px-5  font-semibold leading-none text-neutral-500  shadow-md dark:border-amber-400 dark:bg-neutral-700 dark:text-neutral-500  ">
                         <span className="text-neutral-900 dark:text-white ">Domicilio</span>
+
                         {pedidos[index]?.domicilioEntrega !== null
                           ? pedidos[index]?.domicilioEntrega?.calle +
                             ' ' +
@@ -142,21 +143,25 @@ export const DetallePedidoView = () => {
                             pedidos[index]?.domicilioEntrega?.pisoDpto}
                       </h5>
                       {[employeeRoles.COCINERO, employeeRoles.ADMINISTRADOR].includes(userRole) && (
-                        <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-2 border-l-2 border-neutral-300  py-5 px-5  font-semibold leading-none text-neutral-500  shadow-md dark:border-amber-400 dark:bg-neutral-700 dark:text-neutral-500  ">
+                        <h5 className="border-1  mb-2 flex flex-col flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl  py-5 px-5  font-semibold leading-none text-neutral-500  shadow-md dark:border-amber-400 dark:bg-neutral-700 dark:text-neutral-500  ">
                           <span className="text-neutral-900 dark:text-white ">Ingredientes</span>
                           <div className="flex flex-col">
                             {detallesProducto[index] !== undefined ? (
                               detallesProducto[index].map((detalle) => (
-                                <p key={detalle.id} className="flex gap-x-2 gap-y-5 py-2">
-                                  {detalle.articuloInsumo?.denominacion}
-                                  <span className="border-r-4 border-r-neutral-900  text-neutral-900 dark:border-r-neutral-100 dark:text-neutral-100"></span>
-                                  <span className="text-amber-500">
-                                    {detalle.articuloInsumo?.stockActual}
-                                  </span>
-                                  <span className="text-neutral-900">
-                                    {detalle.unidadMedida?.abreviatura}
-                                  </span>
-                                </p>
+                                <div
+                                  key={'detalleStock' + detalle.id}
+                                  className="flex w-full justify-between gap-2  text-neutral-500 dark:text-neutral-300"
+                                >
+                                  <p className="flex gap-2  text-neutral-500 dark:text-neutral-200">
+                                    {detalle.articuloInsumo?.denominacion}
+                                  </p>
+                                  <p className="text-end ">
+                                    {detalle.cantidad}{' '}
+                                    <span className="text-amber-400">
+                                      {detalle.unidadMedida?.abreviatura}
+                                    </span>
+                                  </p>
+                                </div>
                               ))
                             ) : (
                               <p>Cargando ingredientes...</p>
