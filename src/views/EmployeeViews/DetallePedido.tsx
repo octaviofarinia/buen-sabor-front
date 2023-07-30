@@ -58,8 +58,6 @@ export const DetallePedidoView = () => {
         notify('Ocurrió un error: ' + axiosErr.response?.status, 'error');
       });
 
-    notify('Todas las solicitudes se completaron correctamente', 'success');
-
     setLoading(false);
   };
   const getPedidoPlanilla = async () => {
@@ -81,8 +79,6 @@ export const DetallePedidoView = () => {
         const axiosErr = err as AxiosError;
         notify('Ocurrió un error: ' + axiosErr.response?.status, 'error');
       });
-
-    notify('Todas las solicitudes se completaron correctamente', 'success');
 
     setLoading(false);
   };
@@ -133,17 +129,17 @@ export const DetallePedidoView = () => {
                       </h5>
                       <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-2 border-l-2 border-neutral-300  py-5 px-5  font-semibold leading-none text-neutral-500  shadow-md dark:border-amber-400 dark:bg-neutral-700 dark:text-neutral-500  ">
                         <span className="text-neutral-900 dark:text-white ">Domicilio</span>
-                        {pedidos[index]?.domicilioEntrega != undefined
+                        {pedidos[index]?.domicilioEntrega !== null
                           ? pedidos[index]?.domicilioEntrega?.calle +
-                              ' ' +
-                              pedidos[index]?.domicilioEntrega?.numero +
-                              pedidos[index]?.domicilioEntrega?.numeroDpto !=
-                              null &&
-                            'Departamento ' +
-                              pedidos[index]?.domicilioEntrega?.numeroDpto +
-                              ' ' +
-                              pedidos[index]?.domicilioEntrega?.pisoDpto
+                            ' ' +
+                            pedidos[index]?.domicilioEntrega?.numero
                           : CartConstants.RETIRO_EN_LOCAL}
+
+                        {pedidos[index].domicilioEntrega?.numeroDpto !== null &&
+                          'Departamento ' +
+                            pedidos[index]?.domicilioEntrega?.numeroDpto +
+                            ' ' +
+                            pedidos[index]?.domicilioEntrega?.pisoDpto}
                       </h5>
                       {[employeeRoles.COCINERO, employeeRoles.ADMINISTRADOR].includes(userRole) && (
                         <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-2 border-l-2 border-neutral-300  py-5 px-5  font-semibold leading-none text-neutral-500  shadow-md dark:border-amber-400 dark:bg-neutral-700 dark:text-neutral-500  ">
