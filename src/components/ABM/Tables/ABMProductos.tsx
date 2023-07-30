@@ -103,8 +103,8 @@ export const ABMProductos = () => {
                           <tr
                             className={`border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200
 dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-neutral-100 dark:odd:bg-neutral-600
-dark:even:bg-neutral-700 dark:hover:bg-neutral-700 ${
-                              producto.fechaBaja != undefined && 'bg-rose-400'
+dark:even:bg-neutral-700 dark:hover:bg-neutral-700  ${
+                              producto.fechaBaja != null && 'bg-rose-200 hover:bg-rose-400'
                             }`}
                             key={producto.id}
                           >

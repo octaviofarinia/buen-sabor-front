@@ -3,7 +3,7 @@ import React from 'react';
 import { ArticuloInsumo } from '../../../../Interfaces/ABM/ArticuloInsumo';
 import { Button } from '../../../Botones/Button';
 import { ToastAlert, notify } from '../../../Toast/ToastAlert';
-import { getAll } from '../../../../API/Requests/BaseRequests';
+import { getAll, getAllActive } from '../../../../API/Requests/BaseRequests';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AxiosError } from 'axios';
 export interface IngredienteModalProps {
@@ -20,7 +20,7 @@ export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps
   const getIngredientes = async () => {
     await getAccessTokenSilently()
       .then(async (accessToken) => {
-        const data = await getAll({ endpoint: 'articulos-insumo', token: accessToken });
+        const data = await getAllActive({ endpoint: 'articulos-insumo', token: accessToken });
         setIngredientes(data);
       })
       .catch((err) => {
