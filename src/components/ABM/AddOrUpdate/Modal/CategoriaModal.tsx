@@ -61,12 +61,11 @@ export const CategoryModal = ({
               dark:border-b-neutral-400 dark:bg-neutral-500
               dark:text-neutral-100 dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
         >
-          <td className="whitespace-nowrap px-6 py-4">{categoria.id}</td>
-          <td className="whitespace-nowrap px-6 py-4">{categoria.denominacion}</td>
-          <td className="whitespace-nowrap px-6 py-4">
+          <td className="whitespace-nowrap  px-3 py-4 md:px-6">{categoria.denominacion}</td>
+          <td className="hidden whitespace-nowrap  px-3 py-4 md:block md:px-6">
             {categoria.idRubroPadre !== null ? categoria.idRubroPadre : 'No posee'}
           </td>
-          <td className="px-6 py-4">
+          <td className=" px-3 py-4 md:px-6">
             <div className="flex justify-end">
               <Button
                 callback={() => {
@@ -94,7 +93,7 @@ export const CategoryModal = ({
   );
   const closeButton = <Button callback={() => toggleVisible(false)} content="x" type="button" />;
   return (
-    <div className=" w-full">
+    <div className=" w-full min-h-600">
       {openButton}
       <ToastAlert />
       <div
@@ -105,6 +104,7 @@ export const CategoryModal = ({
         role="dialog"
         aria-modal={true}
       >
+          <div className='h-36 top-0 sm:hidden'></div>
         <div className=" flex h-full w-full items-center justify-center px-4 pt-4 pb-20 text-center  ">
           {/*Modal panel : This is where you put the pop-up's content, the div on top this coment is the wrapper */}
           <div
@@ -117,23 +117,23 @@ export const CategoryModal = ({
               </h2>
               {closeButton}
             </div>
-            <div className="overflow-hidden overflow-x-auto rounded-lg px-8 sm:-mx-6 lg:-mx-8 ">
+            <div className="overflow-hidden overflow-x-auto rounded-lg px-1 sm:-mx-6 sm:px-4 md:px-6 lg:-mx-8 lg:px-10">
               <div className="mt-3 overflow-hidden  rounded-lg text-left">
                 <table className="min-w-full bg-neutral-100 text-left text-sm font-light dark:bg-neutral-900 ">
                   <thead className="rounded-t-md font-medium uppercase">
                     <tr className="rounded-t-md border-b-4 border-b-neutral-500 bg-neutral-100  dark:border-b-white dark:bg-neutral-800 ">
                       <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-neutral-100">
-                        ID
-                      </th>
-                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-neutral-100">
                         Denominación
                       </th>
-                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-neutral-100">
+                      <th
+                        scope="col"
+                        className="hidden px-3 py-4 text-neutral-900 dark:text-neutral-100 md:block md:px-6"
+                      >
                         ID Rubro Padre
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-4 text-center text-neutral-900 dark:text-neutral-100"
+                        className=" px-3 py-4 text-center text-neutral-900 dark:text-neutral-100 md:px-6"
                       >
                         Seleccionar
                       </th>

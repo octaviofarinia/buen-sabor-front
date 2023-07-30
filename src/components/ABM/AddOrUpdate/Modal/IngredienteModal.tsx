@@ -73,7 +73,7 @@ export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal={true}
-      >
+      >    <div className='h-36 top-0 sm:hidden'></div>
         <div className=" flex h-full w-full items-center justify-center px-4 pt-4 pb-20 text-center  ">
           {/*Modal panel : This is where you put the pop-up's content, the div on top this coment is the wrapper */}
           <div
@@ -84,7 +84,7 @@ export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps
               <h2 className="w-full flex-grow text-2xl text-neutral-100">Elige el ingrediente:</h2>
               {closeButton}
             </div>
-            <div className="overflow-hidden overflow-x-auto rounded-lg px-8 sm:-mx-6 lg:-mx-8 ">
+            <div className="overflow-hidden overflow-x-auto rounded-lg px-1 sm:-mx-6 sm:px-4 md:px-6 lg:-mx-8 lg:px-10">
               <div className="mt-3 overflow-hidden  rounded-lg text-left">
                 <table className="min-w-full bg-neutral-100 text-left text-sm font-light dark:bg-neutral-900 ">
                   <thead className="rounded-t-md font-medium uppercase">
