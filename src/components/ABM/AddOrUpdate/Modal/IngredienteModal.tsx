@@ -41,11 +41,15 @@ export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps
               dark:border-b-neutral-400 dark:bg-neutral-500
               dark:text-white dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
         >
-          <td className="whitespace-nowrap px-6 py-4">{ingrediente.id}</td>
+          <td className="whitespace-nowrap px-6 py-4 hidden md:block">{ingrediente.id}</td>
           <td className="whitespace-nowrap px-6 py-4">{ingrediente.denominacion}</td>
           <td className="px-6 py-4">
             <div className="flex justify-end">
-              <Button callback={() => getSetInsumo(ingrediente)} content="Seleccionar" type="button" />
+              <Button
+                callback={() => getSetInsumo(ingrediente)}
+                content="Seleccionar"
+                type="button"
+              />
             </div>
           </td>
         </tr>
@@ -73,15 +77,19 @@ export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal={true}
-      >    <div className='h-36 top-0 sm:hidden'></div>
-        <div className=" flex h-full w-full items-center justify-center px-4 pt-4 pb-20 text-center  ">
+      >
+        {' '}
+        <div className="top-0 h-20 sm:hidden sm:h-0"></div>
+        <div className=" top-10 right-10 flex h-full w-full items-start  justify-center  scroll-auto text-center md:items-center ">
           {/*Modal panel : This is where you put the pop-up's content, the div on top this coment is the wrapper */}
           <div
-            className="mx-52 h-min transform overflow-hidden  
-          rounded-lg bg-neutral-900 p-5 text-left align-bottom shadow-2xl transition-all sm:my-8"
+            className="  h-min transform overflow-hidden rounded-lg  bg-neutral-900 p-5 py-10
+        text-left align-bottom shadow-2xl transition-all sm:top-auto sm:my-8 md:mx-32 lg:mx-52"
           >
             <div className="flex   gap-16">
-              <h2 className="w-full flex-grow text-2xl text-neutral-100">Elige el ingrediente:</h2>
+              <h2 className="w-full flex-grow text-2xl text-neutral-100">
+                Elige el ingrediente
+              </h2>
               {closeButton}
             </div>
             <div className="overflow-hidden overflow-x-auto rounded-lg px-1 sm:-mx-6 sm:px-4 md:px-6 lg:-mx-8 lg:px-10">
@@ -89,7 +97,7 @@ export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps
                 <table className="min-w-full bg-neutral-100 text-left text-sm font-light dark:bg-neutral-900 ">
                   <thead className="rounded-t-md font-medium uppercase">
                     <tr className="rounded-t-md border-b-4 border-b-neutral-500 bg-neutral-100  dark:border-b-white dark:bg-neutral-800 ">
-                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-white">
+                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-white  hidden md:block">
                         ID
                       </th>
                       <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-white">

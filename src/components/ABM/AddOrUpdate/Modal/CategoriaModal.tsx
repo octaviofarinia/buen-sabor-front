@@ -66,7 +66,7 @@ export const CategoryModal = ({
             {categoria.idRubroPadre !== null ? categoria.idRubroPadre : 'No posee'}
           </td>
           <td className=" px-3 py-4 md:px-6">
-            <div className="flex justify-end">
+            <div className="flex justify-end px-1">
               <Button
                 callback={() => {
                   setRubroArticuloPadre !== undefined && setFather(categoria);
@@ -93,7 +93,7 @@ export const CategoryModal = ({
   );
   const closeButton = <Button callback={() => toggleVisible(false)} content="x" type="button" />;
   return (
-    <div className=" w-full min-h-600">
+    <div className=" w-full">
       {openButton}
       <ToastAlert />
       <div
@@ -104,12 +104,12 @@ export const CategoryModal = ({
         role="dialog"
         aria-modal={true}
       >
-          <div className='h-36 top-0 sm:hidden'></div>
-        <div className=" flex h-full w-full items-center justify-center px-4 pt-4 pb-20 text-center  ">
+        <div className='h-20 top-0 sm:hidden sm:h-0'></div>
+        <div className=" flex h-full w-full items-start md:items-center justify-center  text-center  top-10 right-10 scroll-auto ">
           {/*Modal panel : This is where you put the pop-up's content, the div on top this coment is the wrapper */}
           <div
-            className="mx-52 h-min transform overflow-hidden  
-          rounded-lg bg-neutral-900 p-5 text-left align-bottom shadow-2xl transition-all sm:my-8"
+            className="  h-min transform overflow-hidden rounded-lg  bg-neutral-900 p-5 py-10
+          text-left align-bottom shadow-2xl transition-all sm:top-auto sm:my-8 md:mx-32 lg:mx-52"
           >
             <div className="flex   gap-16">
               <h2 className="w-full flex-grow text-2xl text-neutral-100">

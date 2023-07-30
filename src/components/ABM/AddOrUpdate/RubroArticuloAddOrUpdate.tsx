@@ -18,6 +18,7 @@ import { AxiosError } from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Loader } from '../../Loader/Loader';
 import { DELAYED_REDIRECT_COMMON_TIME } from '../../../Utils/NavigationUtils';
+import { HardDeleteButton } from '../../Botones/HardDeleteButton';
 
 export const RubroArticuloAddOrUpdate = () => {
   const { id } = useParams();
@@ -110,6 +111,7 @@ export const RubroArticuloAddOrUpdate = () => {
               <h3 className="mb-4 text-start  text-xl font-bold text-amber-400 md:mb-6 ">
                 Categoría | Rubro - Artículo
               </h3>
+            
             </div>
           </div>
 
