@@ -6,6 +6,8 @@ import { ToastAlert, notify } from '../../../Toast/ToastAlert';
 import { getAll, getAllActive } from '../../../../API/Requests/BaseRequests';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AxiosError } from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 export interface IngredienteModalProps {
   setInsumo: React.Dispatch<React.SetStateAction<ArticuloInsumo>>;
 }
@@ -13,6 +15,19 @@ export interface IngredienteModalProps {
 export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps) => {
   const [ingredientes, setIngredientes] = useState<ArticuloInsumo[]>([]);
   const [visible, toggleVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
+  const handleNextPage = () => {
+    const totalItems = ingredientes.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    setCurrentPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : prevPage));
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : prevPage));
+  };
+
   const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
     getIngredientes();
@@ -33,7 +48,11 @@ export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps
     toggleVisible(false);
   };
   const renderFilasIngredientes = (ingredientes: ArticuloInsumo[]) => {
-    return ingredientes.map((ingrediente) => (
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = ingredientes.slice(indexOfFirstItem, indexOfLastItem);
+
+    return currentItems.map((ingrediente) => (
       <React.Fragment key={ingrediente.id}>
         <tr
           className="border-b border-b-neutral-200 odd:bg-neutral-100
@@ -41,7 +60,7 @@ export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps
               dark:border-b-neutral-400 dark:bg-neutral-500
               dark:text-white dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
         >
-          <td className="whitespace-nowrap px-6 py-4 hidden md:block">{ingrediente.id}</td>
+          <td className="hidden whitespace-nowrap px-6 py-4 md:block">{ingrediente.id}</td>
           <td className="whitespace-nowrap px-6 py-4">{ingrediente.denominacion}</td>
           <td className="px-6 py-4">
             <div className="flex justify-end">
@@ -87,9 +106,7 @@ export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps
         text-left align-bottom shadow-2xl transition-all sm:top-auto sm:my-8 md:mx-32 lg:mx-52"
           >
             <div className="flex   gap-16">
-              <h2 className="w-full flex-grow text-2xl text-neutral-100">
-                Elige el ingrediente
-              </h2>
+              <h2 className="w-full flex-grow text-2xl text-neutral-100">Elige el ingrediente</h2>
               {closeButton}
             </div>
             <div className="overflow-hidden overflow-x-auto rounded-lg px-1 sm:-mx-6 sm:px-4 md:px-6 lg:-mx-8 lg:px-10">
@@ -97,7 +114,10 @@ export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps
                 <table className="min-w-full bg-neutral-100 text-left text-sm font-light dark:bg-neutral-900 ">
                   <thead className="rounded-t-md font-medium uppercase">
                     <tr className="rounded-t-md border-b-4 border-b-neutral-500 bg-neutral-100  dark:border-b-white dark:bg-neutral-800 ">
-                      <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-white  hidden md:block">
+                      <th
+                        scope="col"
+                        className="hidden px-6 py-4 text-neutral-900  dark:text-white md:block"
+                      >
                         ID
                       </th>
                       <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-white">
@@ -116,6 +136,22 @@ export const IngredienteModal = ({ setInsumo: setInsumo }: IngredienteModalProps
                   </tbody>
                 </table>
               </div>
+            </div>
+            <div className="flex w-full justify-end gap-5 mt-5 px-2">
+              {currentPage !== 1 && (
+                <Button
+                  callback={() => handlePrevPage()}
+                  content={<FontAwesomeIcon icon={faArrowLeft} />}
+                  type="button"
+                  color='amarillo'
+                />
+              )}
+              <Button
+                callback={() => handleNextPage()}
+                content={<FontAwesomeIcon icon={faArrowRight} />}
+                type="button"
+                color='amarillo'
+              />
             </div>
           </div>
         </div>

@@ -6,6 +6,8 @@ import { ToastAlert, notify } from '../../../Toast/ToastAlert';
 import { getAll, getAllActive } from '../../../../API/Requests/BaseRequests';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AxiosError } from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 export interface UnidadDeMedidaModalProps {
   setUnidadMedida: React.Dispatch<React.SetStateAction<UnidadDeMedida>>;
   id?: number;
@@ -18,7 +20,18 @@ export const UnidadDeMedidaModal = ({
   const [unidadesDeMedida, setUnidadesDeMedida] = useState<UnidadDeMedida[]>([]);
   const [visible, toggleVisible] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
+  const handleNextPage = () => {
+    const totalItems = unidadesDeMedida.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    setCurrentPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : prevPage));
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : prevPage));
+  };
   const getUnidadesDeMedida = async () => {
     await getAccessTokenSilently()
       .then(async (accessToken) => {
@@ -40,7 +53,11 @@ export const UnidadDeMedidaModal = ({
     toggleVisible(false);
   };
   const renderFilasUnidadDeMedida = (unidades: UnidadDeMedida[]) => {
-    return unidades.map((unidad) => (
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = unidades.slice(indexOfFirstItem, indexOfLastItem);
+
+    return currentItems.map((unidad) => (
       <React.Fragment key={unidad.id}>
         <tr
           className="border-b border-b-neutral-200 odd:bg-neutral-100
@@ -129,6 +146,22 @@ export const UnidadDeMedidaModal = ({
                   </tbody>
                 </table>
               </div>
+            </div>
+            <div className="flex w-full justify-end gap-5 mt-5 px-2">
+              {currentPage !== 1 && (
+                <Button
+                  callback={() => handlePrevPage()}
+                  content={<FontAwesomeIcon icon={faArrowLeft} />}
+                  type="button"
+                  color='amarillo'
+                />
+              )}
+              <Button
+                callback={() => handleNextPage()}
+                content={<FontAwesomeIcon icon={faArrowRight} />}
+                type="button"
+                color='amarillo'
+              />
             </div>
           </div>
         </div>

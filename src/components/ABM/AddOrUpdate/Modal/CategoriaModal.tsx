@@ -6,6 +6,8 @@ import { ToastAlert, notify } from '../../../Toast/ToastAlert';
 import { Button } from '../../../Botones/Button';
 import { AxiosError } from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 export interface CategoryModalProps {
   setRubroArticuloPadre?: React.Dispatch<React.SetStateAction<RubroArticulo>>;
@@ -21,6 +23,18 @@ export const CategoryModal = ({
   const [categories, setCategories] = useState<RubroArticulo[]>([]);
   const [visible, toggleVisible] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
+  const handleNextPage = () => {
+    const totalItems = categories.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    setCurrentPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : prevPage));
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : prevPage));
+  };
   const getPadresDeRubro = async () => {
     await getAccessTokenSilently()
       .then(async (accessToken) => {
@@ -53,7 +67,11 @@ export const CategoryModal = ({
     toggleVisible(false);
   };
   const renderFilasCategorias = (categorias: RubroArticulo[]) => {
-    return categorias.map((categoria) => (
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = categorias.slice(indexOfFirstItem, indexOfLastItem);
+
+    return currentItems.map((categoria) => (
       <React.Fragment key={categoria.id}>
         <tr
           className="border-b border-b-neutral-200 odd:bg-neutral-100
@@ -61,6 +79,7 @@ export const CategoryModal = ({
               dark:border-b-neutral-400 dark:bg-neutral-500
               dark:text-neutral-100 dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
         >
+           <td className="whitespace-nowrap  px-3 py-4 md:px-6 hidden md:block">{categoria.id}</td>
           <td className="whitespace-nowrap  px-3 py-4 md:px-6">{categoria.denominacion}</td>
           <td className="hidden whitespace-nowrap  px-3 py-4 md:block md:px-6">
             {categoria.idRubroPadre !== null ? categoria.idRubroPadre : 'No posee'}
@@ -122,6 +141,9 @@ export const CategoryModal = ({
                 <table className="min-w-full bg-neutral-100 text-left text-sm font-light dark:bg-neutral-900 ">
                   <thead className="rounded-t-md font-medium uppercase">
                     <tr className="rounded-t-md border-b-4 border-b-neutral-500 bg-neutral-100  dark:border-b-white dark:bg-neutral-800 ">
+                    <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-neutral-100 hidden md:block">
+                        ID
+                      </th>
                       <th scope="col" className="px-6 py-4 text-neutral-900 dark:text-neutral-100">
                         Denominación
                       </th>
@@ -144,6 +166,21 @@ export const CategoryModal = ({
                   </tbody>
                 </table>
               </div>
+            </div>
+            <div className="flex w-full justify-end gap-5 mt-5 px-2">
+              {currentPage !== 1 && (
+                <Button
+                  callback={() => handlePrevPage()}
+                  content={<FontAwesomeIcon icon={faArrowLeft} />}
+                  type="button"
+                />
+              )}
+              <Button
+                callback={() => handleNextPage()}
+                content={<FontAwesomeIcon icon={faArrowRight} />}
+                type="button"
+                color='amarillo'
+              />
             </div>
           </div>
         </div>
