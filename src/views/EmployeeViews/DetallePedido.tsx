@@ -135,7 +135,7 @@ export const DetallePedidoView = () => {
                             pedidos[index]?.domicilioEntrega?.numero
                           : CartConstants.RETIRO_EN_LOCAL}
 
-                        {pedidos[index].domicilioEntrega?.numeroDpto !== null &&
+                        {pedidos[index]?.domicilioEntrega?.numeroDpto != undefined &&
                           'Departamento ' +
                             pedidos[index]?.domicilioEntrega?.numeroDpto +
                             ' ' +
