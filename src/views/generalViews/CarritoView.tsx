@@ -134,12 +134,34 @@ export const CarritoView = () => {
     }
   };
 
-  useEffect(() => {
+  const sendUserData = async () => {
+    if (user) {
+      await getAccessTokenSilently()
+        .then(async (accessToken) => {
+          await axios.post(
+            `${backend_url}/usuarios/post_register_save`,
+            {
+              auth0Id: user?.sub,
+              username: user.name,
+              email: user.email,
+            },
+            { headers: { Authorization: 'Bearer ' + accessToken } }
+          );
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+  const generateLifecycle = () => {
     savePedidoData();
     getDomiciliosUsuario();
     obtenerProductosDelCarrito();
     validateStock();
-
+    sendUserData();
+  };
+  useEffect(() => {
+    generateLifecycle();
     return () => {};
   }, [cart.length, user]);
 

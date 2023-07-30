@@ -3,7 +3,7 @@ import React from 'react';
 import { UnidadDeMedida } from '../../../../Interfaces/ABM/UnidadDeMedida';
 import { Button } from '../../../Botones/Button';
 import { ToastAlert, notify } from '../../../Toast/ToastAlert';
-import { getAll } from '../../../../API/Requests/BaseRequests';
+import { getAll, getAllActive } from '../../../../API/Requests/BaseRequests';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AxiosError } from 'axios';
 export interface UnidadDeMedidaModalProps {
@@ -22,7 +22,7 @@ export const UnidadDeMedidaModal = ({
   const getUnidadesDeMedida = async () => {
     await getAccessTokenSilently()
       .then(async (accessToken) => {
-        const data = await getAll({ endpoint: 'unidades-medida', token: accessToken });
+        const data = await getAllActive({ endpoint: 'unidades-medida', token: accessToken });
         setUnidadesDeMedida(data);
       })
       .catch((err) => {

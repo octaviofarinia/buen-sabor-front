@@ -26,6 +26,20 @@ export const getAll = async ({ endpoint, token }: RequestInterface) => {
   }
 };
 
+export const getAllActive = async ({ endpoint, token }: RequestInterface) => {
+  try {
+    const response = await axios.get(`${backend_url}/${endpoint}/listar`, {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    const error = err as AxiosError;
+    console.log(error.message, error.request, error.response);
+  }
+};
+
 export const softDelete = async ({ id, endpoint, token }: RequestInterface) => {
   try {
     const response = await axios.delete(`${backend_url}/${endpoint}/${id}`, {

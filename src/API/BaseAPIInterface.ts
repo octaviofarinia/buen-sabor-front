@@ -3,4 +3,5 @@ export interface BaseAPI {
 }
 export interface Base {
   id?: number ;
+  fechaBaja?: string ;
 }

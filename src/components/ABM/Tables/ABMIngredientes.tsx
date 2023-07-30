@@ -103,7 +103,11 @@ export const ABMIngredientes = () => {
                       <tbody>
                         {insumos.map((ingrediente) => (
                           <tr
-                            className="border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-white dark:odd:bg-neutral-600 dark:even:bg-neutral-700 dark:hover:bg-neutral-700"
+                            className={`border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200
+dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-neutral-100 dark:odd:bg-neutral-600
+dark:even:bg-neutral-700 dark:hover:bg-neutral-700 ${
+                              ingrediente.fechaBaja != undefined && 'bg-rose-400'
+                            }`}
                             key={ingrediente.id}
                           >
                             <td className="px-6 py-4 font-bold">{ingrediente.id}</td>
