@@ -39,7 +39,7 @@ const TablaIngredientes = ({ detalles, setDetalle }: TablaDetallesProps) => {
 
   useEffect(() => {
     setCosto(calcularCostoEstimado(detalles));
-  }, [detalles.length]);
+  }, [detalles]);
   return (
     <div className="mt-16 rounded-md bg-neutral-100 shadow-md">
       <div className="rounded-t-md bg-neutral-200 px-4 py-2">

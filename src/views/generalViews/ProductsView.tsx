@@ -4,7 +4,12 @@ import { ProductCard } from '../../components/ProductCard/ProductCard';
 import axios, { AxiosError } from 'axios';
 import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFaceSadTear, faHand, faSearch } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFaceSadTear,
+  faHand,
+  faHandHoldingHand,
+  faSearch,
+} from '@fortawesome/free-solid-svg-icons';
 import { simpleHandleChange } from '../../Utils/FormUtils';
 import { MoonLoader } from 'react-spinners';
 import { useLocation } from 'react-router-dom';
@@ -83,7 +88,21 @@ export const ProductsView = () => {
                 <h2 className="pt-4 text-4xl font-bold text-neutral-800 dark:text-neutral-100">
                   Nuestra selección
                 </h2>
-                <div className="relative">
+                <Button
+                  content={
+                    <p>
+                      Mostrar todos los productos{' '}
+                      <FontAwesomeIcon icon={faHandHoldingHand} size="xl" />
+                    </p>
+                  }
+                  type="button"
+                  color="negro"
+                  textSize="text-lg"
+                  callback={() => {
+                    getProductos(null);
+                  }}
+                />
+                <div className="relative ">
                   <input
                     type="text"
                     className="w-full rounded border bg-neutral-100 px-3 py-2 pl-8 text-neutral-800 outline-none
