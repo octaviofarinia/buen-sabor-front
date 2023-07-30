@@ -91,7 +91,7 @@ export const DetallePedidoView = () => {
   }, [detallePedido.length]);
 
   return (
-    <div className="flex bg-neutral-100 px-5 lg:px-24">
+    <div className="flex bg-neutral-100 px-5 py-6 dark:bg-neutral-800  lg:px-24">
       {loading ? (
         <Loader texto="Cargando registros" closeLoading={setLoading} />
       ) : (
@@ -103,8 +103,8 @@ export const DetallePedidoView = () => {
             <div className=" mx-auto grid grid-cols-1 gap-5 gap-y-3 px-2 md:grid-cols-2  xl:grid-cols-3">
               {detallePedido.map((detalle, index) => (
                 <div
-                  key={detalle.id}
-                  className="mx-auto my-10  w-full max-w-4xl rounded-lg border-b-4 border-l-4 border-neutral-300  bg-neutral-100 p-5 py-3 px-4 text-xl shadow-lg dark:bg-neutral-800 md:text-2xl lg:py-8"
+                  className="mx-auto my-10  w-full max-w-4xl rounded-lg border-b-4 border-l-4 border-neutral-300 bg-neutral-100 p-5 py-3 px-4 text-xl shadow-lg 
+    dark:border-b-neutral-500 dark:border-l-neutral-500 dark:bg-neutral-700 md:text-2xl lg:py-8"
                 >
                   <div className="flex w-full items-center justify-between pb-4">
                     <h1 className="mb-3 flex flex-col items-start justify-between font-bold  text-neutral-900 dark:text-white md:text-4xl">
@@ -114,20 +114,20 @@ export const DetallePedidoView = () => {
                   </div>
                   <div className="flex flex-col gap-5 px-5">
                     <>
-                      <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-2 border-l-2 border-neutral-300  py-5 px-5  font-semibold leading-none text-neutral-500  shadow-md dark:border-amber-400 dark:bg-neutral-700 dark:text-neutral-500  ">
+                      <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-4 border-l-4 py-5 px-5  border-neutral-300 dark:border-neutral-500 font-semibold leading-none text-neutral-500 shadow-md dark:bg-neutral-700 dark:text-neutral-300  ">
                         <span className="text-neutral-900 dark:text-white ">Denominación</span>
                         {detalle.articuloManufacturado?.denominacion}
                       </h5>
 
-                      <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-2 border-l-2 border-neutral-300  py-5 px-5  font-semibold leading-none text-neutral-500  shadow-md dark:border-amber-400 dark:bg-neutral-700 dark:text-neutral-500  ">
+                      <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-4 border-l-4 py-5 px-5  border-neutral-300 dark:border-neutral-500 font-semibold leading-none text-neutral-500 shadow-md dark:bg-neutral-700 dark:text-neutral-300  ">
                         <span className="text-neutral-900 dark:text-white ">Cantidad</span>
                         {detalle.cantidad}
                       </h5>
-                      <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-2 border-l-2 border-neutral-300  py-5 px-5  font-semibold leading-none text-neutral-500  shadow-md dark:border-amber-400 dark:bg-neutral-700 dark:text-neutral-500  ">
+                      <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-4 border-l-4 py-5 px-5  border-neutral-300 dark:border-neutral-500 font-semibold leading-none text-neutral-500 shadow-md dark:bg-neutral-700 dark:text-neutral-300  ">
                         <span className="text-neutral-900 dark:text-white ">Cliente</span>
                         {pedidos[index]?.cliente.usuario.username}
                       </h5>
-                      <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-2 border-l-2 border-neutral-300  py-5 px-5  font-semibold leading-none text-neutral-500  shadow-md dark:border-amber-400 dark:bg-neutral-700 dark:text-neutral-500  ">
+                      <h5 className="border-1  mb-2 flex flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl border-b-4 border-l-4 py-5 px-5  border-neutral-300 dark:border-neutral-500 font-semibold leading-none text-neutral-500 shadow-md dark:bg-neutral-700 dark:text-neutral-300  ">
                         <span className="text-neutral-900 dark:text-white ">Domicilio</span>
 
                         {pedidos[index]?.domicilioEntrega !== null
@@ -143,7 +143,7 @@ export const DetallePedidoView = () => {
                             pedidos[index]?.domicilioEntrega?.pisoDpto}
                       </h5>
                       {[employeeRoles.COCINERO, employeeRoles.ADMINISTRADOR].includes(userRole) && (
-                        <h5 className="border-1  mb-2 flex flex-col flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl  py-5 px-5  font-semibold leading-none text-neutral-500  shadow-md dark:border-amber-400 dark:bg-neutral-700 dark:text-neutral-500  ">
+                        <h5 className="border-1  mb-2 flex flex-col flex-wrap justify-between  gap-4 rounded-lg rounded-l-xl  border-b-4 border-l-4  border-neutral-300 py-5 px-5  font-semibold leading-none text-neutral-500 shadow-md dark:bg-neutral-700 dark:border-neutral-500 dark:text-neutral-500  ">
                           <span className="text-neutral-900 dark:text-white ">Ingredientes</span>
                           <div className="flex flex-col">
                             {detallesProducto[index] !== undefined ? (
