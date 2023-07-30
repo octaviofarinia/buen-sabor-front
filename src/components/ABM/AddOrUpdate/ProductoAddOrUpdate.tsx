@@ -147,12 +147,14 @@ export const ProductoAddOrUpdate = () => {
                 Producto | Artículo - Manufacturado
               </h3>
             </div>
-            {id !== undefined && <HardDeleteButton id={Number(id)} endpoint={'articulos-manufacturados'} />}
+            {id !== undefined && (
+              <HardDeleteButton id={Number(id)} endpoint={'articulos-manufacturados'} />
+            )}
           </div>
 
           <form
             encType="multipart/form-data"
-            className={`mx-auto grid w-11/12 items-center gap-4 text-end dark:text-neutral-100  sm:grid-cols-3 lg:gap-10`}
+            className={`mx-auto grid w-full items-center gap-4 text-end dark:text-neutral-100 sm:grid-cols-3  md:w-11/12 lg:gap-10`}
             onSubmit={(e) => handleSubmit(e)}
           >
             <label htmlFor="denominacion" className="lg:text-2xl">
@@ -241,26 +243,29 @@ export const ProductoAddOrUpdate = () => {
             <div className="z-0 col-span-2 flex items-center gap-5">
               {ingrediente.id == null && <IngredienteModal setInsumo={setIngrediente} />}
               {ingrediente.id != null && (
-                <div className="col-span-2 flex w-full gap-3">
-                  <span
-                    className="flex w-full items-center rounded border bg-gray-50 px-3 py-2 text-start text-gray-800
+                <div className="col-span-2 flex w-full flex-wrap justify-between gap-3">
+                  <div className="flex w-full gap-3 flex-wrap">
+                    <span
+                      className="flex w-full items-center rounded border bg-gray-50 px-3 py-2 text-start text-gray-800
             outline-none ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-                  >
-                    {ingrediente.denominacion}
-                  </span>
-                  <input
-                    name={'cantidad'}
-                    id={'cantidad'}
-                    type="number"
-                    className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
+                    >
+                      {ingrediente.denominacion}
+                    </span>
+                    <input
+                      name={'cantidad'}
+                      id={'cantidad'}
+                      type="number"
+                      className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none
                   ring-amber-400 transition duration-100 focus:ring dark:border-neutral-400 dark:bg-neutral-700 dark:text-neutral-100"
-                    onChange={(e) => {
-                      setCantidad(Number(e.target.value));
-                    }}
-                    placeholder="Cantidad..."
-                    value={cantidad || ''}
-                    required
-                  />
+                      onChange={(e) => {
+                        setCantidad(Number(e.target.value));
+                      }}
+                      placeholder="Cantidad..."
+                      step="0.01"
+                      value={cantidad || ''}
+                      required
+                    />
+                  </div>
                   <input
                     name={'id'}
                     id={'idRubroArticulo'}
@@ -270,24 +275,25 @@ export const ProductoAddOrUpdate = () => {
                     required
                   />
                   {ingrediente.id !== null && (
-                    <Button
-                      callback={() => {
-                        setIngrediente(base_ingredient);
-                      }}
-                      type="button"
-                      content="x"
-                      color="rojo"
-                    />
-                  )}
-
-                  {ingrediente.id !== null && (
-                    <Button
-                      callback={() => {
-                        confirmarIngrediente();
-                      }}
-                      type="button"
-                      content="Confirmar Ingrediente"
-                    />
+                    <div className="flex w-full gap-3">
+                      <Button
+                        callback={() => {
+                          confirmarIngrediente();
+                        }}
+                        type="button"
+                        content="Confirmar Ingrediente"
+                        fullsize={true}
+                      />
+                      <Button
+                        callback={() => {
+                          setIngrediente(base_ingredient);
+                        }}
+                        type="button"
+                        content="x"
+                        color="rojo"
+                        
+                      />
+                    </div>
                   )}
                 </div>
               )}
