@@ -141,7 +141,7 @@ export const PedidosView = () => {
           Pedidos
         </h1>
         <div className="flex flex-col gap-5 md:flex-row">
-          <label className="flex items-center gap-5 text-xl">
+          <label className="flex items-center gap-5 text-xl dark:text-neutral-100">
             Filtrar:
             <EstadosSelectFiltro
               pedido={null}

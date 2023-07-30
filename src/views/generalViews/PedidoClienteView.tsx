@@ -75,7 +75,7 @@ export const PedidoClienteView = () => {
                               <tr
                                 className="border-b border-b-neutral-200 transition-colors duration-100 ease-linear
                          odd:bg-neutral-100 even:bg-neutral-100 hover:bg-sky-100 dark:border-neutral-500 dark:border-b-neutral-700
-                           dark:bg-neutral-800 dark:text-white  dark:hover:bg-sky-600"
+                           dark:bg-neutral-800 dark:text-white  dark:hover:bg-sky-300"
                                 key={pedido.id}
                               >
                                 <td
