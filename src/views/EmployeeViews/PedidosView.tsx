@@ -1,17 +1,13 @@
 import { ToastAlert, notify } from '../../components/Toast/ToastAlert';
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faFaceSadCry, faTruck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faEye, faFaceSadCry, faTruck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { PedidoPlanilla } from '../../Interfaces/ABM/PedidoPlanilla';
 import { Loader } from '../../components/Loader/Loader';
 import { Button } from '../../components/Botones/Button';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
-import {
-  EstadosSelect,
-  EstadosSelectFiltro,
-  PedidoStatus,
-} from '../../Utils/PlanillaUtils';
+import { EstadosSelect, EstadosSelectFiltro, PedidoStatus } from '../../Utils/PlanillaUtils';
 import { backend_url } from '../../Utils/ConstUtils';
 import {
   anularPedido,
@@ -24,13 +20,14 @@ import { useUser } from '../../context/UserProvider';
 import { employeeRoles } from '../../Utils/Constants/UserRoles';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios, { Axios, AxiosError } from 'axios';
+import { Link } from 'react-router-dom';
 
 export const PedidosView = () => {
   const { userRole } = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const [pedidos, setPedidos] = useState<PedidoPlanilla[]>([]);
   const [conectado, setConectado] = useState<boolean>(false);
-  const { getAccessTokenSilently,user } = useAuth0();
+  const { getAccessTokenSilently, user } = useAuth0();
   var stompClient: any = null;
 
   const setDataByRole = async () => {
@@ -79,7 +76,7 @@ export const PedidosView = () => {
           })
           .then(() => {
             notify('Se cambio de Estado', 'info');
-          })
+          });
       })
       .catch((err) => {
         const error = err as AxiosError;
@@ -138,12 +135,12 @@ export const PedidosView = () => {
           showCloseLoading={true}
         />
       )}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-center justify-between md:flex-row">
         <h1 className="flex items-center gap-3 text-3xl font-extrabold uppercase text-black dark:text-neutral-50">
           <FontAwesomeIcon icon={faTruck} />
           Pedidos
         </h1>
-        <div className="flex gap-5">
+        <div className="flex flex-col gap-5 md:flex-row">
           <label className="flex items-center gap-5 text-xl">
             Filtrar:
             <EstadosSelectFiltro
@@ -189,6 +186,7 @@ export const PedidosView = () => {
                           Pedido Finalizado
                         </th>
                       )}
+                      <th className="px-6 py-4 text-neutral-50">Ver detalle</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -300,6 +298,21 @@ export const PedidosView = () => {
                               </>
                             )}
                           </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <Link to={`/employee/Planilla/Pedidos/${pedido.id}`} className='flex justify-center'>
+                            <Button
+                              color="verde"
+                              type="button"
+                              content={
+                                <FontAwesomeIcon
+                                  icon={faEye}
+                                  size="sm"
+                                  style={{ color: '#ffffff' }}
+                                />
+                              }
+                            />
+                          </Link>
                         </td>
                       </tr>
                     ))}

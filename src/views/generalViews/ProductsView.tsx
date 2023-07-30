@@ -101,7 +101,7 @@ export const ProductsView = () => {
               <div className="grid grid-cols-1 gap-4 pt-5 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3">
                 {productos
                   .filter((product) =>
-                    product.denominacion?.toLowerCase().includes(inputValue || '')
+                    product.denominacion?.toLowerCase().includes(inputValue.toLowerCase() || '')
                   )
                   .map((product) => (
                     <ProductCard producto={product} key={product.id} />
