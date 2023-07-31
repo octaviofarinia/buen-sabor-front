@@ -85,7 +85,8 @@ export const getPedidosDelivery = async (token: string) => {
 export const getPedidosCajero = async (token: string) => {
   const pagadosCajero = await getPedidos(PedidoStatus.PAGADO, token);
   const pendientesPagoCajero = await getPedidos(PedidoStatus.PENDIENTE_PAGO, token);
-  return [...pendientesPagoCajero, ...pagadosCajero];
+  const pendienteEntregaCajero = await getPedidos(PedidoStatus.PENDIENTE_ENTREGA, token);
+  return [...pendientesPagoCajero, ...pagadosCajero,...pendienteEntregaCajero];
 };
 
 export const getPedidosCocinero = async (token: string) => {
