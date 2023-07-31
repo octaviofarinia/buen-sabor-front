@@ -81,7 +81,7 @@ export const Header = () => {
                       .includes(userRole.toLowerCase()) && (
                       <DropdownHeader
                         routes={
-                          employeeRoles.ADMINISTRADOR
+                          userRole===employeeRoles.ADMINISTRADOR
                             ? [...ABMRoutes, ...PlanillaRoutes]
                             : [...ABMRoutes]
                         }
@@ -225,7 +225,7 @@ export const Header = () => {
                   .includes(userRole.toLowerCase()) && (
                   <DropdownHeader
                     routes={
-                      employeeRoles.ADMINISTRADOR
+                      userRole===employeeRoles.ADMINISTRADOR
                         ? [...ABMRoutes, ...PlanillaRoutes]
                         : [...ABMRoutes]
                     }
