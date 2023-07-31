@@ -26,6 +26,7 @@ export const PedidosView = () => {
   const { userRole } = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const [pedidos, setPedidos] = useState<PedidoPlanilla[]>([]);
+  const [estado, setEstado] = useState<PedidoStatus | null>(null);
   const [conectado, setConectado] = useState<boolean>(false);
   const { getAccessTokenSilently, user } = useAuth0();
   var stompClient: any = null;
@@ -125,6 +126,12 @@ export const PedidosView = () => {
   const onError = (err: any) => {
     console.log(err);
   };
+  const resetSelect = () => {
+    setDataByRole();
+    setEstado(null);
+    const selectElement = document.getElementById('selectFiltro') as HTMLSelectElement;
+    selectElement.selectedIndex = 0;
+  };
 
   return (
     <div className=" relative flex w-full flex-1 flex-col gap-5 bg-neutral-100 px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">
@@ -147,6 +154,7 @@ export const PedidosView = () => {
               pedido={null}
               callback={(e) => {
                 getFiltered(e.target.value);
+                setEstado(e.target.value as PedidoStatus);
               }}
             />
           </label>
@@ -157,11 +165,16 @@ export const PedidosView = () => {
             color="negro"
             textSize="text-xl"
             callback={() => {
-              setDataByRole();
+              resetSelect();
             }}
           />
         </div>
       </div>
+      {estado !== null && (
+        <h2 className="flex items-center gap-3 text-2xl font-extrabold uppercase text-neutral-900 dark:text-neutral-50">
+          Filtrado por : <span className="text-rose-500">{estado}</span>
+        </h2>
+      )}
       <ToastAlert />
       {pedidos.length != 0 ? (
         <div className=" mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-neutral-800">
@@ -300,7 +313,10 @@ export const PedidosView = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <Link to={`/employee/Planilla/Pedidos/${pedido.id}`} className='flex justify-center'>
+                          <Link
+                            to={`/employee/Planilla/Pedidos/${pedido.id}`}
+                            className="flex justify-center"
+                          >
                             <Button
                               color="verde"
                               type="button"

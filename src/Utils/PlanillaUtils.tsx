@@ -1,8 +1,5 @@
-import axios, { AxiosError } from 'axios';
 import { PedidoPlanilla } from '../Interfaces/ABM/PedidoPlanilla';
-import { backend_url } from './ConstUtils';
-import { notify } from '../components/Toast/ToastAlert';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { useUser } from '../context/UserProvider';
 import { employeeRoles } from './Constants/UserRoles';
 
@@ -14,11 +11,11 @@ export enum PedidoStatus {
   EN_CAMINO = 'EN_CAMINO',
   CANCELADO = 'CANCELADO',
   NOTA_CREDITO = 'NOTA_CREDITO',
-  PENDIENTE_ENVIO = 'PENDIENTE_ENVIO',
+  PENDIENTE_ENTREGA = 'PENDIENTE_ENTREGA',
 }
 
 interface EstadoSelect {
-  pedido: PedidoPlanilla | null;
+  pedido?: PedidoPlanilla | null;
   callback: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
@@ -32,7 +29,11 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
       defaultValue={pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
       onChange={(e) => callback(e)}
     >
-      <option disabled value={pedido?.estado && pedido !== null ? pedido.estado.toString() : ''}>
+      <option
+        disabled
+        value={pedido?.estado && pedido !== null ? pedido.estado.toString() : ''}
+        hidden
+      >
         {pedido?.estado}
       </option>
       {userRole === employeeRoles.ADMINISTRADOR && (
@@ -52,8 +53,8 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
           <option className="text-xl font-bold text-blue-700" value={PedidoStatus.EN_CAMINO}>
             {PedidoStatus.EN_CAMINO}
           </option>
-          <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENVIO}>
-            {PedidoStatus.PENDIENTE_ENVIO}
+          <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENTREGA}>
+            {PedidoStatus.PENDIENTE_ENTREGA}
           </option>
           <option className="text-xl font-bold text-rose-700" value={PedidoStatus.CANCELADO}>
             {PedidoStatus.CANCELADO}
@@ -69,8 +70,8 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
           <option className="text-xl font-bold text-violet-700" value={PedidoStatus.PREPARACION}>
             {PedidoStatus.PREPARACION}
           </option>
-          <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENVIO}>
-            {PedidoStatus.PENDIENTE_ENVIO}
+          <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENTREGA}>
+            {PedidoStatus.PENDIENTE_ENTREGA}
           </option>
         </>
       )}
@@ -80,8 +81,8 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
           <option className="text-xl font-bold text-blue-700" value={PedidoStatus.EN_CAMINO}>
             {PedidoStatus.EN_CAMINO}
           </option>
-          <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENVIO}>
-            {PedidoStatus.PENDIENTE_ENVIO}
+          <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENTREGA}>
+            {PedidoStatus.PENDIENTE_ENTREGA}
           </option>
         </>
       )}
@@ -91,13 +92,16 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
             {PedidoStatus.PAGADO}
           </option>
+          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PREPARACION}>
+            {PedidoStatus.PREPARACION}
+          </option>
         </>
       )}
     </select>
   );
 };
 
-export const EstadosSelectFiltro = ({ pedido, callback }: EstadoSelect) => {
+export const EstadosSelectFiltro = ({  callback }: EstadoSelect) => {
   const { userRole } = useUser();
 
   useEffect(() => {}, [userRole]);
@@ -105,9 +109,11 @@ export const EstadosSelectFiltro = ({ pedido, callback }: EstadoSelect) => {
   return (
     <select
       className="rounded-md py-2 pr-8 text-xl font-bold text-neutral-900"
-      defaultValue={pedido?.estado || 'SELECCIONE'} // Use `defaultValue` on the <select> element
-      onChange={(e) => callback(e)}
+      onChange={(e) => callback(e)} id="selectFiltro"
     >
+      <option selected hidden>
+        {'Seleccione'}
+      </option>
       {userRole === employeeRoles.ADMINISTRADOR && (
         <>
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
@@ -159,10 +165,16 @@ export const EstadosSelectFiltro = ({ pedido, callback }: EstadoSelect) => {
       {userRole === employeeRoles.CAJERO && (
         <>
           <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
-            PAGADO
+            {PedidoStatus.PAGADO}
           </option>
           <option className="text-xl font-bold text-amber-500" value={PedidoStatus.PENDIENTE_PAGO}>
-            PENDIENTE DE PAGO
+            {PedidoStatus.PENDIENTE_PAGO}
+          </option>
+          <option
+            className="text-xl font-bold text-amber-500"
+            value={PedidoStatus.PENDIENTE_ENTREGA}
+          >
+            {PedidoStatus.PENDIENTE_ENTREGA}
           </option>
         </>
       )}
@@ -181,7 +193,7 @@ export function getTextColorByPedidoStatus(status: string | null) {
       return 'text-violet-700';
     case PedidoStatus.EN_CAMINO:
       return 'text-blue-700';
-    case PedidoStatus.PENDIENTE_ENVIO:
+    case PedidoStatus.PENDIENTE_ENTREGA:
       return 'text-sky-700';
     case PedidoStatus.CANCELADO:
       return 'text-rose-700';

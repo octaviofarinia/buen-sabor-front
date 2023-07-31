@@ -77,7 +77,7 @@ export const getPedido = async (token: string, id?: number) => {
 };
 
 export const getPedidosDelivery = async (token: string) => {
-  const pendienteEnvio = await getPedidos(PedidoStatus.PENDIENTE_ENVIO, token);
+  const pendienteEnvio = await getPedidos(PedidoStatus.PENDIENTE_ENTREGA, token);
   const en_camino = await getPedidos(PedidoStatus.EN_CAMINO, token);
   return [...pendienteEnvio, ...en_camino];
 };
