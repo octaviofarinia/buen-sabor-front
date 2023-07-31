@@ -81,8 +81,8 @@ export const ABMIngredientes = () => {
           </div>
 
           {insumos && insumos.length != 0 ? (
-            <div className=" mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-neutral-800">
-              <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className=" mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-md dark:shadow-neutral-700">
+            <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                   <div className="overflow-hidden">
                     <table className="min-w-full table-fixed bg-neutral-900 text-left text-sm font-light">
@@ -103,9 +103,9 @@ export const ABMIngredientes = () => {
                       <tbody>
                         {insumos.map((ingrediente) => (
                           <tr
-                            className={`border-b border-b-neutral-200 bg-neutral-100 hover:bg-neutral-200
-dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-neutral-100 dark:odd:bg-neutral-600
-dark:even:bg-neutral-700 dark:hover:bg-neutral-700  ${
+                            className={`border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200
+                            dark:border-neutral-500 dark:border-b-neutral-700  dark:bg-neutral-800  dark:text-neutral-50
+                             dark:hover:bg-neutral-900  ${
                               ingrediente.fechaBaja != null && 'bg-rose-200 hover:bg-rose-400'
                             }`}
                             key={ingrediente.id}

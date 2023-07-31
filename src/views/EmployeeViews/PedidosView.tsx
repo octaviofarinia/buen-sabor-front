@@ -208,7 +208,9 @@ export const PedidosView = () => {
                   <tbody>
                     {pedidos.map((pedido) => (
                       <tr
-                        className="border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:border-b-neutral-700  dark:text-neutral-50  dark:bg-neutral-800 dark:hover:bg-neutral-900 dark:shadow-lg "
+                        className="border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200
+                         dark:border-neutral-500 dark:border-b-neutral-700  dark:text-neutral-50  dark:bg-neutral-800
+                          dark:hover:bg-neutral-900"
                         key={pedido.id}
                       >
                         <td className="px-6 py-4">{pedido.id}</td>
