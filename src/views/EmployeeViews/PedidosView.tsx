@@ -82,6 +82,10 @@ export const PedidosView = () => {
       })
       .catch((err) => {
         const error = err as AxiosError;
+        const selectElement = document.getElementById(
+          `selectEstado${id}`
+        ) as HTMLSelectElement;
+        selectElement.selectedIndex = 0;
         notify(error.response?.data as string, 'error');
       });
   };
@@ -178,7 +182,7 @@ export const PedidosView = () => {
       )}
       <ToastAlert />
       {pedidos.length != 0 ? (
-        <div className=" mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-neutral-700 dark:shadow-md">
+        <div className=" mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-md dark:shadow-neutral-700">
           <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
               <div className="overflow-hidden">
@@ -209,7 +213,7 @@ export const PedidosView = () => {
                     {pedidos.map((pedido) => (
                       <tr
                         className="border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200
-                         dark:border-neutral-500 dark:border-b-neutral-700  dark:text-neutral-50  dark:bg-neutral-800
+                         dark:border-neutral-500 dark:border-b-neutral-700  dark:bg-neutral-800  dark:text-neutral-50
                           dark:hover:bg-neutral-900"
                         key={pedido.id}
                       >
@@ -228,7 +232,7 @@ export const PedidosView = () => {
                                   }}
                                 />
                               ) : (
-                                <span className="fontBebas text-neutral-900 dark:text-neutral-100 text-xl">
+                                <span className="fontBebas text-xl text-neutral-900 dark:text-neutral-100">
                                   {pedido.estado}
                                 </span>
                               )}

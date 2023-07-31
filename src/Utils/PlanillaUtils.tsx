@@ -25,7 +25,7 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
 
   return (
     <select
-      className="rounded-md py-2 pr-8 text-xl font-bold text-neutral-900"
+      className="rounded-md py-2 pr-8 text-xl font-bold text-neutral-900"  id={`selectEstado${pedido?.id}`}
       defaultValue={pedido?.estado && pedido !== null ? pedido.estado : 'SELECCIONE'}
       onChange={(e) => callback(e)}
     >
