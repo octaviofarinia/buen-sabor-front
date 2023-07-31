@@ -10,18 +10,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faList, faTableList } from '@fortawesome/free-solid-svg-icons';
 import { PedidoStatus, getTextColorByPedidoStatus } from '../../Utils/PlanillaUtils';
 import CartConstants from '../../Utils/Constants/CartConstants';
+import { over } from 'stompjs';
+import SockJS from 'sockjs-client/dist/sockjs';
+import { backend_url } from '../../Utils/ConstUtils';
 
 export const PedidoClienteView = () => {
   const [pedidos, setPedidos] = useState<PedidoPlanilla[]>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
+  const [conectado, setConectado] = useState<boolean>(false);
   const navigate = useNavigate();
+  var stompClient: any = null;
+
   const { user, getAccessTokenSilently } = useAuth0();
+
   const getPedidosFromUser = async () => {
+    
     if (user?.sub != undefined) {
       await getAccessTokenSilently()
         .then(async (accessToken) => {
           const response = await getPedidosByUser(user.sub!, accessToken);
-          console.log(response);
           setPedidos(response);
           setLoading(false);
         })
@@ -31,10 +38,35 @@ export const PedidoClienteView = () => {
           setLoading(false);
         });
     }
+    
+  };
+  const createSocket = () => {
+    let Sock = new SockJS(`${backend_url}/ws`);
+    stompClient = over(Sock);
+    stompClient.connect({}, onConnected, onError);
   };
 
-  useEffect(() => {
+  const onConnected = () => {
+    setConectado(true);
+    stompClient.subscribe('/pedidos', onMessageReceived);
+    setLoading(false);
+
+  };
+
+  const onMessageReceived = (payload: any) => {
+    let payloadData = JSON.parse(payload.body);
+    console.log(payloadData);
     getPedidosFromUser();
+  };
+
+  const onError = (err: any) => {
+    console.log(err);
+  };
+  useEffect(() => {
+    if (!conectado) {
+      createSocket();
+      getPedidosFromUser();
+    }
   }, [user]);
   return (
     <div className=" relative flex w-full flex-1 flex-col gap-5 bg-neutral-100 px-5 pt-5 dark:bg-neutral-800 sm:px-8 md:px-16 ">
