@@ -40,10 +40,10 @@ export const ConfirmationModal = ({
           {/*Modal panel : This is where you put the pop-up's content, the div on top this coment is the wrapper */}
           <div
             className="mx-52 flex h-min transform  
-          flex-col gap-5 overflow-hidden rounded-lg bg-neutral-100 p-10 text-left align-bottom shadow-2xl transition-all sm:my-8"
+          flex-col gap-5 overflow-hidden rounded-lg bg-neutral-100 p-10 text-left align-bottom shadow-2xl transition-all sm:my-8 dark:bg-neutral-900"
           >
             <div className="flex justify-between gap-5">
-              <h2 className="w-full flex-grow text-2xl text-neutral-900">{contentText}</h2>
+              <h2 className="w-full flex-grow text-2xl text-neutral-900 dark:text-neutral-100">{contentText}</h2>
               <Button callback={() => toggleVisible(false)} content="x" type="button" />
             </div>
             <div>{aditionalInfo}</div>
