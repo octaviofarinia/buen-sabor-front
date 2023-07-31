@@ -13,7 +13,7 @@ export const Footer = () => {
             <h2 className=" mb-3  font-medium uppercase  tracking-wider">el buen sabor</h2>
             <Link
               to="/"
-              className={`flex flex-wrap px-2  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
+              className={`flex flex-wrap px-3  duration-500 ease-in-out hover:px-10 hover:py-2 hover:text-xl hover:text-amber-400  active:bg-amber-500
               active:text-slate-900 `}
             >
               <p>Inicio</p>
