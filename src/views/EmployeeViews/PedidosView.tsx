@@ -21,6 +21,7 @@ import { employeeRoles } from '../../Utils/Constants/UserRoles';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios, { Axios, AxiosError } from 'axios';
 import { Link } from 'react-router-dom';
+import CartConstants from '../../Utils/Constants/CartConstants';
 
 export const PedidosView = () => {
   const { userRole } = useUser();
@@ -189,6 +190,8 @@ export const PedidosView = () => {
                       <th className="px-6 py-4 text-neutral-50">Estado</th>
                       <th className="px-6 py-4 text-neutral-50">Fecha de Alta</th>
                       <th className="px-6 py-4 text-neutral-50">Fecha de Modificación</th>
+                      <th className="px-6 py-4 text-neutral-50">Tipo de Entrega</th>
+                      <th className="px-6 py-4 text-neutral-50">Medio de Pago</th>
                       {[
                         employeeRoles.ADMINISTRADOR,
                         employeeRoles.CAJERO,
@@ -236,7 +239,22 @@ export const PedidosView = () => {
 
                         <td className="px-6 py-4">{pedido.fechaAlta}</td>
                         <td className="px-6 py-4">{pedido.fechaModificacion}</td>
-
+                        <td
+                          className={`px-6 py-4 ${
+                            pedido.tipoEnvio === CartConstants.DELIVERY
+                              ? 'text-rose-500'
+                              : 'text-amber-500'
+                          } font-semibold `}
+                        >
+                          {pedido.tipoEnvio}
+                        </td>
+                        <td
+                          className={`px-6 py-4 ${
+                            pedido.formaPago === 'EFECTIVO' ? 'text-green-500' : 'text-blue-500'
+                          } font-semibold `}
+                        >
+                          {pedido.formaPago}
+                        </td>
                         <td className="px-6 py-4">
                           <div className="m-0 flex h-full items-center justify-center gap-16 p-0">
                             {userRole === employeeRoles.DELIVERY && (
