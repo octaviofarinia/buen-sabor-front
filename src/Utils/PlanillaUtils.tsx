@@ -38,15 +38,6 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
       </option>
       {userRole === employeeRoles.ADMINISTRADOR && (
         <>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
-            {PedidoStatus.PAGADO}
-          </option>
-          <option className="text-xl font-bold text-green-400" value={PedidoStatus.COMPLETADO}>
-            {PedidoStatus.COMPLETADO}
-          </option>
-          <option className="text-xl font-bold text-amber-500" value={PedidoStatus.PENDIENTE_PAGO}>
-            {PedidoStatus.PENDIENTE_PAGO}
-          </option>
           <option className="text-xl font-bold text-violet-700" value={PedidoStatus.PREPARACION}>
             {PedidoStatus.PREPARACION}
           </option>
@@ -55,12 +46,6 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
           </option>
           <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENTREGA}>
             {PedidoStatus.PENDIENTE_ENTREGA}
-          </option>
-          <option className="text-xl font-bold text-rose-700" value={PedidoStatus.CANCELADO}>
-            {PedidoStatus.CANCELADO}
-          </option>
-          <option className="text-xl font-bold text-rose-700" value={PedidoStatus.NOTA_CREDITO}>
-            {PedidoStatus.NOTA_CREDITO}
           </option>
         </>
       )}
@@ -83,17 +68,6 @@ export const EstadosSelect = ({ pedido, callback }: EstadoSelect) => {
           </option>
           <option className="text-xl font-bold text-sky-700" value={PedidoStatus.PENDIENTE_ENTREGA}>
             {PedidoStatus.PENDIENTE_ENTREGA}
-          </option>
-        </>
-      )}
-
-      {userRole === employeeRoles.CAJERO && (
-        <>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PAGADO}>
-            {PedidoStatus.PAGADO}
-          </option>
-          <option className="text-xl font-bold text-green-700" value={PedidoStatus.PREPARACION}>
-            {PedidoStatus.PREPARACION}
           </option>
         </>
       )}

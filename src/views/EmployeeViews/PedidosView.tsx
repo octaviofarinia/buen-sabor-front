@@ -178,11 +178,11 @@ export const PedidosView = () => {
       )}
       <ToastAlert />
       {pedidos.length != 0 ? (
-        <div className=" mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-neutral-800">
+        <div className=" mb-6 flex flex-col gap-y-1 overflow-hidden rounded-lg bg-neutral-900 shadow-2xl dark:shadow-neutral-700 dark:shadow-md">
           <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
               <div className="overflow-hidden">
-                <table className="min-w-full table-fixed bg-neutral-900 text-left text-sm font-light">
+                <table className="min-w-full table-fixed bg-neutral-900 text-left text-sm font-light ">
                   <thead className="font-medium uppercase">
                     <tr className="border-b-4 border-b-neutral-500 bg-neutral-900  dark:border-b-white ">
                       <th className="px-6 py-4 text-neutral-50">ID</th>
@@ -208,7 +208,7 @@ export const PedidosView = () => {
                   <tbody>
                     {pedidos.map((pedido) => (
                       <tr
-                        className="border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:border-b-neutral-400 dark:bg-neutral-500 dark:text-neutral-50 dark:odd:bg-neutral-600 dark:even:bg-neutral-500 dark:hover:bg-neutral-700"
+                        className="border-b border-b-neutral-200 odd:bg-neutral-100 even:bg-neutral-100 hover:bg-neutral-200 dark:border-neutral-500 dark:border-b-neutral-700  dark:text-neutral-50  dark:bg-neutral-800 dark:hover:bg-neutral-900 dark:shadow-lg "
                         key={pedido.id}
                       >
                         <td className="px-6 py-4">{pedido.id}</td>
@@ -218,12 +218,18 @@ export const PedidosView = () => {
                           pedido.estado !== PedidoStatus.NOTA_CREDITO &&
                           pedido.estado !== PedidoStatus.CANCELADO ? (
                             <div className="flex gap-5">
-                              <EstadosSelect
-                                pedido={pedido}
-                                callback={(e) => {
-                                  setEstadoDePedido(e.target.value, pedido.id);
-                                }}
-                              />
+                              {userRole !== employeeRoles.CAJERO ? (
+                                <EstadosSelect
+                                  pedido={pedido}
+                                  callback={(e) => {
+                                    setEstadoDePedido(e.target.value, pedido.id);
+                                  }}
+                                />
+                              ) : (
+                                <span className="fontBebas text-neutral-900 dark:text-neutral-100 text-xl">
+                                  {pedido.estado}
+                                </span>
+                              )}
                             </div>
                           ) : (
                             <h2 className="flex gap-3 py-2 pr-8 text-xl font-bold">
