@@ -13,5 +13,4 @@ export interface PedidoPlanilla extends Base {
   formaPago: string | null;
   domicilioEntrega?: Domicilio;
   cliente: Cliente;
-  fechaBaja: string | null;
 }

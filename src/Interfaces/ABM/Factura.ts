@@ -14,5 +14,4 @@ export interface Factura extends Base {
   medioDePago: string | null;
   fechaAlta: string;
   fechaModificacion: string | null;
-  fechaBaja: string | null;
 }
